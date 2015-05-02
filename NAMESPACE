@@ -3,3 +3,4 @@
 importFrom(Hmisc,mdb.get)
 importFrom(magrittr,"%$%")
 importFrom(magrittr,"%>%")
+importFrom(stringr,str_c)

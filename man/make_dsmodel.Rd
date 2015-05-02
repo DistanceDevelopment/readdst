@@ -10,7 +10,7 @@ make_dsmodel(md)
 \item{md}{a model definition}
 }
 \value{
-a character string starting with \code{dsmodel=}
+a character string starting with "\code{dsmodel=}" or \code{NULL} if no \code{dsmodel} component in this model
 }
 \description{
 From a model definition build the \code{dsmodel} part of the model.

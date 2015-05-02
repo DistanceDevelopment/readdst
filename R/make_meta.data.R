@@ -6,9 +6,27 @@
 #' @return a character string starting with \code{meta.data=}
 #'
 #' @author David L Miller
-make_meta.data <- function(md){
+#' @importFrom stringr str_c
+make_meta.data <- function(df){
 
-  meta <- paste0("meta.data=list(width=",df[["Width"]],")")
+  if(any(names(df) == "Left")){
+    left_truncation <- paste0("left=",df[["Left"]])
+  }else{
+    left_truncation <- "left=0"
+  }
+
+  if(any(names(df) == "Intervals")){
+    breaks <- paste0("breaks=c(", df[["Intervals"]], ")")
+    binned <- "binned=TRUE"
+  }else{
+    breaks <- NULL
+    binned <- NULL
+  }
+
+  meta <- paste0("meta.data=list(width=", df[["Width"]],",",
+                 str_c(left_truncation,
+                       breaks,
+                       binned, sep=","),")")
 
   return(meta)
 }
