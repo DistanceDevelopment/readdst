@@ -1,0 +1,38 @@
+---
+title: "Example import of a Distance analysis"
+author: "David L Miller"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+This is a brief example of how to use the `readdst` package to import all analyses and data from an existing [Distance for Windows](http://distancesampling.org/Distance) project.
+
+## Preliminaries
+
+I assume here that you have a Distance for Windows project file (in this case we're going to try out the "Golf Tees" example, which is shipped with Distance for Windows). This consists of a file called `project.dst` and a folder named `Golftees.dat`. The folder can contain numerous other files (including R analyses, shapefiles, plots etc) but we'll ignore everything apart from the `DistData.mdb` file that contains the data used to fit our models.
+
+To read the Access database files (the `.dst` file and `DistData.mdb` you need to have the `Hmisc` package installed and a copy of [`mdb-tools`](http://mdbtools.sourceforge.net/) installed on your computer. On Mac, if you have [`homebrew`](http://brew.sh/) installed, this consists of simply running `brew install mdb-tools`.
+
+# General principle
+
+`readdst` looks in the project `.dst` file, extracts the analyses, generates the correct calls to `ddf` and then runs those analyses, using the data it extracted from `DistData.mdb`. The various tables in the Distance for Windows databases relate in the following ways (source: Distance Developer's manual):
+
+![relationship between various tables in Distance](tables.png)
+
+Although all of this is going on in the background, there are only a few functions one actually has to worry about.
+
+
+# Golf tees
+
+We begin by finding the golf tees project on our computer, since this project is shipped with `readdst` we can use `system.file` to find the path to it:
+
+```{r}
+res.filename<-system.file("Golftees-example", package="readdst")
+```
+
+

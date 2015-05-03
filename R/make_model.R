@@ -9,7 +9,7 @@
 #'
 #' @author David L Miller
 #' @importFrom stringr str_c
-build_analysis <- function(this_analysis, model_definitions, data_filters){
+make_model <- function(this_analysis, model_definitions, data_filters){
 
   # select the model definition and data filter for this analysis
   md <- model_definitions[[this_analysis$ModelDefinition]]

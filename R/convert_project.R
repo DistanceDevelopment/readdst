@@ -1,0 +1,39 @@
+convert_project <- function(project){
+
+  # project file
+  project_file <- paste0(project, ".dst")
+  # data file
+  data_file <- paste0(project, ".dat/DistData.mdb")
+
+
+  # get the project settings and check that this is a Distance 6+ project
+  project_settings <- Hmisc::mdb.get(project_file,"ProjectSettings")
+  Distance_version <- as.numeric(as.character(
+                                   subset(project_settings,
+                                          Key=="DistanceVersion")$Setting))
+  if(Distance_version < 6){
+    stop("readdst only works with Distance 6.0 and newer projects!")
+  }
+
+
+  # extract the analyses table
+  analyses <- Hmisc::mdb.get(project_file, "Analyses")
+
+  # extract the model definitions
+  model_definitions <- get_definitions(project_file, "ModelDefinitions")
+
+  # extract data filters
+  data_filters <- get_definitions(project_file, "DataFilters")
+
+  # parse the model definitions and data filters
+  model_definitions <- lapply(model_definitions, parse_definition)
+  data_filters <- lapply(data_filters, parse_definition)
+
+  # get the data
+  obs_table <- get_data(data_file)
+
+  R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
+            data_filters, data=obs_table)
+
+  return(R_analyses)
+}
