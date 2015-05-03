@@ -12,8 +12,8 @@
 make_model <- function(this_analysis, model_definitions, data_filters){
 
   # select the model definition and data filter for this analysis
-  md <- model_definitions[[this_analysis$ModelDefinition]]
-  df <- data_filters[[this_analysis$DataFilter]]
+  md <- model_definitions[[as.character(this_analysis$ModelDefinition)]]
+  df <- data_filters[[as.character(this_analysis$DataFilter)]]
 
 
   # what is the method= argument?
