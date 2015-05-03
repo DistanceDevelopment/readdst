@@ -32,7 +32,21 @@ Although all of this is going on in the background, there are only a few functio
 We begin by finding the golf tees project on our computer, since this project is shipped with `readdst` we can use `system.file` to find the path to it:
 
 ```{r}
-res.filename<-system.file("Golftees-example", package="readdst")
+library(readdst)
+project <- system.file("Golftees-example", package="readdst")
+project <- paste0(project,"/Golftees")
+```
+
+We can then convert the whole analysis, this just translates the code that Distance uses to fit the model into R code:
+
+```{r}
+converted <- convert_project(project)
+```
+
+We can run an individual analysis:
+
+```{r}
+run_1 <- run_analysis(converted[[1]])
 ```
 
 

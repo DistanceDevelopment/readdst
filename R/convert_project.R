@@ -1,3 +1,8 @@
+#' Convert a Distance for Windows project
+#'
+#' @param project a path to a project
+#'
+#' @importFrom plyr dlply "."
 convert_project <- function(project){
 
   # project file
