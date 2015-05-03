@@ -43,10 +43,18 @@ We can then convert the whole analysis, this just translates the code that Dista
 converted <- convert_project(project)
 ```
 
-We can run an individual analysis:
+We can run an individual analysis and look at its results (as it will return a `ds` object):
 
 ```{r}
-run_1 <- run_analysis(converted[[1]])
+analysis_1 <- run_analysis(converted[[1]])
+summary(analysis_1)
 ```
+
+Since this is just a fitted object from `mrds` we can do normal stuff like make plots:
+
+```{r fig.cap="Plot results from `analysis_1`"}
+plot(analysis_1)
+```
+
 
 

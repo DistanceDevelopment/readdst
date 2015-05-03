@@ -1,3 +1,8 @@
+#' Run a converted Distance analysis
+#'
+#'
+#' @author David L Miller
+#' @export
 run_analysis <- function(analysis){
 
   cat("Call:\n", analysis$call, "\n\n")

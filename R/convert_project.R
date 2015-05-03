@@ -3,6 +3,7 @@
 #' @param project a path to a project
 #'
 #' @importFrom plyr dlply "."
+#' @export
 convert_project <- function(project){
 
   # project file
