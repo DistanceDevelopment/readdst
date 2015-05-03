@@ -38,8 +38,11 @@ convert_project <- function(project){
   # get the data
   obs_table <- get_data(data_file)
 
+  # batch convert analyses
   R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
             data_filters, data=obs_table)
+
+  names(R_analyses) <- as.character(analyses$Name)
 
   return(R_analyses)
 }

@@ -37,24 +37,40 @@ project <- system.file("Golftees-example", package="readdst")
 project <- paste0(project,"/Golftees")
 ```
 
-We can then convert the whole analysis, this just translates the code that Distance uses to fit the model into R code:
+## Converting analyses
+
+We can then convert the whole project and all analyses in it, this just translates the code that Distance uses to fit the model into R code:
 
 ```{r}
 converted <- convert_project(project)
 ```
 
+Note the warning generated here is because in the golf tees analysis, one data filter specifies distance bins outside of the truncation points.
+
+We can see the names of the analyses (as they were given in Distance for Windows) by calling `names()` on the returned object:
+
+```{r}
+names(converted)
+```
+
+## Running analyses
+
 We can run an individual analysis and look at its results (as it will return a `ds` object):
 
 ```{r}
-analysis_1 <- run_analysis(converted[[1]])
+analysis_1 <- run_analysis(converted[[1]], debug=TRUE)
 summary(analysis_1)
 ```
 
 Since this is just a fitted object from `mrds` we can do normal stuff like make plots:
 
-```{r fig.cap="Plot results from `analysis_1`"}
+```{r fig.cap="Plot results from `analysis_1`.", fig.width=10}
+par(mfrow=c(1,2))
 plot(analysis_1)
 ```
+
+If one wanted to run all the analysis at once, one could of course simply use `lapply`.
+
 
 
 
