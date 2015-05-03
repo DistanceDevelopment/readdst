@@ -9,6 +9,8 @@ LazyData: true
 Imports: Hmisc,
     stringr,
     magrittr,
-    mrds
+    mrds,
+    testthat,
+    plyr
 Suggests: knitr
 VignetteBuilder: knitr

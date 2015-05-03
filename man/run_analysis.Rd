@@ -4,7 +4,15 @@
 \alias{run_analysis}
 \title{Run a converted Distance analysis}
 \usage{
-run_analysis(analysis)
+run_analysis(analysis, debug = FALSE)
+}
+\arguments{
+\item{analysis}{a converted analysis}
+
+\item{debug}{display the call and name of the model before it is run}
+}
+\value{
+fitted \code{\link{ddf}} object
 }
 \description{
 Run a converted Distance analysis

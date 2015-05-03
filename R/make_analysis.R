@@ -13,5 +13,6 @@ make_analysis <- function(this_analysis, model_definitions, data_filters, data){
 
   return(list(call = this_call,
               env  = e,
-              name = as.character(this_analysis[["Name"]])))
+              name = as.character(this_analysis[["Name"]]),
+              ID   = this_analysis[["ID"]]))
 }
