@@ -4,7 +4,7 @@
 \alias{make_model}
 \title{Build a distance sampling analysis}
 \usage{
-make_model(this_analysis, model_definitions, data_filters)
+make_model(this_analysis, model_definitions, data_filters, transect)
 }
 \arguments{
 \item{this_analysis}{an analysis from Distance}
@@ -12,6 +12,8 @@ make_model(this_analysis, model_definitions, data_filters)
 \item{model_definitions}{a list of model definitions}
 
 \item{data_filters}{a list of data filters}
+
+\item{transect}{the transect type}
 }
 \value{
 a character string specifying a call to \code{ddf}

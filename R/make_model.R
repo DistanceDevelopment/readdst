@@ -5,11 +5,13 @@
 #' @param this_analysis an analysis from Distance
 #' @param model_definitions a list of model definitions
 #' @param data_filters a list of data filters
+#' @param transect the transect type
 #' @return a character string specifying a call to \code{ddf}
 #'
 #' @author David L Miller
 #' @importFrom stringr str_c
-make_model <- function(this_analysis, model_definitions, data_filters){
+make_model <- function(this_analysis, model_definitions, data_filters,
+                       transect){
 
   # select the model definition and data filter for this analysis
   md <- model_definitions[[as.character(this_analysis$ModelDefinition)]]
@@ -17,18 +19,22 @@ make_model <- function(this_analysis, model_definitions, data_filters){
 
 
   # what is the method= argument?
-  possible_methods <- c("ds",
-                        "io","io.fi",
-                        "trial","trial.fi",
-                        "rem","rem.fi")
-  method <- md[names(md)=="Method"]
-  method <- paste0("method=\"",method[method %in% possible_methods],"\"")
+  if(md[["Engine"]] == "MRDS"){
+    possible_methods <- c("ds",
+                          "io","io.fi",
+                          "trial","trial.fi",
+                          "rem","rem.fi")
+    method <- md[names(md)=="Method"]
+    method <- paste0("method=\"",method[method %in% possible_methods],"\"")
+  }else{
+    method <- "method=\"ds\""
+  }
 
   # make the model call
   this_call <- paste0("mrds::ddf(",
                       str_c(make_dsmodel(md),
                             make_mrmodel(md),
-                            make_meta.data(df),
+                            make_meta.data(df, transect),
                             method,
                             "data=obs_table",sep=","), ")")
 

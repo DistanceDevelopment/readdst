@@ -14,6 +14,8 @@ get_data <- function(data_file){
   # convert the distance column
   if(any(names(obs_table)=="Perp.distance")){
     obs_table$distance <- obs_table$Perp.distance
+  }else if(any(names(obs_table)=="Radial.distance")){
+    obs_table$distance <- obs_table$Radial.distance
   }else{
     stop("Only perpendicular distances supported at the moment!")
   }
@@ -22,6 +24,11 @@ get_data <- function(data_file){
   # if group size is collected rename to size
   if(any(names(obs_table)=="Cluster.size")){
     obs_table$size <- obs_table$Cluster.size
+  }
+
+  # if there aren't object IDs?
+  if(all(names(obs_table)!="object")){
+    obs_table$object <- 1:nrow(obs_table)
   }
 
   return(obs_table)

@@ -1,5 +1,9 @@
 #' Convert a Distance for Windows project
 #'
+#' Summary here
+#'
+#' @section Details:
+#' At the moment only line or point transects are supported.
 #' @param project a path to a project
 #'
 #' @importFrom plyr dlply "."
@@ -38,9 +42,17 @@ convert_project <- function(project){
   # get the data
   obs_table <- get_data(data_file)
 
+  # what kind of distances to we have?
+  data_names <- mdb.get(data_file, TRUE)
+  if("Point transect" %in% data_names){
+    transect <- "point"
+  }else{
+    transect <- "line"
+  }
+
   # batch convert analyses
   R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
-            data_filters, data=obs_table)
+            data_filters, data=obs_table, transect=transect)
 
   names(R_analyses) <- as.character(analyses$Name)
 

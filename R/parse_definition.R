@@ -15,9 +15,24 @@ parse_definition <- function(df){
 
   # remove the trailing semicolons
   df <- gsub(";", "", df)
-  # split the lines based on the " /" separator
-  df <- unlist(lapply(df, function(x) strsplit(x," /")[[1]]))
-  df <- df[grepl("=",df)]
+
+
+  make_prefixes <- function(x){
+    if(grepl("\\w+ /((.+?=.+?))+",x)){
+      prefix <- sub("(\\w+) /((.+?=.+?))+$", "\\1",x)
+      rest <- sub(prefix, "",x)
+      x <- unlist(lapply(rest, function(x) strsplit(x," /")[[1]]))
+      x <- x[x!=""]
+      x <- paste0(prefix,"_",x)
+    }
+    return(x)
+  }
+
+  df <- unlist(lapply(df, make_prefixes))
+
+#  # split the lines based on the " /" separator
+#  df <- unlist(lapply(df, function(x) strsplit(x," /")[[1]]))
+#  df <- df[grepl("=",df)]
 
   vals <- unlist(lapply(strsplit(df,"="), function(x) x[2]))
   names(vals) <- unlist(lapply(strsplit(df,"="), function(x) x[1]))

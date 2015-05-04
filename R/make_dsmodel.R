@@ -8,22 +8,56 @@
 #' @author David L Miller
 make_dsmodel <- function(md){
 
-  ds_methods <- md[names(md)=="Method"]
-  # if there was no ds part to the model just return that part is NULL
-  if(!any(c("cds", "mcds") %in% ds_methods)){
-    return(NULL)
-  }
+  if(md[["Engine"]] == "MRDS"){
+    # if there was no ds part to the model just return that part is NULL
+    if(!any("DSModel_Method" %in% names(md))){
+      return(NULL)
+    }else{
+      ds_methods <- md[["DSModel_Method"]]
+    }
 
+    if(any(ds_methods=="cds")){
+      ds_formula <- "formula=~1"
+    }else if("Factors" %in% names(md)){
+      ds_formula <- make_formula(md[["DSModel_Formula"]], md[["Factors"]])
+    }else{
+      ds_formula <- paste0("formula=~", md[["DSModel_Formula"]])
+    }
+    # set the function ~cds or ~mcds
+    dsmethod <- ds_methods
 
-  if(any(ds_methods=="cds")){
-    ds_formula <- "formula=~1"
-  }else if("Factors" %in% names(md)){
-    ds_formula <- make_formula(md[["Formula"]], md[["Factors"]])
+    key <- paste0("key=\"", md[["DSModel_Key"]], "\"")
+    adj.series <- NULL
+
+  }else if(md[["Engine"]] == "CDS" | md[["Engine"]] == "MCDS"){
+
+    key <- switch(md[["Estimator_Key"]],
+                  HN = "hn",
+                  HA = "hr",
+                  UN = "unif")
+    key <- paste0("key=\"", key, "\"")
+
+    adj.series <- switch(md[["Estimator_Adjust"]],
+                         CO = "cos",
+                         PO = "poly",
+                         NULL)
+    adj.series <- paste0("adj.series=\"", adj.series,"\"")
+adj.order <- paste0("adj.order=c(","2",")")
+
   }else{
-    ds_formula <- paste0("formula=~", md[["Formula"]])
+    stop("Unsupported engine!")
   }
 
-  dsmethod <- ds_methods[ds_methods %in% c("cds","mcds")]
+  if(md[["Engine"]] == "CDS"){
+    ds_formula <- "formula=~1"
+    dsmethod <- "cds"
+  }else if(md[["Engine"]] == "MCDS"){
+    dsmethod <- "mcds"
+    covariates <- md[names(md)=="CovariateData_Field"]
+    ds_formula <- paste0("formula=~",
+                         paste0(covariates, collapse="+"))
+  }
 
-  paste0("dsmodel=~", dsmethod, "(key=\"", md[["Key"]],"\",", ds_formula,")")
+  paste0("dsmodel=~", dsmethod, "(",
+         str_c(key, ds_formula, adj.series, adj.order, sep=","),")")
 }

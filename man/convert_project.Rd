@@ -10,6 +10,10 @@ convert_project(project)
 \item{project}{a path to a project}
 }
 \description{
-Convert a Distance for Windows project
+Summary here
+}
+\section{Details}{
+
+At the moment only line or point transects are supported.
 }
 
