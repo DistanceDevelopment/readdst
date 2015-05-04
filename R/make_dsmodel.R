@@ -27,7 +27,8 @@ make_dsmodel <- function(md){
     dsmethod <- ds_methods
 
     key <- paste0("key=\"", md[["DSModel_Key"]], "\"")
-    adj.series <- NULL
+adj.series <- NULL
+adj.order <- NULL
 
   }else if(md[["Engine"]] == "CDS" | md[["Engine"]] == "MCDS"){
 
