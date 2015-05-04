@@ -12,7 +12,7 @@ run_analysis <- function(analysis, debug=FALSE){
     cat("Model name:", analysis$name,"\n")
     cat("Call:\n", analysis$call, "\n\n")
   }
-  result <- eval(parse(text=analysis$call), env=analysis$env)
+  result <- eval(parse(text=analysis$call), envir=analysis$env)
 
   return(result)
 }
