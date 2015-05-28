@@ -56,5 +56,7 @@ convert_project <- function(project){
 
   names(R_analyses) <- as.character(analyses$Name)
 
+  class(R_analyses) <- "converted_distance_analyses"
+
   return(R_analyses)
 }
