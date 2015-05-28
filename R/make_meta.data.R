@@ -10,14 +10,27 @@
 #' @importFrom stringr str_c
 make_meta.data <- function(df, transect){
 
+  # get left truncation
   if(any(names(df) == "Distance_Left")){
-    left_truncation <- paste0("left=",df[["Distance_Left"]])
+    left <- as.numeric(df[["Distance_Left"]])
   }else{
-    left_truncation <- "left=0"
+    left <- 0
   }
 
+  # get right truncation
+  width <- as.numeric(df[["Distance_Width"]])
+
+
   if(any(names(df) == "Distance_Intervals")){
-    breaks <- paste0("breaks=c(", df[["Distance_Intervals"]], ")")
+    # extract the bin cutpoints -- make a vector
+    cuts <- eval(parse(text=paste0("c(",
+                               paste(df[["Distance_Intervals"]],collapse=","),
+                                   ")")))
+    # remove those outside the truncation
+    cuts <- cuts[cuts >= left & cuts <= width]
+
+    # make the breaks and binned arguments
+    breaks <- paste0("breaks=c(",paste(cuts,collapse=","), ")")
     binned <- "binned=TRUE"
   }else{
     breaks <- NULL
@@ -30,8 +43,8 @@ make_meta.data <- function(df, transect){
     transect <- NULL
   }
 
-  meta <- paste0("meta.data=list(width=", df[["Distance_Width"]],",",
-                 str_c(left_truncation,
+  meta <- paste0("meta.data=list(width=",width,",",
+                 str_c(paste0("left=",left),
                        breaks,
                        binned,
                        transect, sep=","),")")

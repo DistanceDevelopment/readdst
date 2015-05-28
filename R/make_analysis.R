@@ -18,7 +18,14 @@ make_analysis <- function(this_analysis, model_definitions,
 
   if(grepl("binned=TRUE", this_call)){
     cuts <- gsub(".*breaks=(c\\(.*?\\)),.*", "\\1", this_call)
-    data <- create.bins(data, eval(paste(text=cuts)))
+
+    # remove the cutpoints outside the truncation
+    width <- as.numeric(gsub(".*width=(.*?),.*", "\\1", this_call))
+    left <- as.numeric(gsub(".*left=(.*?),.*", "\\1", this_call))
+    cuts <- eval(parse(text=cuts))
+    cuts <- cuts[cuts >= left & cuts <= width]
+
+    data <- create.bins(data, cuts)
   }
 
   e <- new.env()
