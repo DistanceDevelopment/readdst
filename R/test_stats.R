@@ -22,6 +22,11 @@ test_stats <- function(analysis, project){
 
   stats <- subset(stats, ID==analysis$ID)
 
+  if(nrow(stats)==0){
+    message(paste0("No results for analysis ",analysis$ID))
+    return(NULL)
+  }
+
   test_results <- list()
   test_results[[1]] <- try(expect_equal(run_analysis$criterion,
                             stats[stats$Parameter=="AIC",]$Value,
@@ -45,7 +50,7 @@ test_stats <- function(analysis, project){
 
 
   if(is.null(test_results)){
-    message("All tests okay!")
+    message(paste0("All tests okay for analysis ", analysis$ID))
   }else{
     test_results <- test_results[!unlist(lapply(test_results, is.null))]
   }
