@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.converted_distance_analyses.R
 \name{print.converted_distance_analyses}
 \alias{print.converted_distance_analyses}
-\title{Print a converted distance analysis}
+\title{Converted distance analyses table}
 \usage{
 \method{print}{converted_distance_analyses}(x, ...)
 }

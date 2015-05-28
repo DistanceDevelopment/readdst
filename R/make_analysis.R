@@ -32,8 +32,11 @@ make_analysis <- function(this_analysis, model_definitions,
   e$obs_table <- data
 
 
-  return(list(call = this_call,
+  ret <- list(call = this_call,
               env  = e,
               name = as.character(this_analysis[["Name"]]),
-              ID   = this_analysis[["ID"]]))
+              ID   = this_analysis[["ID"]])
+  class(ret) <- "converted_distance_analysis"
+
+  return(ret)
 }

@@ -1,4 +1,4 @@
-#' Print a converted distance analysis
+#' Converted distance analyses table
 #'
 #' Prints a table of the analyses that have been converted.
 #'
