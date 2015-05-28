@@ -13,19 +13,20 @@ test_stats <- function(analysis, project){
   AIC.tol <- 1e-4
   lnl.tol <- 1e-4
 
-  run_analysis <- run_analysis(analysis)
-
   # at the moment only testing AIC and log likelihood
 
   # get these stats
   stats <- get_stats(paste0(project,".dst"))
-
   stats <- subset(stats, ID==analysis$ID)
 
+  # if there were no results return early
   if(nrow(stats)==0){
     message(paste0("No results for analysis ",analysis$ID))
     return(NULL)
   }
+
+  # run the analysis
+  run_analysis <- run_analysis(analysis)
 
   test_results <- list()
   test_results[[1]] <- try(expect_equal(run_analysis$criterion,
