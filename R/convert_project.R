@@ -56,6 +56,7 @@ convert_project <- function(project){
 
   names(R_analyses) <- as.character(analyses$Name)
 
+  # save the file names of the project for later
   R_analyses <- llply(R_analyses, function(x, project, project_file){
                                     x$project <- project
                                     x$project_file <- project_file
