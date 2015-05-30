@@ -76,7 +76,7 @@ If one wanted to run all the analysis at once, one could of course simply use `l
 We can test the saved results in Distance against those from R using `test_stats`:
 
 ```{r}
-test_stats(converted[[4]], project)
+test_stats(converted[[4]])
 ```
 
 As we can see here, we did well and there were no differences!

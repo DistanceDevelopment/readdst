@@ -4,12 +4,10 @@
 \alias{test_stats}
 \title{Test to see if Distance and R get the same result}
 \usage{
-test_stats(analysis, project)
+test_stats(analysis)
 }
 \arguments{
 \item{analysis}{a converted (but not run) analysis}
-
-\item{project}{a project path}
 }
 \description{
 Test to see if Distance and R get the same result

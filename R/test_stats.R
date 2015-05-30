@@ -2,12 +2,11 @@
 #'
 #'
 #' @param analysis a converted (but not run) analysis
-#' @param project a project path
 #'
 #' @export
 #' @importFrom testthat test_that context expect_equal
 #' @importFrom plyr l_ply
-test_stats <- function(analysis, project){
+test_stats <- function(analysis){
 
   # these should be args
   AIC.tol <- 1e-4
@@ -16,7 +15,7 @@ test_stats <- function(analysis, project){
   # at the moment only testing AIC and log likelihood
 
   # get these stats
-  stats <- get_stats(paste0(project,".dst"))
+  stats <- get_stats(analysis$project_file)
   stats <- subset(stats, ID==analysis$ID)
 
   # if there were no results return early

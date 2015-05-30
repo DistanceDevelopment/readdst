@@ -6,7 +6,7 @@
 #' At the moment only line or point transects are supported.
 #' @param project a path to a project
 #'
-#' @importFrom plyr dlply "."
+#' @importFrom plyr dlply "." llply
 #' @export
 convert_project <- function(project){
 
@@ -55,6 +55,12 @@ convert_project <- function(project){
             data_filters, data=obs_table, transect=transect)
 
   names(R_analyses) <- as.character(analyses$Name)
+
+  R_analyses <- llply(R_analyses, function(x, project, project_file){
+                                    x$project <- project
+                                    x$project_file <- project_file
+                                    return(x)},
+                      project=project, project_file=project_file)
 
   class(R_analyses) <- "converted_distance_analyses"
 
