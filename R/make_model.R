@@ -38,5 +38,10 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                             method,
                             "data=obs_table",sep=","), ")")
 
+  # if AIC selection, save max number of terms
+  if(md[["Pick"]] == "AIC"){
+    attr(this_call, "aic_select_max") <- as.numeric(md[["Maxterms"]])
+  }
+
   return(this_call)
 }

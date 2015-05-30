@@ -40,10 +40,17 @@ adj.order <- NULL
 
     adj.series <- switch(md[["Estimator_Adjust"]],
                          CO = "cos",
+                         HE = "herm",
                          PO = "poly",
                          NULL)
     adj.series <- paste0("adj.series=\"", adj.series,"\"")
-adj.order <- paste0("adj.order=c(","2",")")
+
+    # if we use AIC for selection....
+    if(md[["Pick"]]=="AIC"){
+      adj.order <- "adj.order=NULL"
+    }else{
+      adj.order <- paste0("adj.order=c(","2",")")
+    }
 
   }else{
     stop("Unsupported engine!")

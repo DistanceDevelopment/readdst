@@ -31,11 +31,15 @@ make_analysis <- function(this_analysis, model_definitions,
   e <- new.env()
   e$obs_table <- data
 
+  aic.select <- attr(this_call, "aic_select_max")
+  attr(this_call, "aic_select_max") <- NULL
 
   ret <- list(call = this_call,
+              aic.select = aic.select,
               env  = e,
               name = as.character(this_analysis[["Name"]]),
               ID   = this_analysis[["ID"]])
+
   class(ret) <- "converted_distance_analysis"
 
   return(ret)
