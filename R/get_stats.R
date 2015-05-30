@@ -29,7 +29,7 @@ get_stats <- function(project_file){
 
   # let's just do 1 here, maybe allow others later
 
-  analyses <- subset(analyses, Status==1)
+  analyses <- subset(analyses, Status %in% 1:3)
 
   # some documentation on magic numbers
   #https://github.com/DistanceDevelopment/distance-for-windows/blob/0a20284c906c26cebe582cd9ac5fba0fbc89fc2a/Distance60/Analysis%20Engines/Shared%20Stuff/NEngineInterfaceUtilities/mrds.support.r#L25

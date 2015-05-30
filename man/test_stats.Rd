@@ -4,10 +4,12 @@
 \alias{test_stats}
 \title{Test to see if Distance and R get the same result}
 \usage{
-test_stats(analysis)
+test_stats(analysis, statuses = 1)
 }
 \arguments{
 \item{analysis}{a converted (but not run) analysis}
+
+\item{statuses}{for which statuses should tests be run? Defaults to \code{1} but can be given values like \code{1:3} ("Run", "Run with warnings", "Run with errors", respectively).}
 }
 \description{
 Test to see if Distance and R get the same result

@@ -31,11 +31,13 @@ make_analysis <- function(this_analysis, model_definitions,
   e <- new.env()
   e$obs_table <- data
 
+  # extract AIC term selection status
   aic.select <- attr(this_call, "aic_select_max")
   attr(this_call, "aic_select_max") <- NULL
 
   ret <- list(call = this_call,
               aic.select = aic.select,
+              status = this_analysis$Status,
               env  = e,
               name = as.character(this_analysis[["Name"]]),
               ID   = this_analysis[["ID"]])
