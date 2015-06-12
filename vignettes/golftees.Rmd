@@ -14,7 +14,7 @@ This is a brief example of how to use the `readdst` package to import all analys
 
 ## Preliminaries
 
-I assume here that you have a Distance for Windows project file (in this case we're going to try out the "Golf Tees" example, which is shipped with Distance for Windows). This consists of a file called `project.dst` and a folder named `Golftees.dat`. The folder can contain numerous other files (including R analyses, shapefiles, plots etc) but we'll ignore everything apart from the `DistData.mdb` file that contains the data used to fit our models.
+I assume here that you have a Distance for Windows project file (in this case we're going to try out the "Golf Tees" example, which is shipped with Distance for Windows). This consists of a file called `Golftees.dst` and a folder named `Golftees.dat`. The folder can contain numerous other files (including R analyses, shapefiles, plots etc) but we'll ignore everything apart from the `DistData.mdb` file that contains the data used to fit our models.
 
 To read the Access database files (the `.dst` file and `DistData.mdb` you need to have the `Hmisc` package installed and a copy of [`mdb-tools`](http://mdbtools.sourceforge.net/) installed on your computer. On Mac, if you have [`homebrew`](http://brew.sh/) installed, this consists of simply running `brew install mdb-tools`.
 
@@ -47,10 +47,16 @@ converted <- convert_project(project)
 
 Note the warning generated here is because in the golf tees analysis, one data filter specifies distance bins outside of the truncation points.
 
-We can see the names of the analyses (as they were given in Distance for Windows) by calling `names()` on the returned object:
+We can see the names of the analyses (as they were given in Distance for Windows) and their analysis IDs by printing the returned object:
 
 ```{r}
-names(converted)
+converted
+```
+
+More detail (including the `mrds` call details) can be found by looking an individual element of the list:
+
+```{r}
+converted[[1]]
 ```
 
 ## Running analyses
@@ -76,7 +82,7 @@ If one wanted to run all the analysis at once, one could of course simply use `l
 We can test the saved results in Distance against those from R using `test_stats`:
 
 ```{r}
-test_stats(converted[[4]])
+test_stats(converted[[1]])
 ```
 
 As we can see here, we did well and there were no differences!
