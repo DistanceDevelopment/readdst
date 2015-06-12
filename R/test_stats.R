@@ -9,6 +9,9 @@
 #' @importFrom plyr l_ply
 test_stats <- function(analysis, statuses=1){
 
+  if(class(analysis) != "converted_distance_analysis"){
+    stop("`analysis` must be of class \"converted_distance_analysis\"")
+  }
 
   if(!(analysis$status %in% statuses)){
     message(paste0("Analysis ",analysis$ID, " has not been run before"))
@@ -33,9 +36,8 @@ test_stats <- function(analysis, statuses=1){
     # run the analysis
     run_analysis <- run_analysis(analysis)
 
-    context(paste0("Analysis ",analysis$ID))
 
-    dd<-try(test_that(paste0("Analysis ",analysis$ID, " results are correct"),{
+    test_that(paste0("Analysis ",analysis$ID, " results are correct"),{
       expect_equal(run_analysis$criterion,
        stats[stats$Parameter=="AIC",]$Value,
        label = "AIC",
@@ -45,7 +47,8 @@ test_stats <- function(analysis, statuses=1){
        stats[stats$Parameter=="log-likelihood",]$Value,
        label="log-likelihood",
        tol=lnl.tol)
-    }))
+    })
+    message("All tests were fine!")
   }
 
   invisible()
