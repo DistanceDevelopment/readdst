@@ -40,7 +40,14 @@ make_model <- function(this_analysis, model_definitions, data_filters,
 
   # if AIC selection, save max number of terms
   if(("Pick" %in% names(md)) && md[["Pick"]] == "AIC"){
-    attr(this_call, "aic_select_max") <- as.numeric(md[["Maxterms"]])
+    # if maxterms is specified set the adjustment order to NULL
+    # and do AIC selection
+    if("Maxterms" %in% names(md)){
+      attr(this_call, "aic_select_max") <- as.numeric(md[["Maxterms"]])
+    }else{
+    # else no adjustments
+      attr(this_call, "aic_select_max") <- NULL
+    }
   }
 
   return(this_call)

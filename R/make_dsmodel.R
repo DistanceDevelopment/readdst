@@ -27,8 +27,8 @@ make_dsmodel <- function(md){
     dsmethod <- ds_methods
 
     key <- paste0("key=\"", md[["DSModel_Key"]], "\"")
-adj.series <- NULL
-adj.order <- NULL
+    adj.series <- NULL
+    adj.order <- NULL
 
   }else if(md[["Engine"]] == "CDS" | md[["Engine"]] == "MCDS"){
 
@@ -47,7 +47,15 @@ adj.order <- NULL
 
     # if we use AIC for selection....
     if(md[["Pick"]]=="AIC"){
-      adj.order <- "adj.order=NULL"
+      # if maxterms is specified set the adjustment order to NULL
+      # and do AIC selection
+      if("Maxterms" %in% names(md)){
+        adj.order <- "adj.order=NULL"
+      }else{
+      # else no adjustments
+        adj.series <- NULL
+        adj.order <- NULL
+      }
     }else{
       adj.order <- paste0("adj.order=c(","2",")")
     }
