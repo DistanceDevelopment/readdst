@@ -27,7 +27,7 @@ get_stats <- function(project_file){
   # 8: "Reading results"
   # 9: "Resetting"
 
-  # let's just do 1 here, maybe allow others later
+  # let's just do 1:3 here, maybe allow others later
 
   analyses <- subset(analyses, Status %in% 1:3)
 

@@ -38,11 +38,13 @@ test_stats <- function(analysis, statuses=1){
 
 
     test_that(paste0("Analysis ",analysis$ID, " results are correct"),{
+      # test AIC result
       expect_equal(run_analysis$criterion,
        stats[stats$Parameter=="AIC",]$Value,
        label = "AIC",
        tol=AIC.tol)
 
+      # test log likelihood
       expect_equal(run_analysis$lnl,
        stats[stats$Parameter=="log-likelihood",]$Value,
        label="log-likelihood",

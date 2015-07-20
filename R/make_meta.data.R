@@ -18,8 +18,11 @@ make_meta.data <- function(df, transect){
   }
 
   # get right truncation
-  width <- as.numeric(df[["Distance_Width"]])
-
+  if(any(names(df) == "Distance_Width")){
+    width <- as.numeric(df[["Distance_Width"]])
+  }else{
+    width <- NA
+  }
 
   if(any(names(df) == "Distance_Intervals")){
     # extract the bin cutpoints -- make a vector

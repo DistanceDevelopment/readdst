@@ -6,12 +6,13 @@
 #' @param model_definitions a list of model definitions
 #' @param data_filters a list of data filters
 #' @param transect the transect type
+#' @param data the data
 #' @return a character string specifying a call to \code{ddf}
 #'
 #' @author David L Miller
 #' @importFrom stringr str_c
 make_model <- function(this_analysis, model_definitions, data_filters,
-                       transect){
+                       transect, data){
 
   # select the model definition and data filter for this analysis
   md <- model_definitions[[as.character(this_analysis$ModelDefinition)]]
@@ -30,11 +31,15 @@ make_model <- function(this_analysis, model_definitions, data_filters,
     method <- "method=\"ds\""
   }
 
+  # build the meta.data
+  meta <- make_meta.data(df, transect)
+  meta <- sub("width=NA", paste0("width=", max(data$distance)), meta)
+
   # make the model call
   this_call <- paste0("mrds::ddf(",
                       str_c(make_dsmodel(md),
                             make_mrmodel(md),
-                            make_meta.data(df, transect),
+                            meta,
                             method,
                             "data=obs_table",sep=","), ")")
 
