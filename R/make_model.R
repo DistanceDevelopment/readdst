@@ -40,6 +40,7 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                       str_c(make_dsmodel(md),
                             make_mrmodel(md),
                             meta,
+                            make_control(md),
                             method,
                             "data=obs_table",sep=","), ")")
 
