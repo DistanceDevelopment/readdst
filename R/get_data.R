@@ -14,8 +14,12 @@ get_data <- function(data_file){
   # convert the distance column
   if(any(names(obs_table)=="Perp.distance")){
     obs_table$distance <- obs_table$Perp.distance
+  }else if(any(names(obs_table)=="Perp.Distance")){
+    obs_table$distance <- obs_table$Perp.Distance
   }else if(any(names(obs_table)=="Radial.distance")){
     obs_table$distance <- obs_table$Radial.distance
+  }else if(any(names(obs_table)=="Radial.Distance")){
+    obs_table$distance <- obs_table$Radial.Distance
   }else{
     stop("Only perpendicular distances supported at the moment!")
   }
