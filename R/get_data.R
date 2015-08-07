@@ -12,16 +12,11 @@ get_data <- function(data_file){
   obs_table <- Hmisc::mdb.get(data_file, "Observation")
 
   # convert the distance column
-  if(any(names(obs_table)=="Perp.distance")){
-    obs_table$distance <- obs_table$Perp.distance
-  }else if(any(names(obs_table)=="Perp.Distance")){
-    obs_table$distance <- obs_table$Perp.Distance
-  }else if(any(names(obs_table)=="PerpendicularDistance")){
-    obs_table$distance <- obs_table$PerpendicularDistance
-  }else if(any(names(obs_table)=="Radial.distance")){
-    obs_table$distance <- obs_table$Radial.distance
-  }else if(any(names(obs_table)=="Radial.Distance")){
-    obs_table$distance <- obs_table$Radial.Distance
+  dist_names <- c("Perp.distance", "Perp.Distance", "PerpendicularDistance",
+                  "Radial.distance", "Radial.Distance")
+  if(any(dist_names %in% names(obs_table))){
+    dist_name <- dist_names[dist_names %in% names(obs_table)]
+    obs_table$distance <- obs_table[[dist_name]]
   }else{
     stop("Only perpendicular distances supported at the moment!")
   }
