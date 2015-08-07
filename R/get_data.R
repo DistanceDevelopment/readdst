@@ -16,6 +16,8 @@ get_data <- function(data_file){
     obs_table$distance <- obs_table$Perp.distance
   }else if(any(names(obs_table)=="Perp.Distance")){
     obs_table$distance <- obs_table$Perp.Distance
+  }else if(any(names(obs_table)=="PerpendicularDistance")){
+    obs_table$distance <- obs_table$PerpendicularDistance
   }else if(any(names(obs_table)=="Radial.distance")){
     obs_table$distance <- obs_table$Radial.distance
   }else if(any(names(obs_table)=="Radial.Distance")){
