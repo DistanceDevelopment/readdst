@@ -7,9 +7,11 @@
 #' @param data_file the path to a \code{DistData.mdb} file.
 #'
 #' @author David L Miller
+#' @importFrom plyr join
 get_data <- function(data_file){
 
   obs_table <- Hmisc::mdb.get(data_file, "Observation")
+  effort_table <- Hmisc::mdb.get(data_file, "Effort")
 
   # convert the distance column
   dist_names <- c("Perp.distance", "Perp.Distance", "PerpendicularDistance",
@@ -21,7 +23,6 @@ get_data <- function(data_file){
     stop("Only perpendicular distances supported at the moment!")
   }
 
-
   # if group size is collected rename to size
   if(any(names(obs_table)=="Cluster.size")){
     obs_table$size <- obs_table$Cluster.size
@@ -31,6 +32,10 @@ get_data <- function(data_file){
   if(all(names(obs_table)!="object")){
     obs_table$object <- 1:nrow(obs_table)
   }
+
+  # some covariates are collected at the effort level so
+  # join the effort table to the observations
+  obs_table <- plyr::join(obs_table, effort_table, by="ID")
 
   return(obs_table)
 }
