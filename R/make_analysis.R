@@ -29,11 +29,11 @@ make_analysis <- function(this_analysis, model_definitions,
   }
 
   # filter the data
-  data <- filter_data(data,
-                      data_filters[[as.character(this_analysis$DataFilter)]])
+  filtered <- filter_data(data,
+                         data_filters[[as.character(this_analysis$DataFilter)]])
 
   e <- new.env()
-  e$obs_table <- data
+  e$obs_table <- filtered$data
 
   # extract AIC term selection status
   aic.select <- attr(this_call, "aic_select_max")
@@ -43,6 +43,7 @@ make_analysis <- function(this_analysis, model_definitions,
               aic.select = aic.select,
               status = this_analysis$Status,
               env  = e,
+              filter = filtered$filter,
               name = as.character(this_analysis[["Name"]]),
               ID   = this_analysis[["ID"]])
 
