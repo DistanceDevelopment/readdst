@@ -14,10 +14,11 @@ filter_data <- function(data, data_filter){
     d_sel <- gsub(" AND ", " & ", d_sel)
 
     # package that up
-    d_sel <- paste(paste0("data$", d_sel), collapse=" & ")
+    d_sel <- paste(d_sel, collapse=" & ")
 
     # make the selection
-    data <- data[eval(parse(text=d_sel)),]
+    # yes, I know this is not ideal
+    data <- subset(data, eval(parse(text=d_sel)))
   }
 
   return(data)
