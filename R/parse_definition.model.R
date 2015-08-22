@@ -11,7 +11,7 @@
 #' Note that this function should be called for a single definition, usually using \code{\link{lapply}}.
 #'
 #' @author David L Miller
-parse_definition <- function(df){
+parse_definition.model <- function(df){
 
   # remove the trailing semicolons
   df <- gsub(";", "", df)
@@ -19,7 +19,7 @@ parse_definition <- function(df){
 
   make_prefixes <- function(x){
     if(grepl("\\w+ /((.+?=.+?))+",x)){
-      prefix <- sub("(\\w+) /((.+?=.+?))+$", "\\1",x)
+      prefix <- sub("(\\w+) /((.+?))+$", "\\1", x)
       rest <- sub(prefix, "",x)
       x <- unlist(lapply(rest, function(x) strsplit(x," /")[[1]]))
       x <- x[x!=""]

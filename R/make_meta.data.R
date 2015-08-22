@@ -11,29 +11,29 @@
 make_meta.data <- function(df, transect){
 
   # get left truncation
-  if(any(names(df) == "Distance_Left")){
-    left <- as.numeric(df[["Distance_Left"]])
+  if(!is.null(df$Distance$Left)){
+    left <- as.numeric(df$Distance$Left)
   }else{
     left <- 0
   }
 
   # get right truncation
-  if(any(names(df) == "Distance_Width")){
-    width <- as.numeric(df[["Distance_Width"]])
+  if(!is.null(df$Distance$Width)){
+    width <- as.numeric(df$Distance$Width)
   }else{
     width <- NA
   }
 
-  if(any(names(df) == "Distance_Intervals")){
+  if(!is.null(df$Distance$Intervals)){
     # extract the bin cutpoints -- make a vector
     cuts <- eval(parse(text=paste0("c(",
-                               paste(df[["Distance_Intervals"]],collapse=","),
+                               paste(df$Distance$Intervals, collapse=","),
                                    ")")))
     # remove those outside the truncation
     cuts <- cuts[cuts >= left & cuts <= width]
 
     # make the breaks and binned arguments
-    breaks <- paste0("breaks=c(",paste(cuts,collapse=","), ")")
+    breaks <- paste0("breaks=c(", paste(cuts, collapse=","), ")")
     binned <- "binned=TRUE"
   }else{
     breaks <- NULL

@@ -22,17 +22,18 @@ make_model <- function(this_analysis, model_definitions, data_filters,
   # what is the method= argument?
   if(md[["Engine"]] == "MRDS"){
     possible_methods <- c("ds",
-                          "io","io.fi",
-                          "trial","trial.fi",
-                          "rem","rem.fi")
+                          "io", "io.fi",
+                          "trial", "trial.fi",
+                          "rem", "rem.fi")
     method <- md[names(md)=="Method"]
-    method <- paste0("method=\"",method[method %in% possible_methods],"\"")
+    method <- paste0("method=\"", method[method %in% possible_methods], "\"")
   }else{
     method <- "method=\"ds\""
   }
 
   # build the meta.data
   meta <- make_meta.data(df, transect)
+  # if width was NA, then use the maximum reported distance
   meta <- sub("width=NA", paste0("width=", max(data$distance)), meta)
 
   # make the model call
@@ -42,7 +43,7 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                             meta,
                             make_control(md),
                             method,
-                            "data=obs_table",sep=","), ")")
+                            "data=obs_table", sep=","), ")")
 
   # if AIC selection, save max number of terms
   if(("Pick" %in% names(md)) && md[["Pick"]] == "AIC"){

@@ -36,8 +36,8 @@ convert_project <- function(project){
   data_filters <- get_definitions(project_file, "DataFilters")
 
   # parse the model definitions and data filters
-  model_definitions <- lapply(model_definitions, parse_definition)
-  data_filters <- lapply(data_filters, parse_definition)
+  model_definitions <- lapply(model_definitions, parse_definition.model)
+  data_filters <- lapply(data_filters, parse_definition.data_filter)
 
   # get the data
   obs_table <- get_data(data_file)
@@ -52,7 +52,7 @@ convert_project <- function(project){
 
   # batch convert analyses
   R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
-            data_filters, data=obs_table, transect=transect)
+                      data_filters, data=obs_table, transect=transect)
 
   names(R_analyses) <- as.character(analyses$Name)
 

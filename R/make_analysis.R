@@ -28,6 +28,10 @@ make_analysis <- function(this_analysis, model_definitions,
     data <- create.bins(data, cuts)
   }
 
+  # filter the data
+  data <- filter_data(data,
+                      data_filters[[as.character(this_analysis$DataFilter)]])
+
   e <- new.env()
   e$obs_table <- data
 
