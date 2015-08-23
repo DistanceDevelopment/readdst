@@ -7,7 +7,6 @@
 #' @param data_file the path to a \code{DistData.mdb} file.
 #'
 #' @author David L Miller
-#' @importFrom plyr join
 get_data <- function(data_file){
 
   obs_table <- Hmisc::mdb.get(data_file, "Observation")
@@ -26,16 +25,25 @@ get_data <- function(data_file){
   # if group size is collected rename to size
   if(any(names(obs_table)=="Cluster.size")){
     obs_table$size <- obs_table$Cluster.size
+  }else if(any(names(obs_table)=="ClusterSize")){
+    obs_table$size <- obs_table$ClusterSize
+  }
+  # if observer ID is collected rename column to "Observer"
+  if(any(names(obs_table)=="Observer") & all(names(obs_table)!="observer")){
+    obs_table$observer <- obs_table$Observer
   }
 
   # if there aren't object IDs?
   if(all(names(obs_table)!="object")){
     obs_table$object <- 1:nrow(obs_table)
   }
+#  obs_table <- obs_table[sort(obs_table$object),]
 
   # some covariates are collected at the effort level so
   # join the effort table to the observations
-  obs_table <- plyr::join(obs_table, effort_table, by="ID")
+  #obs_table <- plyr::join(obs_table, effort_table, by="ID")
+  effort_table$ParentID <- NULL
+  obs_table <- merge(obs_table, effort_table, by.x="ParentID", by.y="ID")
 
   return(obs_table)
 }
