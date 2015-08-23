@@ -57,5 +57,7 @@ make_model <- function(this_analysis, model_definitions, data_filters,
     }
   }
 
+  attr(this_call,"factors") <- md[names(md)=="Factors"]
+
   return(this_call)
 }

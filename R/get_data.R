@@ -10,7 +10,6 @@
 get_data <- function(data_file){
 
   obs_table <- Hmisc::mdb.get(data_file, "Observation")
-  effort_table <- Hmisc::mdb.get(data_file, "Effort")
 
   # convert the distance column
   dist_names <- c("Perp.distance", "Perp.Distance", "PerpendicularDistance",
@@ -39,11 +38,13 @@ get_data <- function(data_file){
   }
 #  obs_table <- obs_table[sort(obs_table$object),]
 
-  # some covariates are collected at the effort level so
-  # join the effort table to the observations
-  #obs_table <- plyr::join(obs_table, effort_table, by="ID")
-  effort_table$ParentID <- NULL
-  obs_table <- merge(obs_table, effort_table, by.x="ParentID", by.y="ID")
+  if("Effort" %in% names(Hmisc::mdb.get(data_file))){
+    # some covariates are collected at the effort level so
+    # join the effort table to the observations
+    effort_table <- Hmisc::mdb.get(data_file, "Effort")
+    effort_table$ParentID <- NULL
+    obs_table <- merge(obs_table, effort_table, by.x="ParentID", by.y="ID")
+  }
 
   return(obs_table)
 }
