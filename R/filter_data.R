@@ -22,9 +22,9 @@ filter_data <- function(data, data_filter){
     # DISTANCE uses = to mean ==, fix that
     d_sel[grepl("[^<>]=", d_sel)] <- gsub("=", "==",
                                          d_sel[grepl("[^<>]=", d_sel)])
-    # DISTANCE also uses "AND"
+    # DISTANCE also uses "AND" -- replace with &
     d_sel <- gsub(" AND ", " & ", d_sel)
-    # DISTANCE also uses "IN"
+    # DISTANCE also uses "IN" -- replace with %in%
     d_sel <- gsub(" IN \\(", " %in% c\\(", d_sel)
 
     # since we inserted new "&"s, resplit that
@@ -41,7 +41,8 @@ filter_data <- function(data, data_filter){
     d_sel <- paste(d_sel, collapse=" & ")
 
     # make the selection
-    # yes, I know this is not ideal
+    # yes, I know this is not ideal and I should use something other
+    # than subset()
     data <- subset(data, eval(parse(text=d_sel)))
 
     filter <- d_sel
