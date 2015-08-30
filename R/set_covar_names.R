@@ -1,5 +1,7 @@
 #' Set column names in data to be as in formulae
 #'
+#' @param data a \code{data.frame} of the data to be modelled
+#' @param covnames the covariates that are factors
 #'
 #'
 set_covar_names <- function(data, covnames){

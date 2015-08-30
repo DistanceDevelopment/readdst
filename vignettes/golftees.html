@@ -10,7 +10,7 @@
 
 <meta name="author" content="David L Miller" />
 
-<meta name="date" content="2015-06-12" />
+<meta name="date" content="2015-08-30" />
 
 <title>Example import of a Distance analysis</title>
 
@@ -64,7 +64,7 @@ img {
 <div id="header">
 <h1 class="title">Example import of a Distance analysis</h1>
 <h4 class="author"><em>David L Miller</em></h4>
-<h4 class="date"><em>2015-06-12</em></h4>
+<h4 class="date"><em>2015-08-30</em></h4>
 </div>
 
 
@@ -90,8 +90,8 @@ project &lt;- paste0(project,&quot;/Golftees&quot;)</code></pre>
 <h2>Converting analyses</h2>
 <p>We can then convert the whole project and all analyses in it, this just translates the code that Distance uses to fit the model into R code:</p>
 <pre class="r"><code>converted &lt;- convert_project(project)</code></pre>
-<pre><code>## Warning in loop_apply(n, do.ply): Some distances were outside bins and have
-## been removed.</code></pre>
+<pre><code>## Warning in create.bins(data, cuts): Some distances were outside bins and
+## have been removed.</code></pre>
 <p>Note the warning generated here is because in the golf tees analysis, one data filter specifies distance bins outside of the truncation points.</p>
 <p>We can see the names of the analyses (as they were given in Distance for Windows) and their analysis IDs by printing the returned object:</p>
 <pre class="r"><code>converted</code></pre>
@@ -108,11 +108,12 @@ project &lt;- paste0(project,&quot;/Golftees&quot;)</code></pre>
 ## 10 10           FI - Petersen 2</code></pre>
 <p>More detail (including the <code>mrds</code> call details) can be found by looking an individual element of the list:</p>
 <pre class="r"><code>converted[[1]]</code></pre>
-<pre><code>## Model name : FI - Petersen 
-## ID         : 1 
+<pre><code>## Model name  : FI - Petersen 
+## ID          : 1 
+## Data filter :  
 ## mrds call  :
 ## 
-## mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;),meta.data=list(width=4,left=0),method=&quot;trial.fi&quot;,data=obs_table)</code></pre>
+## mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;),meta.data=list(width=4,left=0),control=list(),method=&quot;trial.fi&quot;,data=obs_table)</code></pre>
 </div>
 <div id="running-analyses" class="section level2">
 <h2>Running analyses</h2>
@@ -120,7 +121,7 @@ project &lt;- paste0(project,&quot;/Golftees&quot;)</code></pre>
 <pre class="r"><code>analysis_1 &lt;- run_analysis(converted[[1]], debug=TRUE)</code></pre>
 <pre><code>## Model name: FI - Petersen 
 ## Call:
-##  mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;),meta.data=list(width=4,left=0),method=&quot;trial.fi&quot;,data=obs_table)</code></pre>
+##  mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;),meta.data=list(width=4,left=0),control=list(),method=&quot;trial.fi&quot;,data=obs_table)</code></pre>
 <pre class="r"><code>summary(analysis_1)</code></pre>
 <pre><code>## 
 ## Summary for trial.fi object 

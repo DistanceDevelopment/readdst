@@ -17,6 +17,8 @@ filter_data <- function(data, data_filter){
 
   if(!is.null(d_sel)){
 
+    # get the layertype numbers
+    l_type <- unlist(d_sel[grepl("LayerType", names(d_sel))])
     # get the criteria
     d_sel <- unlist(d_sel[grepl("Criterion", names(d_sel))])
     # DISTANCE uses = to mean ==, fix that
@@ -28,14 +30,29 @@ filter_data <- function(data, data_filter){
     d_sel <- gsub(" IN \\(", " %in% c\\(", d_sel)
 
     # since we inserted new "&"s, resplit that
-    d_sel <- unlist(strsplit(d_sel," & "))
+    d_sel <- strsplit(d_sel," & ")
+    # replicate the layer types as needed
+    l_type <- rep(l_type, unlist(lapply(d_sel,length)))
+    # unlist the criteria
+    d_sel <- unlist(d_sel)
 
-    # apparrently the variable names are case insensitive -- hooray!
+    # get all the variable names
+    select_vars <- stringr::str_extract(d_sel,"^[:alpha:]+")
+
+    # if there is ambiguity over which covariate we should be
+    # selecting on, use the layer data to disambiguate
+    for(sv in select_vars){
+      if(sum(grepl(paste0(sv, "\\.\\d+"), names(data)))>1){
+        data[[sv]] <- data[[paste0(sv,".",l_type[grepl(sv, d_sel)])]]
+      }
+    }
+    # apparrently the variable names are case insensitive ¯\_(ツ)_/¯
     # so match them up and fix the filter call
     # get all the variables in the selection
-    select_vars <- stringr::str_extract(d_sel,"^[:alpha:]+")
-    data_names <- names(data)[match(tolower(select_vars), tolower(names(data)))]
+    data_names <- names(data)[match(tolower(select_vars),
+                                    tolower(names(data)))]
     d_sel <- stringr::str_replace(d_sel, select_vars, data_names)
+
 
     # package that up
     d_sel <- paste(d_sel, collapse=" & ")

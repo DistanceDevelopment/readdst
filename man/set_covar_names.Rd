@@ -6,6 +6,11 @@
 \usage{
 set_covar_names(data, covnames)
 }
+\arguments{
+\item{data}{a \code{data.frame} of the data to be modelled}
+
+\item{covnames}{the covariates that are factors}
+}
 \description{
 Set column names in data to be as in formulae
 }

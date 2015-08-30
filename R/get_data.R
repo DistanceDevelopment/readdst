@@ -45,6 +45,7 @@ get_data <- function(data_file){
 
   # get the top layer (usually "Survey area")
   dat <- Hmisc::mdb.get(data_file, hier[1])
+  last_name <- names(hier)[1]
   dat$ParentID <- NULL
   hier <- hier[-1]
 
@@ -53,13 +54,21 @@ get_data <- function(data_file){
 
   # keep joining the tables until we have none left
   while(length(hier)>0){
-    this_table <- Hmisc::mdb.get(data_file, hier[length(hier)])
-    dat <- merge(dat, this_table, by.y="ParentID", by.x="ID.last",
-                 all.y=TRUE, suffixes=c(paste0(".",
-                                        names(hier)[1]),""))
-    hier <- hier[-1]
+    this_table <- Hmisc::mdb.get(data_file, hier[1])
+    dat <- merge(dat, this_table,
+                 by.x="ID.last", by.y="ParentID",
+                 all.y=TRUE,
+                 suffixes=c(paste0(".",last_name),paste0(".",names(hier)[1])))
+
     # new ID to do the joining on
-    dat$ID.last <- dat$ID
+    if(is.null(dat[[paste0("ID.", names(hier)[1])]])){
+      dat[[paste0("ID.", names(hier)[1])]] <- dat[["ID"]]
+      dat[["ID"]] <- NULL
+    }
+    dat$ID.last <- dat[[paste0("ID.", names(hier)[1])]]
+    # save and remove that layer
+    last_name <- names(hier)[1]
+    hier <- hier[-1]
   }
 
   # join  the observation table on at the end

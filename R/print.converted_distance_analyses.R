@@ -2,6 +2,9 @@
 #'
 #' Prints a table of the analyses that have been converted.
 #'
+#' @param x converted distance analyses
+#' @param ... unused additional args for S3 compatibility
+#'
 #' @export
 print.converted_distance_analyses <- function(x, ...){
 

@@ -33,7 +33,7 @@ make_analysis <- function(this_analysis, model_definitions,
                          data_filters[[as.character(this_analysis$DataFilter)]])
 
   # set the variable names
-  filtered$data <- set_covar_names(filtered$data, attr(this_call,"factors"))
+  #filtered$data <- set_covar_names(filtered$data, attr(this_call,"factors"))
 
   e <- new.env()
   e$obs_table <- filtered$data

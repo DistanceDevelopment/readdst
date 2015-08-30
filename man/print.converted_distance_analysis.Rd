@@ -6,6 +6,11 @@
 \usage{
 \method{print}{converted_distance_analysis}(x, ...)
 }
+\arguments{
+\item{x}{converted distance analyses}
+
+\item{...}{unused additional args for S3 compatibility}
+}
 \description{
 Prints details of an analyses that has been converted.
 }

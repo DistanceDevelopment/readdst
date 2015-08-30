@@ -17,9 +17,10 @@ parse_definition.data_filter <- function(df){
   # remove the trailing semicolons
   df <- gsub(";", "", df)
 
+  ## make the text into a list that makes
+  ## sense and can be parsed further
   # at each line, the first word (chars before a space) is
   # the name of the element
-
   element_names <- sub("^([[:alnum:]]+) /.*","\\1", df, perl=TRUE)
   # remove the element names that we extracted
   df <- stringr::str_replace(df, element_names, "")
@@ -27,6 +28,7 @@ parse_definition.data_filter <- function(df){
   # split on the " \blah", returns a list
   df <- stringr::str_split(df," /")
 
+  # function to split everything up
   make_list_e <- function(x){
     # remove empty strings
     x <- x[x!=""]
@@ -41,8 +43,8 @@ parse_definition.data_filter <- function(df){
     return(vals)
   }
 
+  # apply that and give names
   df <- lapply(df, make_list_e)
-
   names(df) <- element_names
 
   return(df)
