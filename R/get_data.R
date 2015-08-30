@@ -18,7 +18,7 @@ get_data <- function(data_file){
     dist_name <- dist_names[dist_names %in% names(obs_table)]
     obs_table$distance <- obs_table[[dist_name]]
   }else{
-    stop("Only perpendicular distances supported at the moment!")
+    stop("Only perpendicular and radial distances supported at the moment!")
   }
 
   # if group size is collected rename to size
@@ -36,15 +36,35 @@ get_data <- function(data_file){
   if(all(names(obs_table)!="object")){
     obs_table$object <- 1:nrow(obs_table)
   }
-#  obs_table <- obs_table[sort(obs_table$object),]
 
-  if("Effort" %in% names(Hmisc::mdb.get(data_file))){
-    # some covariates are collected at the effort level so
-    # join the effort table to the observations
-    effort_table <- Hmisc::mdb.get(data_file, "Effort")
-    effort_table$ParentID <- NULL
-    obs_table <- merge(obs_table, effort_table, by.x="ParentID", by.y="ID")
+  # in what order should we be joining layers?
+  hier <- build_layer_hierarchy(data_file)
+  # pop the last entry, which was "Observation"
+  obs_id <- names(hier)[length(hier)]
+  hier <- hier[-length(hier)]
+
+  # get the top layer (usually "Survey area")
+  dat <- Hmisc::mdb.get(data_file, hier[1])
+  dat$ParentID <- NULL
+  hier <- hier[-1]
+
+  # set ID.last=ID so we can join on that
+  dat$ID.last <- dat$ID
+
+  # keep joining the tables until we have none left
+  while(length(hier)>0){
+    this_table <- Hmisc::mdb.get(data_file, hier[length(hier)])
+    dat <- merge(dat, this_table, by.y="ParentID", by.x="ID.last",
+                 all.y=TRUE, suffixes=c(paste0(".",
+                                        names(hier)[1]),""))
+    hier <- hier[-1]
+    # new ID to do the joining on
+    dat$ID.last <- dat$ID
   }
+
+  # join  the observation table on at the end
+  obs_table <- merge(dat, obs_table, by.y="ParentID", by.x="ID.last",
+               all.y=TRUE, suffixes=c(paste0(".", obs_id),""))
 
   return(obs_table)
 }
