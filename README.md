@@ -2,6 +2,8 @@
 
 This package allows one to import data from Distance for Windows "projects" and convert them into analyses one can run in the R package `mrds`.
 
+The `ducknests.html` vignette shows how to use most of the functionality of the package.
+
 ## Access databases
 
 Distance for Windows uses Access databases to store data, models and results. To use an Access database on Unix and Mac one needs to install [mdbtools](https://github.com/brianb/mdbtools).
