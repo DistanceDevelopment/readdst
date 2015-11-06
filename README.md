@@ -14,6 +14,8 @@ Distance for Windows uses Access databases to store data, models and results. To
 apt-get install mdbtools
 ```
 
+Note that Filipe Dias reports that there are issues with `mdbtools` on Linux when using Distance projects with spaces in their filenames. I can't reproduce these on Mac though.
+
 ### On Mac
 
 If you have [`homebrew`](http://brew.sh/) installed:
