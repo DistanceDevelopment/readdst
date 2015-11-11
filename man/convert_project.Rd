@@ -9,8 +9,14 @@ convert_project(project)
 \arguments{
 \item{project}{a path to a project}
 }
+\value{
+an object of class \code{converted_distance_analyses}
+}
 \description{
-Summary here
+Take each analysis in a Distance for Windows project and convert the model definition to an \code{mrds} model. Note that at the moment only CDS/MCDS/MRDS analyses are supported.
+}
+\details{
+Note that model names are as they are in Distance for Windows (so if you have nonesensical names in Distance for Windows they will be the same in R).
 }
 \section{Details}{
 

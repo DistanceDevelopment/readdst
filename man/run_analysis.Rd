@@ -15,7 +15,7 @@ run_analysis(analysis, debug = FALSE)
 fitted \code{\link{ddf}} object
 }
 \description{
-Run a converted Distance analysis
+Take a single converted analysis and run the model contained therein.
 }
 \author{
 David L Miller

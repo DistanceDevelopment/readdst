@@ -1,10 +1,13 @@
 #' Convert a Distance for Windows project
 #'
-#' Summary here
+#' Take each analysis in a Distance for Windows project and convert the model definition to an \code{mrds} model. Note that at the moment only CDS/MCDS/MRDS analyses are supported.
+#'
+#' Note that model names are as they are in Distance for Windows (so if you have nonesensical names in Distance for Windows they will be the same in R).
 #'
 #' @section Details:
 #' At the moment only line or point transects are supported.
 #' @param project a path to a project
+#' @return an object of class \code{converted_distance_analyses}
 #'
 #' @importFrom plyr dlply "." llply
 #' @export

@@ -1,5 +1,7 @@
 #' Run a converted Distance analysis
 #'
+#' Take a single converted analysis and run the model contained therein.
+#'
 #' @param analysis a converted analysis
 #' @param debug display the call and name of the model before it is run
 #' @return fitted \code{\link{ddf}} object
