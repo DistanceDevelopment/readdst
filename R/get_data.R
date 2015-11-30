@@ -9,7 +9,7 @@
 #' @author David L Miller
 get_data <- function(data_file){
 
-  obs_table <- Hmisc::mdb.get(data_file, "Observation")
+  obs_table <- db_get(data_file, "Observation")
 
   # convert the distance column
   dist_names <- c("Perp.distance", "Perp.Distance", "PerpendicularDistance",
@@ -44,7 +44,7 @@ get_data <- function(data_file){
   hier <- hier[-length(hier)]
 
   # get the top layer (usually "Survey area")
-  dat <- Hmisc::mdb.get(data_file, hier[1])
+  dat <- db_get(data_file, hier[1])
   last_name <- names(hier)[1]
   dat$ParentID <- NULL
   hier <- hier[-1]
@@ -54,7 +54,7 @@ get_data <- function(data_file){
 
   # keep joining the tables until we have none left
   while(length(hier)>0){
-    this_table <- Hmisc::mdb.get(data_file, hier[1])
+    this_table <- db_get(data_file, hier[1])
     dat <- merge(dat, this_table,
                  by.x="ID.last", by.y="ParentID",
                  all.y=TRUE,

@@ -2,7 +2,7 @@
 #'
 #' Take each analysis in a Distance for Windows project and convert the model definition to an \code{mrds} model. Note that at the moment only CDS/MCDS/MRDS analyses are supported.
 #'
-#' Note that model names are as they are in Distance for Windows (so if you have nonesensical names in Distance for Windows they will be the same in R).
+#' Note that model names are as they are in Distance for Windows (so if you have nonsensical names in Distance for Windows they will be the same in R).
 #'
 #' @section Details:
 #' At the moment only line or point transects are supported.
@@ -13,6 +13,7 @@
 #' @export
 convert_project <- function(project){
 
+  ## get file names to use
   # project file
   project_file <- paste0(project, ".dst")
   # data file
@@ -20,7 +21,7 @@ convert_project <- function(project){
 
 
   # get the project settings and check that this is a Distance 6+ project
-  project_settings <- Hmisc::mdb.get(project_file,"ProjectSettings")
+  project_settings <- db_get(project_file, "ProjectSettings")
   Distance_version <- as.numeric(as.character(
                                    subset(project_settings,
                                           Key=="DistanceVersion")$Setting))
@@ -30,7 +31,7 @@ convert_project <- function(project){
 
 
   # extract the analyses table
-  analyses <- Hmisc::mdb.get(project_file, "Analyses")
+  analyses <- db_get(project_file, "Analyses")
 
   # extract the model definitions
   model_definitions <- get_definitions(project_file, "ModelDefinitions")
@@ -46,7 +47,7 @@ convert_project <- function(project){
   obs_table <- get_data(data_file)
 
   # what kind of distances to we have?
-  data_names <- mdb.get(data_file, TRUE)
+  data_names <- db_get(data_file, TRUE)
   if("Point transect" %in% data_names){
     transect <- "point"
   }else{

@@ -6,16 +6,15 @@
 #' @param table which table to extract the "Description" column from
 #' @return a \code{list} of definitions, each element of which is a character vector.
 #'
-#' @importFrom Hmisc mdb.get
 #' @importFrom magrittr "%>%" "%$%"
 #' @author David L Miller
 get_definitions <- function(file, table){
   definitions <- file %>%
-                  Hmisc::mdb.get(tables=table) %$%
+                  db_get(table=table) %$%
                   as.character(Definition) %>%
                   strsplit("\n")
   names(definitions) <- file %>%
-                         Hmisc::mdb.get(tables=table) %$%
+                         db_get(table=table) %$%
                          as.character(ID) %>%
                          strsplit("\n")
   return(definitions)

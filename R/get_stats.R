@@ -5,14 +5,13 @@
 #' @param project_file path to project file
 #'
 #' @author David L Miller
-#' @importFrom Hmisc mdb.get
 get_stats <- function(project_file){
 
   # get the stats
-  stats <- mdb.get(project_file, "AnalysisResultsStats")
+  stats <- db_get(project_file, "AnalysisResultsStats")
 
   # get the analyses that were run
-  analyses <- Hmisc::mdb.get(project_file, "Analyses")
+  analyses <- db_get(project_file, "Analyses")
 
 
   # from: Distance60/Utilities/Classes/Enumerations.cls
