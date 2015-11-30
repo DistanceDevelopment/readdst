@@ -25,7 +25,7 @@ make_analysis <- function(this_analysis, model_definitions,
     cuts <- eval(parse(text=cuts))
     cuts <- cuts[cuts >= left & cuts <= width]
 
-    data <- create.bins(data, cuts)
+    data <- create_bins(data, cuts)
   }
 
   # filter the data

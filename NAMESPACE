@@ -3,7 +3,7 @@
 S3method(print,converted_distance_analyses)
 S3method(print,converted_distance_analysis)
 export(convert_project)
-export(create.bins)
+export(create_bins)
 export(run_analysis)
 export(test_stats)
 importFrom(Hmisc,mdb.get)
