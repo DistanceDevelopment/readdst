@@ -9,12 +9,41 @@ test_stats(analysis, statuses = 1)
 \arguments{
 \item{analysis}{a converted (but not run) analysis}
 
-\item{statuses}{for which statuses should tests be run? Defaults to \code{1} but can be given values like \code{1:3} ("Run", "Run with warnings", "Run with errors", respectively).}
+\item{statuses}{for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).}
 }
 \description{
 Tests the results stored in the Distance for Windows project file against those generated from running the same analysis in R.
 }
 \details{
 Currently only tests AIC and log-likelihood values.
+
+A previous call to \code{\link{convert_project}} will return a list of projects. Only one analysis at a time can be run with \code{test_stats}. If you wish to run all the analyses in the project, you can use \code{\link{lapply}}.
+}
+\section{Status}{
+
+The \code{status} code is taken from Distance for Windows to indicate whether the analysis has been run yet and what the outcome was. Status codes are as follows:
+
+\itemize{
+  \item{\code{0}}{ analyses has not been run in Distance for Windows yet}
+  \item{\code{1}}{ analysis ran without errors or warnings}
+  \item{\code{2}}{ analysis ran with warnings}
+  \item{\code{3}}{ analysis ran with errors}
+}
+
+If an analysis has a status of 0 or 3 there will usually not be any statistics attached to the analysis, so no tests will be run.
+
+Note that an analysis that runs with error in Distance for Windows may run fine in R and an analysis that runs fine in Distance for Windows may not work in R. In the latter case, please consider submitting this a a bug to \url{github.com/distancedevelopment/distance-bugs}.
+}
+\examples{
+\dontrun{
+library(readdst)
+# load the golftees sample project and convert it
+project <- system.file("Golftees-example", package="readdst")
+project <- paste0(project,"/Golftees")
+converted <- convert_project(project)
+
+# run tests for analysis 1
+test_stats(converted[[1]])
+}
 }
 

@@ -4,16 +4,42 @@
 #'
 #' Currently only tests AIC and log-likelihood values.
 #'
+#' A previous call to \code{\link{convert_project}} will return a list of projects. Only one analysis at a time can be run with \code{test_stats}. If you wish to run all the analyses in the project, you can use \code{\link{lapply}}.
+#' @section Status:
+#' The \code{status} code is taken from Distance for Windows to indicate whether the analysis has been run yet and what the outcome was. Status codes are as follows:
+#'
+#' \itemize{
+#'   \item{\code{0}}{ analyses has not been run in Distance for Windows yet}
+#'   \item{\code{1}}{ analysis ran without errors or warnings}
+#'   \item{\code{2}}{ analysis ran with warnings}
+#'   \item{\code{3}}{ analysis ran with errors}
+#' }
+#'
+#' If an analysis has a status of 0 or 3 there will usually not be any statistics attached to the analysis, so no tests will be run.
+#'
+#' Note that an analysis that runs with error in Distance for Windows may run fine in R and an analysis that runs fine in Distance for Windows may not work in R. In the latter case, please consider submitting this a a bug to \url{github.com/distancedevelopment/distance-bugs}.
+#'
 #' @param analysis a converted (but not run) analysis
-#' @param statuses for which statuses should tests be run? Defaults to \code{1} but can be given values like \code{1:3} ("Run", "Run with warnings", "Run with errors", respectively).
+#' @param statuses for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).
 #'
 #' @export
 #' @importFrom testthat test_that context expect_equal
 #' @importFrom plyr l_ply
+#' @examples
+#' \dontrun{
+#' library(readdst)
+#' # load the golftees sample project and convert it
+#' project <- system.file("Golftees-example", package="readdst")
+#' project <- paste0(project,"/Golftees")
+#' converted <- convert_project(project)
+#'
+#' # run tests for analysis 1
+#' test_stats(converted[[1]])
+#' }
 test_stats <- function(analysis, statuses=1){
 
-  if(class(analysis) != "converted_distance_analysis"){
-    stop("`analysis` must be of class \"converted_distance_analysis\"")
+  if("converted_distance_analyses" %in% class(analysis)){
+    stop("You can only run one analysis at a time with test_stats, try again selecting only one analysis")
   }
 
   if(!(analysis$status %in% statuses)){
