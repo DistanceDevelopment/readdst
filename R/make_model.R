@@ -43,7 +43,7 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                             meta,
                             make_control(md),
                             method,
-                            "data=obs_table", sep=","), ")")
+                            "data=obs_table", sep=", "), ")")
 
   # if AIC selection, save max number of terms
   if(("Pick" %in% names(md)) && md[["Pick"]] == "AIC"){

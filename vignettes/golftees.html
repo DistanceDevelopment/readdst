@@ -106,7 +106,7 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 ## Data filter :  
 ## mrds call  :
 ## 
-## mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;),meta.data=list(width=4,left=0),control=list(),method=&quot;trial.fi&quot;,data=obs_table)</code></pre>
+## mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=obs_table)</code></pre>
 </div>
 <div id="running-analyses" class="section level2">
 <h2>Running analyses</h2>
@@ -114,7 +114,7 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 <pre class="sourceCode r"><code class="sourceCode r">analysis_1 &lt;-<span class="st"> </span><span class="kw">run_analysis</span>(converted[[<span class="dv">1</span>]], <span class="dt">debug=</span><span class="ot">TRUE</span>)</code></pre>
 <pre><code>## Model name: FI - Petersen 
 ## Call:
-##  mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;),meta.data=list(width=4,left=0),control=list(),method=&quot;trial.fi&quot;,data=obs_table)</code></pre>
+##  mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=obs_table)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(analysis_1)</code></pre>
 <pre><code>## 
 ## Summary for trial.fi object 
