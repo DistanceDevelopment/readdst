@@ -1,16 +1,18 @@
-#' Convert a Distance for Windows project
+#' Convert a Distance for Windows project to R
 #'
-#' Take each analysis in a Distance for Windows project and convert the model definition to an \code{mrds} model. Note that at the moment only CDS/MCDS/MRDS analyses are supported.
-#'
-#' Note that model names are as they are in Distance for Windows (so if you have nonsensical names in Distance for Windows they will be the same in R).
+#' Take each analysis in a Distance for Windows project and convert the model definition to an \code{mrds} model, data and data filters are also extracted and associated with the relevant models.
 #'
 #' @section Details:
-#' At the moment only line or point transects are supported.
-#' @param project a path to a project
-#' @return an object of class \code{converted_distance_analyses}
+#' Only CDS/MCDS/MRDS analyses are supported.
+#'
+#' Model names are as they are in Distance for Windows (so if you have nonsensical names in Distance for Windows they will be the same in R).
+#'
+#' @param project a path to a project (path to the \code{dst} file with "\code{.dst}" removed from the end of the path)
+#' @return an object of class \code{\link{converted_distance_analyses}}
 #'
 #' @importFrom plyr dlply "." llply
 #' @export
+#' @author David L Miller
 convert_project <- function(project){
 
   ## get file names to use
@@ -54,10 +56,10 @@ convert_project <- function(project){
     transect <- "line"
   }
 
-  # batch convert analyses
+  # batch convert analyses and return a list, one element per analysis
   R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
                       data_filters, data=obs_table, transect=transect)
-
+  # give each analysis a name
   names(R_analyses) <- as.character(analyses$Name)
 
   # save the file names of the project for later
@@ -67,6 +69,9 @@ convert_project <- function(project){
                                     return(x)},
                       project=project, project_file=project_file)
 
+  # return object is just a list of class "converted_distance_analysis"
+  # make that list of class "converted_distance_analyses" so we can
+  # dispatch it later.
   class(R_analyses) <- "converted_distance_analyses"
 
   return(R_analyses)

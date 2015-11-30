@@ -1,4 +1,4 @@
-#' Test to see if Distance and R get the same result
+#' Test to see if DISTANCE and R get the same result
 #'
 #'
 #' @param analysis a converted (but not run) analysis

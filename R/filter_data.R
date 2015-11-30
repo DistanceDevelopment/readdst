@@ -30,20 +30,20 @@ filter_data <- function(data, data_filter){
     d_sel <- gsub(" IN \\(", " %in% c\\(", d_sel)
 
     # since we inserted new "&"s, resplit that
-    d_sel <- strsplit(d_sel," & ")
+    d_sel <- strsplit(d_sel, " & ")
     # replicate the layer types as needed
-    l_type <- rep(l_type, unlist(lapply(d_sel,length)))
+    l_type <- rep(l_type, unlist(lapply(d_sel, length)))
     # unlist the criteria
     d_sel <- unlist(d_sel)
 
     # get all the variable names
-    select_vars <- stringr::str_extract(d_sel,"^[:alpha:]+")
+    select_vars <- stringr::str_extract(d_sel, "^[:alpha:]+")
 
     # if there is ambiguity over which covariate we should be
     # selecting on, use the layer data to disambiguate
     for(sv in select_vars){
       if(sum(grepl(paste0(sv, "\\.\\d+"), names(data)))>1){
-        data[[sv]] <- data[[paste0(sv,".",l_type[grepl(sv, d_sel)])]]
+        data[[sv]] <- data[[paste0(sv, ".", l_type[grepl(sv, d_sel)])]]
       }
     }
     # apparrently the variable names are case insensitive ¯\_(ツ)_/¯
