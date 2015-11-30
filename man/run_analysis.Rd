@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_analysis.R
 \name{run_analysis}
 \alias{run_analysis}
-\title{Run a converted Distance analysis}
+\title{Run a converted distance sampling analysis}
 \usage{
 run_analysis(analysis, debug = FALSE)
 }
@@ -16,6 +16,27 @@ fitted \code{\link{ddf}} object
 }
 \description{
 Take a single converted analysis and run the model contained therein.
+}
+\details{
+A previous call to \code{\link{convert_project}} will return a list of projects. Only one analysis at a time can be run with \code{run_analysis}. If you wish to run all the analyses in the project, see the code below using \code{\link{lapply}}.
+
+If an analysis needs to select the number of adjustment terms (for key plus adjustment detection functions) by AIC, then that selection is done at this stage.
+}
+\examples{
+\dontrun{
+library(readdst)
+# load and convert the golftees project
+project <- system.file("Golftees-example", package="readdst")
+project <- paste0(project,"/Golftees")
+converted <- convert_project(project)
+# run the first analysis
+analysis_1 <- run_analysis(converted[[1]], debug=TRUE)
+# look at the resulting model output
+summary(analysis_1)
+
+# run all the analyses in a project
+all_analyses_run <- lapply(converted, run_analysis)
+}
 }
 \author{
 David L Miller
