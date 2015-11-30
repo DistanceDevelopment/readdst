@@ -8,4 +8,20 @@
 \description{
 This package read data and model definitions from a Distance for Windows project (\code{.dst} and \code{.dat} files) and converts models to run in the R package \code{\link{mrds}}.
 }
+\details{
+Usually, a workflow will look something like that below. See also the vignette shipped with the package for example output.
+}
+\examples{
+\dontrun{
+library(readdst)
+# load the golftees sample project and convert it
+project <- system.file("Golftees-example", package="readdst")
+project <- paste0(project,"/Golftees")
+converted <- convert_project(project)
+
+# run the first analysis in the project and look at model summary
+analysis_1 <- run_analysis(converted[[1]], debug=TRUE)
+summary(analysis_1)
+}
+}
 

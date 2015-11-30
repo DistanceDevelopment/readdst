@@ -25,6 +25,6 @@ Model names are as they are in Distance for Windows (so if you have nonsensical 
 David L Miller
 }
 \seealso{
-converted_distance_analyses
+converted_distance_analyses readdst-package
 }
 

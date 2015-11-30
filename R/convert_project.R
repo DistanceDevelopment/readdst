@@ -13,7 +13,7 @@
 #' @importFrom plyr dlply "." llply
 #' @export
 #' @author David L Miller
-#' @seealso converted_distance_analyses
+#' @seealso converted_distance_analyses readdst-package
 convert_project <- function(project){
 
   ## get file names to use
