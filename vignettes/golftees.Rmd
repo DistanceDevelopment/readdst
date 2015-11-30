@@ -70,7 +70,7 @@ summary(analysis_1)
 
 Since this is just a fitted object from `mrds` we can do normal stuff like make plots:
 
-```{r fig.cap="Plot results from `analysis_1`.", fig.width=10}
+```{r fig.cap="Plot results from `analysis_1`.", fig.width=9, fig.height=4}
 par(mfrow=c(1,2))
 plot(analysis_1)
 ```
