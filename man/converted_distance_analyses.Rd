@@ -13,7 +13,7 @@ Once \code{\link{convert_project}} has been run on a project, two types of objec
 \itemize{
   \item{\code{call}}{ string with the call to \code{\link{ddf}} to build and run the model}
   \item{\code{aic.select}}{ maximum number of terms to select by AIC if AIC term selection has been enabled (for key plus adjustment terms models only)}
-  \item{\code{status}}{ what the status of this model was in DISTANCE (see details)}
+  \item{\code{status}}{ what the status of this model was in DISTANCE (see "Status" below)}
   \item{\code{env}}{ an \code{environment} that contains any data needed to run the model (at the moment only one object, \code{obs.table} containing the observation table)}
   \item{\code{filter}}{ string used to subset the data to get the same filter as in DISTANCE}
   \item{\code{name}}{ the name for this analysis, as used in DISTANCE}

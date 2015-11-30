@@ -24,4 +24,7 @@ Model names are as they are in Distance for Windows (so if you have nonsensical 
 \author{
 David L Miller
 }
+\seealso{
+converted_distance_analyses
+}
 

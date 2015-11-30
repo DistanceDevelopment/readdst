@@ -13,6 +13,7 @@
 #' @importFrom plyr dlply "." llply
 #' @export
 #' @author David L Miller
+#' @seealso converted_distance_analyses
 convert_project <- function(project){
 
   ## get file names to use
