@@ -15,7 +15,7 @@ run_analysis(analysis, debug = FALSE)
 fitted \code{\link{ddf}} object
 }
 \description{
-Take a single converted analysis and run the model contained therein.
+Take a single converted analysis and run the model contained therein. The returned object is exactly as if the model has been run using \code{\link{ddf}}, so anything that can normally be done with a \code{ddf} object can be done with the return.
 }
 \details{
 A previous call to \code{\link{convert_project}} will return a list of projects. Only one analysis at a time can be run with \code{run_analysis}. If you wish to run all the analyses in the project, see the code below using \code{\link{lapply}}.
