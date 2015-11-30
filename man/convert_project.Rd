@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_project.R
 \name{convert_project}
 \alias{convert_project}
-\title{Convert a Distance for Windows project to R}
+\title{Convert a Distance for Windows project to be run in R}
 \usage{
 convert_project(project)
 }

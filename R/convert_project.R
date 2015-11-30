@@ -1,4 +1,4 @@
-#' Convert a Distance for Windows project to R
+#' Convert a Distance for Windows project to be run in R
 #'
 #' Take each analysis in a Distance for Windows project and convert the model definition to an \code{mrds} model, data and data filters are also extracted and associated with the relevant models.
 #'

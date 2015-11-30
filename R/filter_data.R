@@ -1,6 +1,6 @@
 #' Filter the data
 #'
-#' Take the "Filters" applied by DISTANCE to the data and use them to subset the data.
+#' Take the "data filters" applied by Distance for Windows to the data and use them to subset the data.
 #'
 #' @author David L Miller
 #' @return a list with two elements, the data and the filter string

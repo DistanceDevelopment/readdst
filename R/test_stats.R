@@ -1,5 +1,8 @@
-#' Test to see if DISTANCE and R get the same result
+#' Test to see if Distance for Windows and R get the same results
 #'
+#' Tests the results stored in the Distance for Windows project file against those generated from running the same analysis in R.
+#'
+#' Currently only tests AIC and log-likelihood values.
 #'
 #' @param analysis a converted (but not run) analysis
 #' @param statuses for which statuses should tests be run? Defaults to \code{1} but can be given values like \code{1:3} ("Run", "Run with warnings", "Run with errors", respectively).
@@ -36,7 +39,7 @@ test_stats <- function(analysis, statuses=1){
     # run the analysis
     run_analysis <- run_analysis(analysis)
 
-
+    # do some tests!
     test_that(paste0("Analysis ",analysis$ID, " results are correct"),{
       # test AIC result
       expect_equal(run_analysis$criterion,

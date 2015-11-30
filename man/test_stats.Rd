@@ -2,7 +2,7 @@
 % Please edit documentation in R/test_stats.R
 \name{test_stats}
 \alias{test_stats}
-\title{Test to see if DISTANCE and R get the same result}
+\title{Test to see if Distance for Windows and R get the same results}
 \usage{
 test_stats(analysis, statuses = 1)
 }
@@ -12,6 +12,9 @@ test_stats(analysis, statuses = 1)
 \item{statuses}{for which statuses should tests be run? Defaults to \code{1} but can be given values like \code{1:3} ("Run", "Run with warnings", "Run with errors", respectively).}
 }
 \description{
-Test to see if DISTANCE and R get the same result
+Tests the results stored in the Distance for Windows project file against those generated from running the same analysis in R.
+}
+\details{
+Currently only tests AIC and log-likelihood values.
 }
 
