@@ -44,7 +44,6 @@ db_get <- function(file, table=NULL){
     #  * mdb.get just pulls _whole tables_ and puts them in data.frames
     #  * setting table=NULL will import _all tables_
     #  * setting table=TRUE will give a list of tables
-    stop("Windows is currently not supported.")
   }
 
   return(dat)

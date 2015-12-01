@@ -15,9 +15,10 @@ test_stats(analysis, statuses = 1)
 Tests the results stored in the Distance for Windows project file against those generated from running the same analysis in R.
 }
 \details{
-Currently only tests AIC and log-likelihood values.
-
 A previous call to \code{\link{convert_project}} will return a list of projects. Only one analysis at a time can be run with \code{test_stats}. If you wish to run all the analyses in the project, you can use \code{\link{lapply}}.
+}
+\note{
+Currently only tests AIC and log-likelihood values.
 }
 \section{Status}{
 

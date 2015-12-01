@@ -2,6 +2,10 @@
 #'
 #' At the moment only extracts the AIC and likelihood
 #'
+#' @section Details:
+#'
+#' Codes used to determine the meanings of statistics are given at \url{https://github.com/DistanceDevelopment/readdst/wiki/distance-results-codes}.
+#'
 #' @param project_file path to project file
 #'
 #' @author David L Miller
@@ -13,21 +17,11 @@ get_stats <- function(project_file){
   # get the analyses that were run
   analyses <- db_get(project_file, "Analyses")
 
-
-  # from: Distance60/Utilities/Classes/Enumerations.cls
-  # 0: "Not Run"
-  # 1: "Ran OK"
-  # 2: "Ran with warnings"
-  # 3: "Ran with errors"
-  # 4: "Survey completed"
-  # 5: "Queued to run"
-  # 6: "Run initializing"
-  # 7: "Running"
-  # 8: "Reading results"
-  # 9: "Resetting"
-
-  # let's just do 1:3 here, maybe allow others later
-
+  # only look for stats for analyses with codes:
+  # 1 "Ran OK"
+  # 2 "Ran with warnings"
+  # 3 "Ran with errors"
+  # more documentation on numbers: https://github.com/DistanceDevelopment/readdst/wiki/distance-status-codes
   analyses <- subset(analyses, Status %in% 1:3)
 
   # some documentation on magic numbers
@@ -41,6 +35,10 @@ get_stats <- function(project_file){
   #cat('4032',dht$individuals$N$lcl[n.ests],'\n')
   #cat('4033',dht$individuals$N$ucl[n.ests],'\n')
   #cat('4034',dht$individuals$N$df[n.ests],'\n')
+
+  # for MCDS magic numbers see distance manual p322-323
+  # https://github.com/DistanceDevelopment/readdst/wiki/distance-results-codes
+
 
   # grab the results
   results <- subset(stats, ID %in% analyses$ID & Parameter %in% c(2020, 2090))
