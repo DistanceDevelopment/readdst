@@ -1,10 +1,8 @@
 Package: readdst
 Title: Convert Distance for Windows projects to R analyses
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: person("David", "Miller", , "dave@ninepointeightone.net", role = c("aut", "cre"))
-Description: Take projects built using Distance for Windows and create R scripts
-    which duplicate the analysis. Optionally build a test suite that checks analysis
-    results from Distance with the equivalent R results.
+Description: Take projects built using Distance for Windows and create R scripts which duplicate the analysis. Optionally build a test suite that checks analysis results from Distance with the equivalent R results.
 Depends:
     R (>= 3.2.0)
 License: GPL
