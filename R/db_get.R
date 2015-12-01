@@ -49,18 +49,14 @@ db_get <- function(file, table=NULL){
     odbcClose(db)
 
     # remove \r line endings
-    if(is.data.frame(dat) && nrow(dat)>1){
-      dat <- apply(dat, 2, function(x){
+    dat <- lapply(dat, function(x){
                     if(typeof(x) == "character"){
                       gsub("\\r", "", x)
                     }else{
                       x
                     }
                   })
-      dat <- as.data.frame(dat, stringsAsFactors=FALSE)
-    }else{
-      dat <- gsub("\\r", "", dat)
-    }
+    dat <- as.data.frame(dat, stringsAsFactors=FALSE)
     ## WHEN IMPLEMENTING THIS:
     ## for compatability with mdb.get:
     #  * mdb.get just pulls _whole tables_ and puts them in data.frames
