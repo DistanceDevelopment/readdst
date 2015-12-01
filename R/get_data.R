@@ -14,8 +14,8 @@ get_data <- function(data_file){
   # convert the distance column
   dist_names <- c("Perp.distance", "Perp.Distance", "PerpendicularDistance",
                   "Radial.distance", "Radial.Distance")
-  if(any(grepl(dist_names, names(obs_table)))){
-    dist_name <- dist_names[grepl(dist_names, names(obs_table))]
+  if(any(dist_names %in% names(obs_table))){
+    dist_name <- dist_names[dist_names %in% names(obs_table)]
     obs_table$distance <- obs_table[[dist_name]]
   }else{
     stop("Only perpendicular and radial distances supported at the moment!")
