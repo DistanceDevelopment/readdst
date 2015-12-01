@@ -46,7 +46,16 @@ get_data <- function(data_file){
   # get the top layer (usually "Survey area")
   dat <- db_get(data_file, hier[1])
   last_name <- names(hier)[1]
-  dat$ParentID <- NULL
+
+  # get the ID field
+  if("ParentID" %in% names(dat)){
+    ID_field <- "ParentID"
+  }else if("ContainerID" %in% names(dat)){
+    ID_field <- "ContainerID"
+  }else{
+    stop("Unable to find 'ParentID' or 'ContainerID'")
+  }
+  dat[[ID_field]] <- NULL
   hier <- hier[-1]
 
   # set ID.last=ID so we can join on that
@@ -56,7 +65,7 @@ get_data <- function(data_file){
   while(length(hier)>0){
     this_table <- db_get(data_file, hier[1])
     dat <- merge(dat, this_table,
-                 by.x="ID.last", by.y="ParentID",
+                 by.x="ID.last", by.y=ID_field,
                  all.y=TRUE,
                  suffixes=c(paste0(".",last_name),paste0(".",names(hier)[1])))
 
@@ -72,7 +81,7 @@ get_data <- function(data_file){
   }
 
   # join  the observation table on at the end
-  obs_table <- merge(dat, obs_table, by.y="ParentID", by.x="ID.last",
+  obs_table <- merge(dat, obs_table, by.y=ID_field, by.x="ID.last",
                all.y=TRUE, suffixes=c(paste0(".", obs_id),""))
 
   return(obs_table)
