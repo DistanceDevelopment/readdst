@@ -8,6 +8,7 @@
 #' @return a \code{data.frame} with the contents of a database table
 #' @author David L Miller
 #' @importFrom Hmisc mdb.get
+#' @importFrom RODBC odbcDriverConnect sqlTables sqlQuery odbcClose
 db_get <- function(file, table=NULL){
 
   # on unix systems use mdb.get
@@ -17,9 +18,26 @@ db_get <- function(file, table=NULL){
   # on Windows
   }else{
     # this will probably consist of the following steps:
-    # db <- odbcConnect(file)
-    # query <- sqlQuery(db, query, errors = TRUE, ..., rows_at_time)
-    # odbcCloseAll()
+    require(RODBC)
+    dsn <- paste0("Driver={Microsoft Access Driver (*.mdb)};Dbq=",
+                  file, ";Uid=;Pwd=;")
+    db <- odbcDriverConnect(dsn)
+
+    if(is.null(table)){
+      # get a character vector of table names
+      table_names <- sqlTables(db)$TABLE_NAME
+      table_names <- table_names[!grepl("MSys", table_names)]
+      # make a list, one table per element
+      dat <- lapply(table_names, function(x) sqlQuery(db,
+                      paste0("SELECT * FROM ", table)))
+    }else if(table==TRUE){
+      # get a character vector of table names
+      dat <- sqlTables(db)$TABLE_NAME
+    }else{
+      # do the query and get the table
+      dat <- sqlQuery(db, paste0("SELECT * FROM ", table))
+    }
+    odbcClose(db)
 
     ## WHEN IMPLEMENTING THIS:
     ## for compatability with mdb.get:
