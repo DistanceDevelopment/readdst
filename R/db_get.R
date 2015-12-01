@@ -53,7 +53,7 @@ db_get <- function(file, table=NULL){
                     x
                   }
                 })
-    dat <- as.data.frame(dat)
+    dat <- as.data.frame(dat, stringsAsFactors=FALSE)
 
     ## WHEN IMPLEMENTING THIS:
     ## for compatability with mdb.get:
