@@ -2,7 +2,7 @@
 
 This package allows one to import data from Distance for Windows "projects" and convert them into analyses one can run in the R package `mrds`.
 
-The `ducknests.html` vignette shows how to use most of the functionality of the package.
+The `golftees.html` vignette shows how to use most of the functionality of the package.
 
 ## Access databases
 
@@ -26,4 +26,4 @@ brew install mdbtools
 
 ### On Windows
 
-Not supported at the moment, but will be in the future via RODBC.
+Support is via `RODBC` -- simply installing the R package should enable use.
