@@ -28,14 +28,18 @@ db_get <- function(file, table=NULL){
       table_names <- sqlTables(db)$TABLE_NAME
       table_names <- table_names[!grepl("MSys", table_names)]
       # make a list, one table per element
-      dat <- lapply(table_names, function(x) sqlQuery(db,
-                      paste0("SELECT * FROM ", table)))
+      dat <- lapply(table_names, function(x){
+                      xx <- sqlQuery(db,paste0("SELECT * FROM ", table))
+                      names(xx) <- sub(" ", ".", names(xx))
+                    })
     }else if(table==TRUE){
       # get a character vector of table names
       dat <- sqlTables(db)$TABLE_NAME
+      dat <- sub(" ", ".", dat)
     }else{
       # do the query and get the table
       dat <- sqlQuery(db, paste0("SELECT * FROM ", table))
+      names(dat) <- sub(" ", ".", names(dat))
     }
     odbcClose(db)
 
