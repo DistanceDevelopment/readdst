@@ -48,12 +48,9 @@ get_data <- function(data_file){
   last_name <- names(hier)[1]
 
   # get the ID field
-  if("ParentID" %in% names(dat)){
-    ID_field <- "ParentID"
-  }else if("ContainerID" %in% names(dat)){
+  ID_field <- "ParentID"
+  if("ContainerID" %in% names(dat)){
     ID_field <- "ContainerID"
-  }else{
-    stop("Unable to find 'ParentID' or 'ContainerID'")
   }
   dat[[ID_field]] <- NULL
   hier <- hier[-1]
