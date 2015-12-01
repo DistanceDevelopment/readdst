@@ -29,7 +29,7 @@ db_get <- function(file, table=NULL){
       table_names <- table_names[!grepl("MSys", table_names)]
       # make a list, one table per element
       dat <- lapply(table_names, function(x){
-                      xx <- sqlQuery(db,paste0("SELECT * FROM ", table))
+                      xx <- sqlQuery(db, paste0("SELECT * FROM '", table, "'"))
                       names(xx) <- sub(" ", ".", names(xx))
                     })
     }else if(table==TRUE){
@@ -38,7 +38,9 @@ db_get <- function(file, table=NULL){
       dat <- sub(" ", ".", dat)
     }else{
       # do the query and get the table
-      dat <- sqlQuery(db, paste0("SELECT * FROM ", table))
+      # go back to spaces not dots
+      table <- sub(".", " ", table)
+      dat <- sqlQuery(db, paste0("SELECT * FROM '", table, "'"))
       names(dat) <- sub(" ", ".", names(dat))
     }
     odbcClose(db)
