@@ -9,6 +9,7 @@ build_layer_hierarchy <- function(data_file){
   data_layers <- db_get(data_file, "DataLayers")
   data_layers$LayerName <- as.character(data_layers$LayerName)
   data_layers$ParentLayerName <- as.character(data_layers$ParentLayerName)
+  data_layers$LayerType <- as.numeric(data_layers$LayerType)
 
   # construct the layers in order left to right
   layers <- data_layers$LayerName[data_layers$LayerType==1]
