@@ -27,3 +27,5 @@ brew install mdbtools
 ### On Windows
 
 Support is via `RODBC` -- simply installing the R package should enable use.  Version 0.0.3 has added a dependency on the `readr` package.
+
+Subsequent runs of analyses extracted from `.dst` projects creates dependence of `readdst` upon `mrds`
