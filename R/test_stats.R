@@ -58,7 +58,7 @@ test_stats <- function(analysis, statuses=1){
 
     # get these stats
     stats <- get_stats(analysis$project_file)
-    stats <- subset(stats, ID==analysis$ID)
+    stats <- stats[stats$ID==analysis$ID, ]
 
     # if there were no results return early
     if(nrow(stats)==0){
