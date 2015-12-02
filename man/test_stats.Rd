@@ -11,6 +11,9 @@ test_stats(analysis, statuses = 1)
 
 \item{statuses}{for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).}
 }
+\value{
+a \code{data.frame} with two columns: \code{Statistic}, a description of the tested statistic; and \code{Result} a series of ticks, indicating that values were the same (or similar enough in the case of numeric values; see \code{\link{stats_table}}).
+}
 \description{
 Tests the results stored in the Distance for Windows project file against those generated from running the same analysis in R.
 }
@@ -18,7 +21,7 @@ Tests the results stored in the Distance for Windows project file against those 
 A previous call to \code{\link{convert_project}} will return a list of projects. Only one analysis at a time can be run with \code{test_stats}. If you wish to run all the analyses in the project, you can use \code{\link{lapply}}.
 }
 \note{
-Currently only tests AIC and log-likelihood values.
+Tests all available statistics.
 }
 \section{Status}{
 

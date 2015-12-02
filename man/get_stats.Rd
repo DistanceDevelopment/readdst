@@ -4,16 +4,17 @@
 \alias{get_stats}
 \title{Extract saved statistics for analyses}
 \usage{
-get_stats(project_file)
+get_stats(project_file, stats_table)
 }
 \arguments{
 \item{project_file}{path to project file}
+
+\item{stats_table}{a \code{data.frame} containing possible statistics}
 }
 \description{
 At the moment only extracts the AIC and likelihood
 }
 \section{Details}{
-
 
 Codes used to determine the meanings of statistics are given at \url{https://github.com/DistanceDevelopment/readdst/wiki/distance-results-codes}.
 }

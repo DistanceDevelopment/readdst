@@ -18,10 +18,11 @@
 #'
 #' Note that an analysis that runs with error in Distance for Windows may run fine in R and an analysis that runs fine in Distance for Windows may not work in R. In the latter case, please consider submitting this a a bug to \url{github.com/distancedevelopment/distance-bugs}.
 #'
-#' @note Currently only tests AIC and log-likelihood values.
+#' @note Tests all available statistics.
 #'
 #' @param analysis a converted (but not run) analysis
 #' @param statuses for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).
+#' @return a \code{data.frame} with two columns: \code{Statistic}, a description of the tested statistic; and \code{Result} a series of ticks, indicating that values were the same (or similar enough in the case of numeric values; see \code{\link{stats_table}}).
 #'
 #' @export
 #' @importFrom testthat test_that context expect_equal
@@ -50,14 +51,15 @@ test_stats <- function(analysis, statuses=1){
                    " (looking for ", paste(statuses, collapse=", "), ")"))
   }else{
 
-    # these should be args
-    AIC.tol <- 1e-4
-    lnl.tol <- 1e-4
+#    # these should be args
+#    AIC.tol <- 1e-4
+#    lnl.tol <- 1e-4
 
-    # at the moment only testing AIC and log likelihood
+    # what are the possible stats?
+    stats <- stats_table()
 
     # get these stats
-    stats <- get_stats(analysis$project_file)
+    stats <- get_stats(analysis$project_file, stats)
     stats <- stats[stats$ID==analysis$ID, ]
 
     # if there were no results return early
@@ -67,23 +69,54 @@ test_stats <- function(analysis, statuses=1){
     }
 
     # run the analysis
-    run_analysis <- run_analysis(analysis)
+    model <- run_analysis(analysis)
 
-    # do some tests!
-    test_that(paste0("Analysis ",analysis$ID, " results are correct"),{
-      # test AIC result
-      expect_equal(run_analysis$criterion,
-       stats[stats$Parameter=="AIC",]$Value,
-       label = "AIC",
-       tol=AIC.tol)
+#    # do some tests!
+#    test_that(paste0("Analysis ",analysis$ID),{
+#      # test AIC result
+#      expect_equal(model$criterion,
+#       stats[stats$Parameter=="AIC",]$Value,
+#       label = "AIC",
+#       tol=AIC.tol)
+#
+#      # test log likelihood
+#      expect_equal(model$lnl,
+#       stats[stats$Parameter=="log-likelihood",]$Value,
+#       label="log-likelihood",
+#       tol=lnl.tol)
+#    })
 
-      # test log likelihood
-      expect_equal(run_analysis$lnl,
-       stats[stats$Parameter=="log-likelihood",]$Value,
-       label="log-likelihood",
-       tol=lnl.tol)
-    })
-    message("All tests were fine!")
+    # set tolerance here
+    # this should be set in stats_table() per statistic
+    tol <- 1e-4
+
+    # test function
+    test_it <- function(x, tol){
+      # get the test statistic for this model
+      model_val <- eval(parse(text=x[4]))
+
+      # get the Distance value and convert to the same mode
+      # as that from the model
+      test_val <- x[3]
+      mode(test_val) <- mode(model_val)
+
+      # test!
+      all.equal(test_val, model_val, check.attributes = FALSE,
+                tolerance = tol)
+    }
+    # apply over the possible tests in the table
+    res <- apply(stats, 1, test_it, tol=tol)
+    res_text <- res
+    res <- res=="TRUE"
+
+    ticks <- rep("\U2713", nrow(stats))
+    ticks[!res] <- ""
+
+    result_table <- data.frame(Statistic = stats$Description,
+                               Result    = ticks)
+
+#    message("All tests were fine!")
+    return(result_table)
   }
 
   invisible()

@@ -14,7 +14,7 @@ stats_table <- function(){
   # this trick thanks to Noam Ross
   stat_tab <- read_delim(
     ' Code | MRDS                                      | Description
-    #----- | ----------------------------------------- | ------
+#    ----- | ----------------------------------------- | ------------
         1  | NULL                                      | Number of sampler points
       100  | NULL                                      | Mean coverage probability
      1000  | NULL                                      | AIC - (minimum AIC), calculated within survey and data filter
@@ -109,6 +109,8 @@ stats_table <- function(){
   delim='|', comment="#")
 
   stat_tab <- stat_tab[stat_tab$MRDS!="NULL", ]
+
+  stat_tab$Code <- as.numeric(stat_tab$Code)
 
   return(stat_tab)
 }
