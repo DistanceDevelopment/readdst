@@ -93,7 +93,7 @@ test_stats <- function(analysis, statuses=1){
     ticks[res_text!="1"] <- ""
 
     # format the mean relative difference column
-    res_text[res_text=="1"] <- ""
+    res_text[res_text=="1"] <- 0
     res_text <- sub("^Mean relative difference: ", "", res_text)
 
     # build the data.frame
