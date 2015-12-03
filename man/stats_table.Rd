@@ -7,7 +7,7 @@
 stats_table()
 }
 \value{
-a \code{data.frame} with statistics Distance for Windows collects that have equivalents in \code{mrds}. The \code{data.frame} has three columns: \code{Code}, the numeric code for the statistic (as used in the Distance for Windows database); \code{MRDS} the operation required to obtain the equivalent statistic in \code{mrds}; \code{Description}, a short description of the statistic.
+a \code{data.frame} with statistics Distance for Windows collects that have equivalents in \code{mrds}. The \code{data.frame} has three columns: \code{Code}, the numeric code for the statistic (as used in the Distance for Windows database); \code{Name}, the short name for this statistic; \code{MRDS}, the operation required to obtain the equivalent statistic in \code{mrds}; \code{Description}, a short description of the statistic.
 }
 \description{
 To use \code{\link{get_stats}} we need a set of statistics to test. We also require their codes (to look up in the Distance for Windows database) and their equivalent values in \code{mrds} (or how to calculate those values). This function provides such a table.
