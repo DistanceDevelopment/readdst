@@ -13,7 +13,8 @@ Imports:
     magrittr,
     mrds,
     testthat,
-    plyr
+    plyr,
+    readr
 Suggests:
     knitr
 VignetteBuilder: knitr
