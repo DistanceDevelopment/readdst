@@ -2,6 +2,7 @@
 
 S3method(print,converted_distance_analyses)
 S3method(print,converted_distance_analysis)
+S3method(print,distance_stats_table)
 export(convert_project)
 export(create_bins)
 export(run_analysis)

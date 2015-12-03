@@ -117,6 +117,13 @@ test_stats <- function(analysis, statuses=1){
   invisible()
 }
 
+#' Print tested statistics
+#'
+#' This is simply a \code{print} method to nicely ouput the results of \code{\link{test_stats}}.
+#' @author David L Miller
+#' @param x the result of a call to \code{\link{test_stats}}
+#' @return just prints the results
+#' @export
 print.distance_stats_table <- function(x){
   class(x) <- NULL
   print(as.data.frame(x, stringsAsFactors=FALSE), digits=attr(x, "print.digits"))
