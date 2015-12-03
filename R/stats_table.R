@@ -17,10 +17,10 @@ stats_table <- function(){
 #    ----- | -------------- | --------- | ---------------------------------------------------- | ------------
         1  | NULL           |           | NULL                                                 | Number of sampler points
       100  | NULL           |           | NULL                                                 | Mean coverage probability
-     1000  | NULL           |           | NULL                                                 | AIC - (minimum AIC), calculated within survey and data filter
-     1001  | NULL           |           | NULL                                                 | AICc - (minimum AICc), calculated within survey and data filter
-     1002  | NULL           |           | NULL                                                 | BIC - (minimum BIC), calculated within survey and data filter
-     1003  | NULL           |           | NULL                                                 | LogL - (minimum LogL), calculated within survey and data filter
+     1000  | NULL           |           | NULL                                                 | minimum AIC, within survey and data filter
+     1001  | NULL           |           | NULL                                                 | minimum AICc, within survey and data filter
+     1002  | NULL           |           | NULL                                                 | minimum BIC, within survey and data filter
+     1003  | NULL           |           | NULL                                                 | minimum LogL, within survey and data filter
       101  | NULL           |           | NULL                                                 | Minimum coverage probability
      1010  | n              | 0         | nrow(model$data)                                     | Number of observations
       102  | NULL           |           | NULL                                                 | Maximum coverage probability
@@ -34,7 +34,7 @@ stats_table <- function(){
      1044  | NULL           |           | NULL                                                 | Encounter rate degrees of freedom
         2  | NULL           |           | NULL                                                 | Number of sampler points
      2010  | parameters     | 0         | length(model$par)                                    | Total number of parameters
-     2020  | AIC            | 1e-4      | model$criterion                                      | Akaike Information Criterion (AIC) value
+     2020  | AIC            | 1e-4      | model$criterion                                      | Akaike Information Criterion
      2030  | Chi^2 p        | 1e-6      | ddf.gof(model, qq=FALSE)$chisquare$chi1$p            | Goodness-of-fit chi-square test probability (test 1, after pooling)
      2040  | NULL           |           | NULL                                                 | PDF (lines) or slope of PDF (points) at x=0
      2050  | P_a            | 1e-4      | summary(model)$average.p                             | Probability of detection
