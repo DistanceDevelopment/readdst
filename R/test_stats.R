@@ -27,6 +27,7 @@
 #' @export
 #' @importFrom testthat test_that context expect_equal
 #' @importFrom plyr l_ply
+#' @importFrom mrds ddf.gof
 #' @examples
 #' \dontrun{
 #' library(readdst)
@@ -71,29 +72,10 @@ test_stats <- function(analysis, statuses=1){
     # run the analysis
     model <- run_analysis(analysis)
 
-#    # do some tests!
-#    test_that(paste0("Analysis ",analysis$ID),{
-#      # test AIC result
-#      expect_equal(model$criterion,
-#       stats[stats$Parameter=="AIC",]$Value,
-#       label = "AIC",
-#       tol=AIC.tol)
-#
-#      # test log likelihood
-#      expect_equal(model$lnl,
-#       stats[stats$Parameter=="log-likelihood",]$Value,
-#       label="log-likelihood",
-#       tol=lnl.tol)
-#    })
-
-    # set tolerance here
-    # this should be set in stats_table() per statistic
-    tol <- 1e-4
-
     # test function
     test_it <- function(x, tol){
       # get the test statistic for this model
-      model_val <- eval(parse(text=x[4]))
+      model_val <- eval(parse(text=x[6]))
 
       # get the Distance value and convert to the same mode
       # as that from the model
@@ -101,23 +83,41 @@ test_stats <- function(analysis, statuses=1){
       mode(test_val) <- mode(model_val)
 
       # test!
-      all.equal(test_val, model_val, check.attributes = FALSE,
-                tolerance = tol)
+      test <- all.equal(test_val, model_val, check.attributes = FALSE,
+                        tolerance = as.numeric(x[5]))
+      # form result
+      return(c(test=test, mrds_val=model_val))
     }
     # apply over the possible tests in the table
-    res <- apply(stats, 1, test_it, tol=tol)
-    res_text <- res
-    res <- res=="TRUE"
+    res <- t(apply(stats, 1, test_it, tol=tol))
+    res_text <- res[,1]
 
+    # make some ticks
     ticks <- rep("\U2713", nrow(stats))
-    ticks[!res] <- ""
+    ticks[res_text!="1"] <- ""
 
-    result_table <- data.frame(Statistic = stats$Description,
-                               Result    = ticks)
+    # format the mean relative difference column
+    res_text[res_text=="1"] <- ""
+    res_text <- sub("^Mean relative difference: ", "", res_text)
 
-#    message("All tests were fine!")
-    return(result_table)
+    # build the data.frame
+    res_table <- data.frame(Statistic      = stats$Name,
+                            Distance_value = as.numeric(stats$Value),
+                            mrds_value     = as.numeric(res[,2]),
+                            Mean_rel_diff  = as.numeric(res_text),
+                            Pass           = ticks)
+
+    # give the result a class so it can be pretty-printed
+    class(res_table) <- "distance_stats_table"
+    attr(res_table, "print.digits") <- sub("^\\d+\\.*\\d*e[\\+-]", "",
+                                       min(stats$Tolerance[stats$Tolerance>0]))
+    return(res_table)
   }
 
   invisible()
+}
+
+print.distance_stats_table <- function(x){
+  class(x) <- NULL
+  print(as.data.frame(x, stringsAsFactors=FALSE), digits=attr(x, "print.digits"))
 }
