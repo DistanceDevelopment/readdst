@@ -38,7 +38,7 @@ stats_table <- function(){
      2030  | Chi^2 p        | 1e-6      | ddf.gof(model, qq=FALSE)$chisquare$chi1$p            | Goodness-of-fit chi-square test probability (test 1, after pooling)
      2040  | NULL           |           | NULL                                                 | PDF (lines) or slope of PDF (points) at x=0
      2050  | P_a            | 1e-4      | summary(model)$average.p                             | Probability of detection
-     2051  | CV(P_a)        | 1e-4      | summary(model)$average.p.se/summary(model)$average.p | Probability of detection coeff. of var.
+     2051  | CV(P_a)        | 1e-4      | as.numeric(summary(model)$average.p.se)/summary(model)$average.p | Probability of detection coeff. of var.
      2052  | NULL           |           | NULL                                                 | Probability of detection lower conf. limit
      2053  | NULL           |           | NULL                                                 | Probability of detection upper conf. limit
      2054  | NULL           |           | NULL                                                 | Probability of detection degrees of freedom
