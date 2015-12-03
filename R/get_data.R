@@ -1,13 +1,22 @@
 #' Extract data from a Distance database
 #'
-#' Extracts the relevant (existing) tables from the Distance database.
-#'
-#' Currently, this only returns the observation table, eventually it will return all tables.
+#' Extracts the relevant tables from the Distance for Windows database to build data that can be used with \code{mrds} or \code{Distance}.
 #'
 #' @param data_file the path to a \code{DistData.mdb} file.
+#' @return a "flatfile" compatible \code{data.frame} containing all of the information necessary to make a stratified abundance/density estimate.
 #'
 #' @author David L Miller
+#' @export
 get_data <- function(data_file){
+
+  # function to rename columns
+  relabel <- function(old_name, new_name, data){
+    if(old_name %in% names(data)){
+      data[[new_name]] <- data[[old_name]]
+      data[[old_name]] <- NULL
+    }
+    return(data)
+  }
 
   obs_table <- db_get(data_file, "Observation")
 
@@ -16,17 +25,20 @@ get_data <- function(data_file){
                   "Radial.distance", "Radial.Distance")
   if(any(dist_names %in% names(obs_table))){
     dist_name <- dist_names[dist_names %in% names(obs_table)]
-    obs_table$distance <- obs_table[[dist_name]]
+
+    # if more than one of the above are in the data then throw an error
+    if(length(dist_name)>1){
+      stop(paste0("Non-unique distance column names: ", dist_name, collapse=""))
+    }
+    obs_table <- relabel(dist_name, "distance", obs_table)
   }else{
     stop("Only perpendicular and radial distances supported at the moment!")
   }
 
   # if group size is collected rename to size
-  if(any(names(obs_table)=="Cluster.size")){
-    obs_table$size <- obs_table$Cluster.size
-  }else if(any(names(obs_table)=="ClusterSize")){
-    obs_table$size <- obs_table$ClusterSize
-  }
+  obs_table <- relabel("Cluster.size", "size", obs_table)
+  obs_table <- relabel("ClusterSize", "size", obs_table)
+
   # if observer ID is collected rename column to "Observer"
   if(any(names(obs_table)=="Observer") & all(names(obs_table)!="observer")){
     obs_table$observer <- obs_table$Observer
@@ -79,7 +91,23 @@ get_data <- function(data_file){
 
   # join  the observation table on at the end
   obs_table <- merge(dat, obs_table, by.y=ID_field, by.x="ID.last",
-               all.y=TRUE, suffixes=c(paste0(".", obs_id),""))
+                     all.y=TRUE, suffixes=c(paste0(".", obs_id),""))
+
+  # clean up this data
+  obs_table$ID.last <- NULL
+  obs_table$ID <- NULL
+  obs_table$ID.1 <- NULL
+  obs_table$ID.10 <- NULL
+  obs_table$ID.20 <- NULL
+
+  # naming for dht()
+  obs_table <- relabel("Label.1", "Study.Area", obs_table)
+  obs_table <- relabel("Label.10", "Region.Label", obs_table)
+  obs_table <- relabel("Label", "Sample.Label", obs_table)
+  obs_table <- relabel("Line.length", "Effort", obs_table)
+  obs_table <- relabel("Survey.effort", "Effort", obs_table)
+
+  ## we now have a flatfile-compatible table with our data in it
 
   return(obs_table)
 }

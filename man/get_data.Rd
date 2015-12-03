@@ -9,11 +9,11 @@ get_data(data_file)
 \arguments{
 \item{data_file}{the path to a \code{DistData.mdb} file.}
 }
-\description{
-Extracts the relevant (existing) tables from the Distance database.
+\value{
+a "flatfile" compatible \code{data.frame} containing all of the information necessary to make a stratified abundance/density estimate.
 }
-\details{
-Currently, this only returns the observation table, eventually it will return all tables.
+\description{
+Extracts the relevant tables from the Distance for Windows database to build data that can be used with \code{mrds} or \code{Distance}.
 }
 \author{
 David L Miller
