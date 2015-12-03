@@ -52,10 +52,6 @@ test_stats <- function(analysis, statuses=1){
                    " (looking for ", paste(statuses, collapse=", "), ")"))
   }else{
 
-#    # these should be args
-#    AIC.tol <- 1e-4
-#    lnl.tol <- 1e-4
-
     # what are the possible stats?
     stats <- stats_table()
 
@@ -104,7 +100,7 @@ test_stats <- function(analysis, statuses=1){
     res_table <- data.frame(Statistic      = stats$Name,
                             Distance_value = as.numeric(stats$Value),
                             mrds_value     = as.numeric(res[,2]),
-                            Mean_rel_diff  = as.numeric(res_text),
+                            Rel_diff       = as.numeric(res_text),
                             Pass           = ticks)
 
     # give the result a class so it can be pretty-printed
