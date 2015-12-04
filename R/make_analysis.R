@@ -4,7 +4,7 @@
 #' @param this_analysis an analysis from Distance
 #' @param model_definitions a list of model definitions
 #' @param data_filters a list of data filters
-#' @param data the data to use with the model
+#' @param data the data to use with the model (see \code{\link{get_data}} and \code{\link{unflatfile}})
 #' @param transect the transect type
 #' @return a list with the following elements: a character string specifying a call to \code{ddf}, an environment to run it in, the name of the analysis and it's ID.
 #'
@@ -35,8 +35,7 @@ make_analysis <- function(this_analysis, model_definitions,
   # set the variable names
   #filtered$data <- set_covar_names(filtered$data, attr(this_call,"factors"))
 
-  e <- new.env()
-  e$obs_table <- filtered$data
+  e <- list2env(unflatfile(filtered$data))
 
   # extract AIC term selection status
   aic.select <- attr(this_call, "aic_select_max")

@@ -4,11 +4,12 @@
 #'
 #' @param df a data filter object
 #' @param transect type of transect
+#' @param data the data used in the model
 #' @return a character string starting with \code{meta.data=}
 #'
 #' @author David L Miller
 #' @importFrom stringr str_c
-make_meta.data <- function(df, transect){
+make_meta.data <- function(df, transect, data){
 
   # get left truncation
   if(!is.null(df$Distance$Left)){
@@ -17,12 +18,20 @@ make_meta.data <- function(df, transect){
     left <- 0
   }
 
-  # get right truncation
+  # get right truncation (distance)
   if(!is.null(df$Distance$Width)){
     width <- as.numeric(df$Distance$Width)
   }else{
     width <- NA
   }
+
+  # truncation may also be specified as a percentage
+  if(!is.null(df$Distance$Rtruncate)){
+    width <- quantile(data$distance,
+                      probs=1-as.numeric(df$Distance$Rtruncate),
+                      na.rm=TRUE)
+  }
+
 
   if(!is.null(df$Distance$Intervals)){
     # extract the bin cutpoints -- make a vector
@@ -39,6 +48,7 @@ make_meta.data <- function(df, transect){
     breaks <- NULL
     binned <- NULL
   }
+
 
   if(transect == "point"){
     transect <- "point=TRUE"

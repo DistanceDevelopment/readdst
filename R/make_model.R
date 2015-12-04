@@ -32,7 +32,7 @@ make_model <- function(this_analysis, model_definitions, data_filters,
   }
 
   # build the meta.data
-  meta <- make_meta.data(df, transect)
+  meta <- make_meta.data(df, transect, data)
   # if width was NA, then use the maximum reported distance
   meta <- sub("width=NA", paste0("width=", max(data$distance)), meta)
 
@@ -43,7 +43,7 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                             meta,
                             make_control(md),
                             method,
-                            "data=obs_table", sep=", "), ")")
+                            "data=data", sep=", "), ")")
 
   # if AIC selection, save max number of terms
   if(("Pick" %in% names(md)) && md[["Pick"]] == "AIC"){

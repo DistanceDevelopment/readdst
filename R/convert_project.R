@@ -47,7 +47,8 @@ convert_project <- function(project){
   data_filters <- lapply(data_filters, parse_definition.data_filter)
 
   # get the data
-  obs_table <- get_data(data_file)
+  # this returns a flatfile-compatible data.frame
+  data <- get_data(data_file)
 
   # what kind of distances to we have?
   data_names <- db_get(data_file, TRUE)
@@ -59,7 +60,7 @@ convert_project <- function(project){
 
   # batch convert analyses and return a list, one element per analysis
   R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
-                      data_filters, data=obs_table, transect=transect)
+                      data_filters, data=data, transect=transect)
   # give each analysis a name
   names(R_analyses) <- as.character(analyses$Name)
 

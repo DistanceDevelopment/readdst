@@ -15,12 +15,15 @@
 #' @examples
 #' \dontrun{
 #' library(readdst)
+#'
 #' # load and convert the golftees project
 #' project <- system.file("Golftees-example", package="readdst")
 #' project <- paste0(project,"/Golftees")
 #' converted <- convert_project(project)
+#'
 #' # run the first analysis
 #' analysis_1 <- run_analysis(converted[[1]], debug=TRUE)
+#'
 #' # look at the resulting model output
 #' summary(analysis_1)
 #'
@@ -46,19 +49,19 @@ run_analysis <- function(analysis, debug=FALSE){
 
     last.model<-list(criterion=Inf)
 
-    adjustment <- sub(".*adj\\.series=\"(\\w+)\".*","\\1",analysis$call)
-    key <- sub(".*key=\"(\\w+)\".*","\\1",analysis$call)
+    adjustment <- sub(".*adj\\.series=\"(\\w+)\".*", "\\1", analysis$call)
+    key <- sub(".*key=\"(\\w+)\".*", "\\1", analysis$call)
 
     # this is according to p. 47 of IDS.
     if(adjustment=="poly"){
-      orders <- seq(1,max.order)
+      orders <- seq(1, max.order)
     }else{
-      orders <- seq(2,max.order)
+      orders <- seq(2, max.order)
     }
 
     # for Fourier...
     if(key=="unif" & adjustment=="cos"){
-      orders <- c(1,orders)
+      orders <- c(1, orders)
     }
 
     if(adjustment=="herm" | adjustment=="poly"){
@@ -69,7 +72,7 @@ run_analysis <- function(analysis, debug=FALSE){
     this_call <- analysis$call
 
     for(i in seq_along(orders)){
-      order <- paste("c(",orders[1:i],")",collapse=",")
+      order <- paste("c(", orders[1:i],")", collapse=",")
       this_call <- sub("adj\\.order=NULL",
                        paste0("adj.order=", order), this_call)
       model <- eval(parse(text=this_call), envir=analysis$env)

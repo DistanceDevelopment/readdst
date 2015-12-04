@@ -27,7 +27,7 @@
 #' @export
 #' @importFrom testthat test_that context expect_equal
 #' @importFrom plyr l_ply
-#' @importFrom mrds ddf.gof
+#' @importFrom mrds ddf.gof dht
 #' @examples
 #' \dontrun{
 #' library(readdst)
@@ -68,10 +68,18 @@ test_stats <- function(analysis, statuses=1){
     # run the analysis
     model <- run_analysis(analysis)
 
+    # make an environment with the objects in that we want
+    e <- new.env()
+    e$model <- model
+    e$model_sum <- summary(model)
+    e$dht <- dht(model, obs.table=analysis$env$obs.table,
+                 sample.table=analysis$env$sample.table,
+                 region.table=analysis$env$region.table)
+
     # test function
-    test_it <- function(x, tol){
+    test_it <- function(x, tol, env){
       # get the test statistic for this model
-      model_val <- eval(parse(text=x[6]))
+      model_val <- eval(parse(text=x[6]), envir=env)
 
       # get the Distance value and convert to the same mode
       # as that from the model
@@ -85,7 +93,7 @@ test_stats <- function(analysis, statuses=1){
       return(c(test=test, mrds_val=model_val))
     }
     # apply over the possible tests in the table
-    res <- t(apply(stats, 1, test_it, tol=tol))
+    res <- t(apply(stats, 1, test_it, tol=tol, env=e))
     res_text <- res[,1]
 
     # make some ticks

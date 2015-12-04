@@ -13,7 +13,7 @@ make_analysis(this_analysis, model_definitions, data_filters, data, transect)
 
 \item{data_filters}{a list of data filters}
 
-\item{data}{the data to use with the model}
+\item{data}{the data to use with the model (see \code{\link{get_data}} and \code{\link{unflatfile}})}
 
 \item{transect}{the transect type}
 }

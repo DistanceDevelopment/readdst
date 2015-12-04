@@ -25,12 +25,15 @@ If an analysis needs to select the number of adjustment terms (for key plus adju
 \examples{
 \dontrun{
 library(readdst)
+
 # load and convert the golftees project
 project <- system.file("Golftees-example", package="readdst")
 project <- paste0(project,"/Golftees")
 converted <- convert_project(project)
+
 # run the first analysis
 analysis_1 <- run_analysis(converted[[1]], debug=TRUE)
+
 # look at the resulting model output
 summary(analysis_1)
 
