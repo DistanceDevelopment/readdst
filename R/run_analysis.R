@@ -79,7 +79,7 @@ run_analysis <- function(analysis, debug=FALSE){
 
       # if this models AIC is worse (bigger) than the last
       # return the last model and stop looking.
-      if(model$criterion>last.model$criterion){
+      if(model$criterion >= last.model$criterion){
         model <- last.model
 #        message(paste0("\n\n",model$name.message," selected!"))
         break
