@@ -37,7 +37,7 @@ stats_table <- function(){
      2020  | AIC             | 1e-4      | model$criterion                                      | Akaike Information Criterion
      2030  | Chi^2 p         | 1e-6      | ddf.gof(model, qq=FALSE)$chisquare$chi1$p            | Goodness-of-fit chi-square test probability (test 1, after pooling)
      2040  | NULL            |           | NULL                                                 | PDF (lines) or slope of PDF (points) at x=0
-     2050  | P_a             | 1e-4      | model_sum$average.p                             | Probability of detection
+     2050  | P_a             | 1e-4      | model_sum$average.p                                  | Probability of detection
      2051  | CV(P_a)         | 1e-4      | as.numeric(model_sum$average.p.se)/model_sum$average.p | Probability of detection coeff. of var.
      2052  | NULL            |           | NULL                                                 | Probability of detection lower conf. limit
      2053  | NULL            |           | NULL                                                 | Probability of detection upper conf. limit
@@ -75,16 +75,16 @@ stats_table <- function(){
      4012  | NULL            |           | NULL                                                 | Density of clusters analytic lower conf. limit
      4013  | NULL            |           | NULL                                                 | Density of clusters analytic upper conf. limit
      4014  | NULL            |           | NULL                                                 | Density of clusters degrees of freedom
-     4020  | density         | 1e-4      | as.numeric(dht$individuals$D$Estimate)               | Density of individuals
-     4021  | CV(density)     | 1e-4      | as.numeric(dht$individuals$D$cv)                     | Density of individuals analytic coeff. of var.
-     4022  | density lcl     | 1e-4      | as.numeric(dht$individuals$D$lcl)                    | Density of individuals analytic lower conf. limit
-     4023  | density ucl     | 1e-4      | as.numeric(dht$individuals$D$ucl)                    | Density of individuals analytic upper conf. limit
-     4024  | density df      | 1e-1      | as.numeric(dht$individuals$D$df)                     | Density of individuals degrees of freedom
-     4030  | individuals     | 1e-1      | as.numeric(dht$individuals$N$Estimate)               | Number of individuals
-     4031  | CV(individuals) | 1e-4      | as.numeric(dht$individuals$N$cv)                     | Number of individuals analytic coeff. of var.
-     4032  | individuals lcl | 1e-4      | as.numeric(dht$individuals$N$lcl)                    | Number of individuals analytic lower conf. limit
-     4033  | individuals ucl | 1e-4      | as.numeric(dht$individuals$N$ucl)                    | Number of individuals analytic upper conf. limit
-     4034  | individuals df  | 1e-1      | as.numeric(dht$individuals$N$df)                     | Number of individuals analytic degrees of freedom
+     4020  | density         | 1e-4      | as.numeric(dht$individuals$D$Estimate)[nrow(dht$individuals$D)]               | Density of individuals
+     4021  | CV(density)     | 1e-4      | as.numeric(dht$individuals$D$cv)[nrow(dht$individuals$D)]                     | Density of individuals analytic coeff. of var.
+     4022  | density lcl     | 1e-4      | as.numeric(dht$individuals$D$lcl)[nrow(dht$individuals$D)]                    | Density of individuals analytic lower conf. limit
+     4023  | density ucl     | 1e-4      | as.numeric(dht$individuals$D$ucl)[nrow(dht$individuals$D)]                    | Density of individuals analytic upper conf. limit
+     4024  | density df      | 1e-1      | as.numeric(dht$individuals$D$df)[nrow(dht$individuals$D)]                     | Density of individuals degrees of freedom
+     4030  | individuals     | 1e-1      | as.numeric(dht$individuals$N$Estimate)[nrow(dht$individuals$N)]               | Number of individuals
+     4031  | CV(individuals) | 1e-4      | as.numeric(dht$individuals$N$cv)[nrow(dht$individuals$N)]                     | Number of individuals analytic coeff. of var.
+     4032  | individuals lcl | 1e-4      | as.numeric(dht$individuals$N$lcl)[nrow(dht$individuals$N)]                    | Number of individuals analytic lower conf. limit
+     4033  | individuals ucl | 1e-4      | as.numeric(dht$individuals$N$ucl)[nrow(dht$individuals$N)]                    | Number of individuals analytic upper conf. limit
+     4034  | individuals df  | 1e-1      | as.numeric(dht$individuals$N$df)[nrow(dht$individuals$N)]                     | Number of individuals analytic degrees of freedom
      4040  | NULL            |           | NULL                                                 | Density of clusters bootstrap
      4041  | NULL            |           | NULL                                                 | Density of clusters bootstrap coeff. of var.
      4042  | NULL            |           | NULL                                                 | Density of clusters bootstrap lower conf. limit
