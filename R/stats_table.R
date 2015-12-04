@@ -75,11 +75,11 @@ stats_table <- function(){
      4012  | NULL            |           | NULL                                                 | Density of clusters analytic lower conf. limit
      4013  | NULL            |           | NULL                                                 | Density of clusters analytic upper conf. limit
      4014  | NULL            |           | NULL                                                 | Density of clusters degrees of freedom
-     4020  | NULL            |           | NULL                                                 | Density of individuals
-     4021  | NULL            |           | NULL                                                 | Density of individuals analytic coeff. of var.
-     4022  | NULL            |           | NULL                                                 | Density of individuals analytic lower conf. limit
-     4023  | NULL            |           | NULL                                                 | Density of individuals analytic upper conf. limit
-     4024  | NULL            |           | NULL                                                 | Density of individuals degrees of freedom
+     4020  | density         | 1e-4      | as.numeric(dht$individuals$D$Estimate)               | Density of individuals
+     4021  | CV(density)     | 1e-4      | as.numeric(dht$individuals$D$cv)                     | Density of individuals analytic coeff. of var.
+     4022  | density lcl     | 1e-4      | as.numeric(dht$individuals$D$lcl)                    | Density of individuals analytic lower conf. limit
+     4023  | density ucl     | 1e-4      | as.numeric(dht$individuals$D$ucl)                    | Density of individuals analytic upper conf. limit
+     4024  | density df      | 1e-1      | as.numeric(dht$individuals$D$df)                     | Density of individuals degrees of freedom
      4030  | individuals     | 1e-1      | as.numeric(dht$individuals$N$Estimate)               | Number of individuals
      4031  | CV(individuals) | 1e-4      | as.numeric(dht$individuals$N$cv)                     | Number of individuals analytic coeff. of var.
      4032  | individuals lcl | 1e-4      | as.numeric(dht$individuals$N$lcl)                    | Number of individuals analytic lower conf. limit
