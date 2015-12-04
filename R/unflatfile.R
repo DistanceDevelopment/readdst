@@ -14,6 +14,7 @@
 #' @return list of the four \code{data.frame}s described in "Details".
 #' @note Based on \code{checkdata} from package \code{Distance}.
 #' @author David L. Miller
+#' @export
 unflatfile <- function(data){
 
   if(all(c("Region.Label", "Area", "Sample.Label", "Effort", "object") %in%
