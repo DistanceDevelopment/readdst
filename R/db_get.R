@@ -22,6 +22,10 @@ db_get <- function(file, table=NULL){
     dsn <- paste0("Driver={Microsoft Access Driver (*.mdb)};Dbq=",
                   file, ";Uid=;Pwd=;")
     db <- odbcDriverConnect(dsn)
+    if(db == -1){
+      stop(paste0("RODBC is unable to open ", file,"\n",
+                  "  table= ", table))
+    }
 
     if(is.null(table)){
       # get a character vector of table names
