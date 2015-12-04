@@ -47,8 +47,6 @@ run_analysis <- function(analysis, debug=FALSE){
 
     max.order <- analysis$aic.select
 
-    last.model<-list(criterion=Inf)
-
     adjustment <- sub(".*adj\\.series=\"(\\w+)\".*", "\\1", analysis$call)
     key <- sub(".*key=\"(\\w+)\".*", "\\1", analysis$call)
 
@@ -71,6 +69,12 @@ run_analysis <- function(analysis, debug=FALSE){
 
     this_call <- analysis$call
 
+    # run a model without adjustments first
+    this_call <- sub(",adj\\.order=NULL", "", this_call)
+    this_call <- sub(",adj\\.series=\"[a-z]+\"", "", this_call)
+    last.model <- eval(parse(text=this_call), envir=analysis$env)
+
+    # now select adjustments
     for(i in seq_along(orders)){
       order <- paste("c(", orders[1:i],")", collapse=",")
       this_call <- sub("adj\\.order=NULL",
