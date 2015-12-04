@@ -4,12 +4,14 @@
 \alias{make_meta.data}
 \title{Build the model meta.data}
 \usage{
-make_meta.data(df, transect)
+make_meta.data(df, transect, data)
 }
 \arguments{
 \item{df}{a data filter object}
 
 \item{transect}{type of transect}
+
+\item{data}{the data used in the model}
 }
 \value{
 a character string starting with \code{meta.data=}
