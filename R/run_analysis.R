@@ -69,10 +69,15 @@ run_analysis <- function(analysis, debug=FALSE){
 
     this_call <- analysis$call
 
-    # run a model without adjustments first
-    this_call <- sub(",adj\\.order=NULL", "", this_call)
-    this_call <- sub(",adj\\.series=\"[a-z]+\"", "", this_call)
-    last.model <- eval(parse(text=this_call), envir=analysis$env)
+    # for fourier model, don't run a no adjustments model
+    if(key=="unif" & adjustment=="cos"){
+      last.model <- list(criterion=Inf)
+    }else{
+      # run a model without adjustments first
+      this_call <- sub(",adj\\.order=NULL", "", this_call)
+      this_call <- sub(",adj\\.series=\"[a-z]+\"", "", this_call)
+      last.model <- eval(parse(text=this_call), envir=analysis$env)
+    }
 
     # now select adjustments
     for(i in seq_along(orders)){
