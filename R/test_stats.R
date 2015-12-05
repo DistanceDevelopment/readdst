@@ -68,13 +68,29 @@ test_stats <- function(analysis, statuses=1){
     # run the analysis
     model <- run_analysis(analysis)
 
-    # make an environment with the objects in that we want
+    ## make an environment with the objects in that we want
     e <- new.env()
+    # model
     e$model <- model
+    # its summary
     e$model_sum <- summary(model)
+    # dht output
+    # first get the conversion between units
+    convert_units <- analysis$env$units
+    if(model$meta.data$point){
+      # no effort for points
+      convert_units <- 1/(convert_units$Conversion[convert_units=="Area"]/
+                        (convert_units$Conversion[convert_units=="distance"]))
+    }else{
+      convert_units <- 1/(convert_units$Conversion[convert_units=="Area"]/
+                        (convert_units$Conversion[convert_units=="distance"] *
+                         convert_units$Conversion[convert_units=="Effort"]))
+    }
+    # then do the call to dht
     e$dht <- dht(model, obs.table=analysis$env$obs.table,
                  sample.table=analysis$env$sample.table,
-                 region.table=analysis$env$region.table)
+                 region.table=analysis$env$region.table,
+                 options=list(convert.units=convert_units))
 
     # test function
     test_it <- function(x, tol, env){

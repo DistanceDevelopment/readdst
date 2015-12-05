@@ -34,9 +34,10 @@ make_meta.data <- function(df, transect, data){
 
 
   if(!is.null(df$Distance$Intervals)){
+    intervals <- df$Distance$Intervals
     # extract the bin cutpoints -- make a vector
     cuts <- eval(parse(text=paste0("c(",
-                               paste(df$Distance$Intervals, collapse=","),
+                               paste(intervals, collapse=","),
                                    ")")))
     # remove those outside the truncation
     cuts <- cuts[cuts >= left & cuts <= width]
@@ -56,8 +57,8 @@ make_meta.data <- function(df, transect, data){
     transect <- NULL
   }
 
-  meta <- paste0("meta.data=list(width=",width,",",
-                 str_c(paste0("left=",left),
+  meta <- paste0("meta.data=list(width=", width, ",",
+                 str_c(paste0("left=", left),
                        breaks,
                        binned,
                        transect, sep=","),")")

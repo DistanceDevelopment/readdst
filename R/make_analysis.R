@@ -13,6 +13,9 @@
 make_analysis <- function(this_analysis, model_definitions,
                           data_filters, data, transect){
 
+  # get conversion table
+  unit_conversion <- attr(data, "unit_conversion")
+
   this_call <- make_model(this_analysis, model_definitions, data_filters,
                           transect, data=data)
 
@@ -36,6 +39,7 @@ make_analysis <- function(this_analysis, model_definitions,
   #filtered$data <- set_covar_names(filtered$data, attr(this_call,"factors"))
 
   e <- list2env(unflatfile(filtered$data))
+  e$units <- unit_conversion
 
   # extract AIC term selection status
   aic.select <- attr(this_call, "aic_select_max")

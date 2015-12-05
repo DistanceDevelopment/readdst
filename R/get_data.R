@@ -18,6 +18,8 @@ get_data <- function(data_file){
     return(data)
   }
 
+
+  # grab the observation table
   obs_table <- db_get(data_file, "Observation")
 
   # convert the distance column
@@ -72,7 +74,11 @@ get_data <- function(data_file){
 
   # keep joining the tables until we have none left
   while(length(hier)>0){
+
+    # get this table
     this_table <- db_get(data_file, hier[1])
+
+    # merge it onto the previous data
     dat <- merge(dat, this_table,
                  by.x="ID.last", by.y=ID_field,
                  all.y=TRUE,
@@ -91,7 +97,30 @@ get_data <- function(data_file){
 
   # join  the observation table on at the end
   obs_table <- merge(dat, obs_table, by.y=ID_field, by.x="ID.last",
-                     all.y=TRUE, suffixes=c(paste0(".", obs_id),""))
+                     all.y=TRUE, suffixes=c(paste0(".", obs_id), ""))
+
+
+  # deal with multiple visits
+  if("visits" %in% names(obs_table)){
+    visits <- unique(obs_table$visits)
+    if(length(visits)>1) stop("Number of transects visits varies - don't know what to do!")
+    if(!any("visit" %in% names(obs_table))) stop("Multiple visits but no visit column!")
+
+    warning("Data containts transects with repeated visits, 'Sample.Label's will not match Distance for Windows")
+
+
+    # what if the below will remove some repeats?
+    u_lab_visit <- unique(obs_table[,c("Label","visit")])
+    u_lab <- unique(obs_table$Label)
+    if(nrow(u_lab_visit) != visits*length(u_lab)){
+      # for now just break!
+      stop("Including repeat visits will break Sample.Labels, stopping")
+    }
+
+    # relabel the transects to include visit info
+    obs_table$Label <- paste0(obs_table$Label, "-", obs_table$visit)
+
+  }
 
   # clean up this data
   obs_table$ID.last <- NULL
@@ -107,7 +136,20 @@ get_data <- function(data_file){
   obs_table <- relabel("Line.length", "Effort", obs_table)
   obs_table <- relabel("Survey.effort", "Effort", obs_table)
 
+  # rename unit conversion table
+  # ....
+
   ## we now have a flatfile-compatible table with our data in it
+
+  ## add an attribute for unit conversion
+  unit_conv <- get_unit_conversion(data_file)
+  # rename the Variables as appropriate
+  unit_conv$Variable[unit_conv$Variable == "Area"] <- "Area"
+  unit_conv$Variable[unit_conv$Variable == "Survey.effort"] <- "Effort"
+  unit_conv$Variable[unit_conv$Variable == "Line.length"] <- "Effort"
+  unit_conv$Variable[unit_conv$Variable == dist_name] <- "distance"
+  # save our work
+  attr(obs_table, "unit_conversion") <- unit_conv
 
   return(obs_table)
 }
