@@ -5,6 +5,9 @@
 #' @section Details:
 #' Data for this table (numeric code and descriptions) is from the \code{DistIni.mdb} which is shipped with Distance for Windows. See also \url{https://github.com/distancedevelopment/readdst/wiki/distance-results-codes}.
 #'
+#' @section Additional notes:
+#' Note that the Cramer-von Mises p-value as recorded in Distance for Windows is only recorded to the nearest 0.1.
+#'
 #' @return a \code{data.frame} with statistics Distance for Windows collects that have equivalents in \code{mrds}. The \code{data.frame} has three columns: \code{Code}, the numeric code for the statistic (as used in the Distance for Windows database); \code{Name}, the short name for this statistic; \code{MRDS}, the operation required to obtain the equivalent statistic in \code{mrds}; \code{Description}, a short description of the statistic.
 #' @author David L Miller
 #' @importFrom readr read_delim
@@ -51,7 +54,7 @@ stats_table <- function(){
      2080  | NULL            |           | NULL                                                 | Bayes\' Information Criterion
      2090  | log-likelihood  |  1e-4     | model$lnl                                            | Log likelihood
      2100  | K-S p           |  1e-5     | ddf.gof(model, qq=FALSE)$dsgof$ks$p                  | Goodness-of-fit Kolmogorov-Smirnov test probability
-     2110  | C-vM p          |  1e-5     | ddf.gof(model, qq=FALSE)$dsgof$CvM$p                 | Goodness-of-fit Cramer-von Mises (uniform weighting) test probability
+     2110  | C-vM p          |  1e-1     | ddf.gof(model, qq=FALSE)$dsgof$CvM$p                 | Goodness-of-fit Cramer-von Mises (uniform weighting) test probability
      2120  | NULL            |           | NULL                                                 | Goodness-of-fit Cramer-von Mises (cosine weighting) test probability
      2150  | NULL            |           | NULL                                                 | Number of key function parameters
      2160  | NULL            |           | NULL                                                 | Number of adjustment term parameters

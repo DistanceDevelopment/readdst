@@ -16,6 +16,11 @@ To use \code{\link{get_stats}} we need a set of statistics to test. We also requ
 
 Data for this table (numeric code and descriptions) is from the \code{DistIni.mdb} which is shipped with Distance for Windows. See also \url{https://github.com/distancedevelopment/readdst/wiki/distance-results-codes}.
 }
+
+\section{Additional notes}{
+
+Note that the Cramer-von Mises p-value as recorded in Distance for Windows is only recorded to the nearest 0.1.
+}
 \author{
 David L Miller
 }
