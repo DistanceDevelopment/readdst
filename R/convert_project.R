@@ -17,9 +17,9 @@
 convert_project <- function(project){
 
   # die on spaces in the path spec
-  if(grepl("\\w +", project)){
-    stop("Project path contains spaces, please escape them properly using \"\\\\\"")
-  }
+#  if(grepl("\\w +", project)){
+#    stop("Project path contains spaces, please escape them properly using \"\\\\\"")
+#  }
 
   ## get file names to use
   # project file
