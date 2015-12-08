@@ -20,6 +20,10 @@ get_unit_conversion <- function(data_file){
   # get the unit table
   units_t <- units_table()
 
+  # make everything lowercase for the join
+  units_t$Unit <- tolower(units_t$Unit)
+  fields$Units <- tolower(fields$Units)
+
   # match data fields to conversion
   fields <- merge(fields, units_t, by.x="Units", by.y="Unit")
 
