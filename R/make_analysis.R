@@ -16,9 +16,11 @@ make_analysis <- function(this_analysis, model_definitions,
   # get conversion table
   unit_conversion <- attr(data, "unit_conversion")
 
+  # make the model call
   this_call <- make_model(this_analysis, model_definitions, data_filters,
                           transect, data=data)
 
+  # deal with binning
   if(grepl("binned=TRUE", this_call)){
     cuts <- gsub(".*breaks=(c\\(.*?\\)),.*", "\\1", this_call)
 
@@ -36,8 +38,10 @@ make_analysis <- function(this_analysis, model_definitions,
                          data_filters[[as.character(this_analysis$DataFilter)]])
 
   # set the variable names
+  # is this necessary?
   #filtered$data <- set_covar_names(filtered$data, attr(this_call,"factors"))
 
+  # convert the flatfile to the necessary tables and store the unit conversion
   e <- list2env(unflatfile(filtered$data))
   e$units <- unit_conversion
 
@@ -45,6 +49,7 @@ make_analysis <- function(this_analysis, model_definitions,
   aic.select <- attr(this_call, "aic_select_max")
   attr(this_call, "aic_select_max") <- NULL
 
+  # build the return object
   ret <- list(call = this_call,
               aic.select = aic.select,
               status = this_analysis$Status,
