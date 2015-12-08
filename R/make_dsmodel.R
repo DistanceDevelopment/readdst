@@ -10,35 +10,35 @@ make_dsmodel <- function(md){
 
   if(md[["Engine"]] == "MRDS"){
     # if there was no ds part to the model just return that part is NULL
-    if(!any("DSModel_Method" %in% names(md))){
+    if(is.null(md$DSModel$Method)){
       return(NULL)
     }else{
-      ds_methods <- md[["DSModel_Method"]]
+      ds_methods <- md$DSModel$Method
     }
 
     if(any(ds_methods=="cds")){
       ds_formula <- "formula=~1"
     }else if("Factors" %in% names(md)){
-      ds_formula <- make_formula(md[["DSModel_Formula"]], md[["Factors"]])
+      ds_formula <- make_formula(md$DSModel$Formula, md$Factors)
     }else{
-      ds_formula <- paste0("formula=~", md[["DSModel_Formula"]])
+      ds_formula <- paste0("formula=~", md$DSModel$Formula)
     }
     # set the function ~cds or ~mcds
     dsmethod <- ds_methods
 
-    key <- paste0("key=\"", md[["DSModel_Key"]], "\"")
+    key <- paste0("key=\"", md$DSModel$Key, "\"")
     adj.series <- NULL
     adj.order <- NULL
 
   }else if(md[["Engine"]] == "CDS" | md[["Engine"]] == "MCDS"){
 
-    key <- switch(md[["Estimator_Key"]],
+    key <- switch(md$Estimate$Estimator$Key,
                   HN = "hn",
                   HA = "hr",
                   UN = "unif")
     key <- paste0("key=\"", key, "\"")
 
-    adj.series <- switch(md[["Estimator_Adjust"]],
+    adj.series <- switch(md$Estimate$Estimator$Adjust,
                          CO = "cos",
                          HE = "herm",
                          PO = "poly",
@@ -46,18 +46,22 @@ make_dsmodel <- function(md){
     adj.series <- paste0("adj.series=\"", adj.series,"\"")
 
     # if we use AIC for selection....
-    if(md[["Pick"]]=="AIC"){
+    if(md$Estimate$Pick=="AIC"){
       # if maxterms is specified set the adjustment order to NULL
       # and do AIC selection
-      if("Maxterms" %in% names(md)){
+      if(!is.null(md$Options$Maxterms)){
         adj.order <- "adj.order=NULL"
       }else{
       # else no adjustments
         adj.series <- NULL
         adj.order <- NULL
       }
+    }else if(!is.null(md$Estimate$Estimator$Order)){
+      adj.order <- paste0("c(",md$Estimate$Estimator$Order,")")
     }else{
-      adj.order <- paste0("adj.order=c(","2",")")
+    # else no adjustments
+      adj.series <- NULL
+      adj.order <- NULL
     }
 
   }else{
@@ -69,11 +73,12 @@ make_dsmodel <- function(md){
     dsmethod <- "cds"
   }else if(md[["Engine"]] == "MCDS"){
     dsmethod <- "mcds"
-    covariates <- md[names(md)=="CovariateData_Field"]
-    ds_formula <- paste0("formula=~",
-                         paste0(covariates, collapse="+"))
+    factors <- md$Data$CovariateData$Field[md$Data$CovariateData$CType=="F"]
+    ds_formula <- paste0(md$Data$CovariateData$Field, collapse="+")
+
+    ds_formula <- make_formula(ds_formula, factors)
   }
 
   paste0("dsmodel=~", dsmethod, "(",
-         str_c(key, ds_formula, adj.series, adj.order, sep=","),")")
+         str_c(key, ds_formula, adj.series, adj.order, sep=", "),")")
 }

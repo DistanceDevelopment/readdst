@@ -7,6 +7,8 @@
 #'
 make_control <- function(md){
 
+  # just need the estimate element
+  md <- md[["Estimate"]]
   control <- "control=list("
   if(any(names(md) == "Monotone")){
     if(md[["Monotone"]] == "Strict"){

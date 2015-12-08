@@ -25,8 +25,8 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                           "io", "io.fi",
                           "trial", "trial.fi",
                           "rem", "rem.fi")
-    method <- md[names(md)=="Method"]
-    method <- paste0("method=\"", method[method %in% possible_methods], "\"")
+    method <- paste0("method=\"", md$Method[md$Method %in% possible_methods],
+                     "\"")
   }else{
     method <- "method=\"ds\""
   }
@@ -46,18 +46,18 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                             "data=data", sep=", "), ")")
 
   # if AIC selection, save max number of terms
-  if(("Pick" %in% names(md)) && md[["Pick"]] == "AIC"){
+  if(!is.null(md$Estimate$Pick) && md$Estimate$Pick == "AIC"){
     # if maxterms is specified set the adjustment order to NULL
     # and do AIC selection
-    if("Maxterms" %in% names(md)){
-      attr(this_call, "aic_select_max") <- as.numeric(md[["Maxterms"]])
+    if(!is.null(md$Options$Maxterms)){
+      attr(this_call, "aic_select_max") <- as.numeric(md$Options$Maxterms)
     }else{
     # else no adjustments
       attr(this_call, "aic_select_max") <- NULL
     }
   }
 
-  attr(this_call,"factors") <- md[names(md)=="Factors"]
+  attr(this_call,"factors") <- md[["Factors"]]
 
   return(this_call)
 }

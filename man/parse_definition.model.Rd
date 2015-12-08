@@ -7,17 +7,17 @@
 parse_definition.model(df)
 }
 \arguments{
-\item{df}{a definition}
+\item{df}{a definition (vector of character strings)}
 }
 \value{
-named vector of defintions
+a \code{list} of \code{list}s
 }
 \description{
 Given data from a "Definition", pre-processed by \code{\link{get_definitions}}, extract the useful information from it.
 }
 \section{Details}{
 
-A definition consists either of a key=value pair or a name then key=value pairs separated by \code{\\} and terminated with \code{;}.
+See the "MCDS Command Language" section of the Distance manual for more information.
 
 Note that this function should be called for a single definition, usually using \code{\link{lapply}}.
 }

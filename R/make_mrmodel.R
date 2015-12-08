@@ -12,8 +12,7 @@ make_mrmodel <- function(md){
                            "trial","trial.fi",
                            "rem","rem.fi")
 
-
-  mr_methods <- md[names(md)=="Method"]
+  mr_methods <- md$Method
 
   # if there was no mr part to the model just return that part is NULL
   if(!any(mr_methods %in% possible_mr_methods)){
@@ -21,10 +20,10 @@ make_mrmodel <- function(md){
   }
 
   # this actually only really works in mrds with glm
-  mrmethod <- "glm"#mr_methods[mr_methods %in% possible_mr_methods]
+  mrmethod <- "glm" #mr_methods[mr_methods %in% possible_mr_methods]
 
-  mr_formula <- make_formula(md[["MRModel_Formula"]], md[["Factors"]])#paste0("~",md[["Formula"]])
-  mr_link <- paste0("\"", md[["MRModel_Link"]], "\"")
+  mr_formula <- make_formula(md$MRModel$Formula, md$Factors)
+  mr_link <- paste0("\"", md$MRModel$Link, "\"")
 
   paste0("mrmodel=~", mrmethod, "(",mr_formula,", link=", mr_link,")")
 }

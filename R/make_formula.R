@@ -16,9 +16,7 @@ make_formula <- function(md_formula, md_factors){
 
   formula_vars <- str_trim(strsplit(md_formula,"\\+")[[1]])
 
-  factors <- strsplit(md_factors,", ")[[1]]
-
-  which_f <- formula_vars %in% factors
+  which_f <- formula_vars %in% md_factors
   formula_vars[which_f] <- paste0("as.factor(", formula_vars[which_f],")")
 
   return(paste0("formula=~",paste(formula_vars, collapse="+")))
