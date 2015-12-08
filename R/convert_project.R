@@ -16,10 +16,11 @@
 #' @seealso converted_distance_analyses readdst-package
 convert_project <- function(project){
 
-  # die on spaces in the path spec
-#  if(grepl("\\w +", project)){
-#    stop("Project path contains spaces, please escape them properly using \"\\\\\"")
-#  }
+  # die on spaces in the path spec if using unix
+  # somehow the RODBC driver deals with this fine on Windows
+  if((.Platform$OS.type == "unix") & grepl("\\w +", project)){
+    stop("Project path contains spaces, please escape them properly using \"\\\\\"")
+  }
 
   ## get file names to use
   # project file
