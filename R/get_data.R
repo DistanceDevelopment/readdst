@@ -106,7 +106,7 @@ get_data <- function(data_file){
     if(length(visits)>1) stop("Number of transects visits varies - don't know what to do!")
     if(!any("visit" %in% names(obs_table))) stop("Multiple visits but no visit column!")
 
-    warning("Data containts transects with repeated visits, 'Sample.Label's will not match Distance for Windows")
+    warning("Data contains transects with repeated visits, 'Sample.Label's will not match Distance for Windows")
 
 
     # what if the below will remove some repeats?
