@@ -49,18 +49,19 @@ make_analysis <- function(this_analysis, model_definitions,
   aic.select <- attr(this_call, "aic_select_max")
   attr(this_call, "aic_select_max") <- NULL
 
-  # deal with size bias regression
-  sizebias <- group_size_regression(filtered$data,
-               model_definitions[[as.character(this_analysis$ModelDefinition)]])
+  ## deal with size bias regression or using group size
+  #size_est <- group_size_est(filtered$data,
+  #             model_definitions[[as.character(this_analysis$ModelDefinition)]])
 
   # build the return object
-  ret <- list(call = this_call,
+  ret <- list(call       = this_call,
               aic.select = aic.select,
-              status = this_analysis$Status,
-              env  = e,
-              filter = filtered$filter,
-              name = as.character(this_analysis[["Name"]]),
-              ID   = this_analysis[["ID"]])
+              status     = this_analysis$Status,
+              env        = e,
+              filter     = filtered$filter,
+              size_est   = size_est,
+              name       = as.character(this_analysis[["Name"]]),
+              ID         = this_analysis[["ID"]])
 
   class(ret) <- "converted_distance_analysis"
 
