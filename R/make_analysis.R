@@ -59,7 +59,7 @@ make_analysis <- function(this_analysis, model_definitions,
               status     = this_analysis$Status,
               env        = e,
               filter     = filtered$filter,
-              size_est   = size_est,
+              group_size = model_definitions[[as.character(this_analysis$ModelDefinition)]]$Estimate$Cluster,
               name       = as.character(this_analysis[["Name"]]),
               ID         = this_analysis[["ID"]])
 

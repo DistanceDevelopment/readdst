@@ -86,6 +86,13 @@ test_stats <- function(analysis, statuses=1){
                         (convert_units$Conversion[convert_units=="distance"] *
                          convert_units$Conversion[convert_units=="Effort"]))
     }
+
+    # modify the size part of the model to take into account the
+    # estimated group size from any regression or mean size estimate
+    if(!is.null(analysis$group_size)){
+      size_est <- group_size_est(model$data, analysis$group_size, model)
+      model$data$size <- size_est
+    }
     # then do the call to dht
     e$dht <- dht(model, obs.table=analysis$env$obs.table,
                  sample.table=analysis$env$sample.table,
