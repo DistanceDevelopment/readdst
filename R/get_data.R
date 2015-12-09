@@ -82,7 +82,8 @@ get_data <- function(data_file){
     dat <- merge(dat, this_table,
                  by.x="ID.last", by.y=ID_field,
                  all.y=TRUE,
-                 suffixes=c(paste0(".",last_name),paste0(".",names(hier)[1])))
+                 suffixes=c(paste0(".", last_name),
+                            paste0(".", names(hier)[1])))
 
     # new ID to do the joining on
     if(is.null(dat[[paste0("ID.", names(hier)[1])]])){
@@ -112,7 +113,7 @@ get_data <- function(data_file){
     # what if the below will remove some repeats?
     u_lab_visit <- unique(obs_table[,c("Label","visit")])
     u_lab <- unique(obs_table$Label)
-    if(nrow(u_lab_visit) != visits*length(u_lab)){
+    if(nrow(u_lab_visit) != (visits*length(u_lab))){
       # for now just break!
       stop("Including repeat visits will break Sample.Labels, stopping")
     }
