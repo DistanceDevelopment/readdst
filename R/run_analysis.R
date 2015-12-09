@@ -74,9 +74,9 @@ run_analysis <- function(analysis, debug=FALSE){
       last.model <- list(criterion=Inf)
     }else{
       # run a model without adjustments first
-      this_call <- sub(", adj\\.order=NULL", "", this_call)
-      this_call <- sub(", adj\\.series=\"[a-z]+\"", "", this_call)
-      last.model <- eval(parse(text=this_call), envir=analysis$env)
+      first_call <- sub(", adj\\.order=NULL", "", this_call)
+      first_call <- sub(", adj\\.series=\"[a-z]+\"", "", first_call)
+      last.model <- eval(parse(text=first_call), envir=analysis$env)
     }
 
     # now select adjustments
