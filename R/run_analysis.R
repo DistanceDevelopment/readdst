@@ -67,30 +67,30 @@ run_analysis <- function(analysis, debug=FALSE){
       orders <- orders[orders<=2*max.order]
     }
 
-    this_call <- analysis$call
+    model_call <- analysis$call
 
     # for fourier model, don't run a no adjustments model
     if(key=="unif" & adjustment=="cos"){
       last.model <- list(criterion=Inf)
     }else{
       # run a model without adjustments first
-      first_call <- sub(", adj\\.order=NULL", "", this_call)
+      first_call <- sub(", adj\\.order=NULL", "", model_call)
       first_call <- sub(", adj\\.series=\"[a-z]+\"", "", first_call)
       last.model <- eval(parse(text=first_call), envir=analysis$env)
     }
 
     # now select adjustments
     for(i in seq_along(orders)){
-      order <- paste("c(", orders[1:i],")", collapse=",")
+      order <- paste0("c(", paste(orders[1:i], collapse=","),")")
       this_call <- sub("adj\\.order=NULL",
-                       paste0("adj.order=", order), this_call)
+                       paste0("adj.order=", order), model_call)
       model <- eval(parse(text=this_call), envir=analysis$env)
 
       # if this models AIC is worse (bigger) than the last
       # return the last model and stop looking.
-      if(model$criterion >= last.model$criterion){
+      # OR if the model failed to converge
+      if((model$criterion >= last.model$criterion) | model$ds$converge!=0){
         model <- last.model
-#        message(paste0("\n\n",model$name.message," selected!"))
         break
       }else{
         # otherwise keep this, best model
