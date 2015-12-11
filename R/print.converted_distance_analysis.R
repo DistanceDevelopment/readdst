@@ -12,7 +12,6 @@ print.converted_distance_analysis <- function(x, ...){
   cat("ID          :", x$ID, "\n")
   cat("Data filter :", x$filter, "\n")
 
-  cat("mrds call  :\n\n")
-  cat(x$call, "\n")
+  cat("mrds call   :", x$call, "\n")
 
 }
