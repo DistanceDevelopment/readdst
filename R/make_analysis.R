@@ -49,9 +49,6 @@ make_analysis <- function(this_analysis, model_definitions,
   aic.select <- attr(this_call, "aic_select_max")
   attr(this_call, "aic_select_max") <- NULL
 
-  ## deal with size bias regression or using group size
-  #size_est <- group_size_est(filtered$data,
-  #             model_definitions[[as.character(this_analysis$ModelDefinition)]])
 
   # build the return object
   ret <- list(call       = this_call,
