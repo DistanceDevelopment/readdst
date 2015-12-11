@@ -115,7 +115,7 @@ run_analysis <- function(analysis, debug=FALSE){
     result <- eval(parse(text=analysis$call), envir=analysis$env)
   }
   if(debug){
-    message("\nSelected model:\n  ", model_description(model))
+    message("\nSelected model:\n  ", model_description(result))
   }
 
   return(result)
