@@ -7,7 +7,7 @@
 #' If an analysis needs to select the number of adjustment terms (for key plus adjustment detection functions) by AIC, then that selection is done at this stage.
 #'
 #' @param analysis a converted analysis
-#' @param debug display the call and name of the model before it is run
+#' @param debug display the call and name of the model before it is run, print AIC selection details
 #' @return fitted \code{\link{ddf}} object
 #'
 #' @author David L Miller
@@ -45,6 +45,10 @@ run_analysis <- function(analysis, debug=FALSE){
   # code from Distance
   if(!is.null(analysis$aic.select)){
 
+    if(debug){
+      message("Starting AIC adjustment term selection")
+    }
+
     max.order <- analysis$aic.select
 
     adjustment <- sub(".*adj\\.series=\"(\\w+)\".*", "\\1", analysis$call)
@@ -77,6 +81,9 @@ run_analysis <- function(analysis, debug=FALSE){
       first_call <- sub(", adj\\.order=NULL", "", model_call)
       first_call <- sub(", adj\\.series=\"[a-z]+\"", "", first_call)
       last.model <- eval(parse(text=first_call), envir=analysis$env)
+      if(debug){
+        message(model_description(last.model))
+      }
     }
 
     # now select adjustments
@@ -86,6 +93,9 @@ run_analysis <- function(analysis, debug=FALSE){
                        paste0("adj.order=", order), model_call)
       model <- eval(parse(text=this_call), envir=analysis$env)
 
+      if(debug){
+        message(model_description(model))
+      }
       # if this models AIC is worse (bigger) than the last
       # return the last model and stop looking.
       # OR if the model failed to converge
@@ -103,6 +113,9 @@ run_analysis <- function(analysis, debug=FALSE){
   }else{
 
     result <- eval(parse(text=analysis$call), envir=analysis$env)
+  }
+  if(debug){
+    message("\nSelected model:\n  ", model_description(model))
   }
 
   return(result)

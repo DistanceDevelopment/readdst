@@ -9,7 +9,7 @@ run_analysis(analysis, debug = FALSE)
 \arguments{
 \item{analysis}{a converted analysis}
 
-\item{debug}{display the call and name of the model before it is run}
+\item{debug}{display the call and name of the model before it is run, print AIC selection details}
 }
 \value{
 fitted \code{\link{ddf}} object
