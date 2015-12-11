@@ -32,7 +32,7 @@ make_meta.data <- function(df, transect, data){
                       na.rm=TRUE)
   }
 
-
+  # binned data can be specified as "Intervals"
   if(!is.null(df$Distance$Intervals)){
     intervals <- df$Distance$Intervals
     # extract the bin cutpoints -- make a vector
@@ -44,6 +44,14 @@ make_meta.data <- function(df, transect, data){
 
     # make the breaks and binned arguments
     breaks <- paste0("breaks=c(", paste(cuts, collapse=","), ")")
+    binned <- "binned=TRUE"
+  }else if(!is.null(df$Distance$Nclass)){
+    # or the number of bins -- "Nclass"
+    # make the breaks and binned arguments
+    breaks <- paste0("breaks=c(",
+                     paste(seq(left, width,
+                               length.out=as.numeric(df$Distance$Nclass)+1),
+                           collapse=","), ")")
     binned <- "binned=TRUE"
   }else{
     breaks <- NULL
