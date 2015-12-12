@@ -12,6 +12,6 @@
 \item{...}{unused additional args for S3 compatibility}
 }
 \description{
-Prints a table of the analyses that have been converted.
+Prints a table of the analyses that have been converted and their status from Distance for Windows.
 }
 
