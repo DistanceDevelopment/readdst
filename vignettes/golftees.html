@@ -85,25 +85,23 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 <p>Note the warning generated here is because in the golf tees analysis, one data filter specifies distance bins outside of the truncation points.</p>
 <p>We can see the names of the analyses (as they were given in Distance for Windows) and their analysis IDs by printing the returned object:</p>
 <pre class="sourceCode r"><code class="sourceCode r">converted</code></pre>
-<pre><code>##    ID                      Name
-## 1   1             FI - Petersen
-## 2   2              FI - MR dist
-## 3   3 FI - MR dist+size+sex+exp
-## 4   4      ds (single platform)
-## 5   5                     trial
-## 6   6                     io.fi
-## 7   7                     io.pi
-## 8   8            test intervals
-## 9   9           FI - Petersen 1
-## 10 10           FI - Petersen 2</code></pre>
+<pre><code>##    ID                      Name  Status
+## 1   3 FI - MR dist+size+sex+exp Not Run
+## 2   2              FI - MR dist Not Run
+## 3   7                     io.pi Not Run
+## 4   9           FI - Petersen 1 Not Run
+## 5  10           FI - Petersen 2 Not Run
+## 6   1             FI - Petersen  Ran OK
+## 7   6                     io.fi  Ran OK
+## 8   4      ds (single platform)  Ran OK
+## 9   5                     trial  Ran OK
+## 10  8            test intervals  Ran OK</code></pre>
 <p>More detail (including the <code>mrds</code> call details) can be found by looking an individual element of the list:</p>
 <pre class="sourceCode r"><code class="sourceCode r">converted[[<span class="dv">1</span>]]</code></pre>
 <pre><code>## Model name  : FI - Petersen 
 ## ID          : 1 
 ## Data filter :  
-## mrds call  :
-## 
-## mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=data)</code></pre>
+## mrds call   : mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=data)</code></pre>
 </div>
 <div id="running-analyses" class="section level2">
 <h2>Running analyses</h2>
@@ -138,10 +136,8 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 </div>
 <div id="testing-that-distance-and-r-got-the-same-answer" class="section level2">
 <h2>Testing that Distance and R got the same answer</h2>
-<p>We can test the saved results in Distance against those from R using <code>test_stats</code>:</p>
+<p>We can test the saved results in Distance against those from R using <code>test_stats</code>. This produces a table comparing the values stored in the Distance for Windows project database and their corresponding values calculated using R:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">test_stats</span>(converted[[<span class="dv">1</span>]])</code></pre>
-<pre><code>## Warning in data.frame(Statistic = stats$Name, Distance_value =
-## as.numeric(stats$Value), : NAs introduced by coercion</code></pre>
 <pre><code>##          Statistic Distance_value mrds_value Rel_diff Pass
 ## 1              AIC      510.76599  510.76603   0.0000    ✓
 ## 2   log-likelihood     -254.38300 -254.38302   0.0000    ✓
@@ -149,13 +145,12 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 ## 4      CV(density)        0.07345    0.08365   0.1389     
 ## 5      density lcl        0.26818    0.22962   0.1438     
 ## 6      density ucl        0.35753    0.41757   0.1679     
-## 7       density df        0.00000    2.49433       NA     
+## 7       density df        0.00000    2.49433   2.4943     
 ## 8      individuals      520.21149  520.21154   0.0000    ✓
 ## 9  CV(individuals)        0.07345    0.08365   0.1389     
 ## 10 individuals lcl      450.54651  385.76812   0.1438     
 ## 11 individuals ucl      600.64838  701.50961   0.1679     
-## 12  individuals df        0.00000    2.49433       NA</code></pre>
-<p>As we can see here, we did well and there were no differences!</p>
+## 12  individuals df        0.00000    2.49433   2.4943</code></pre>
 </div>
 </div>
 
