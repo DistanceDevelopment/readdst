@@ -10,7 +10,7 @@
 
 <meta name="author" content="David L Miller" />
 
-<meta name="date" content="2015-11-30" />
+<meta name="date" content="2015-12-15" />
 
 <title>Example import of a Distance analysis</title>
 
@@ -54,7 +54,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="header">
 <h1 class="title">Example import of a Distance analysis</h1>
 <h4 class="author"><em>David L Miller</em></h4>
-<h4 class="date"><em>2015-11-30</em></h4>
+<h4 class="date"><em>2015-12-15</em></h4>
 </div>
 
 
@@ -73,17 +73,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="golf-tees" class="section level1">
 <h1>Golf tees</h1>
 <p>We begin by finding the golf tees project on our computer, since this project is shipped with <code>readdst</code> we can use <code>system.file</code> to find the path to it:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readdst)</code></pre>
-<pre><code>## Warning: replacing previous import by 'ggplot2::unit' when loading 'Hmisc'</code></pre>
-<pre><code>## Warning: replacing previous import by 'ggplot2::arrow' when loading 'Hmisc'</code></pre>
-<pre><code>## Warning: replacing previous import by 'scales::alpha' when loading 'Hmisc'</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;Golftees-example&quot;</span>, <span class="dt">package=</span><span class="st">&quot;readdst&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readdst)
+project &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;Golftees-example&quot;</span>, <span class="dt">package=</span><span class="st">&quot;readdst&quot;</span>)
 project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<span class="st">&quot;/Golftees&quot;</span>)</code></pre>
 <div id="converting-analyses" class="section level2">
 <h2>Converting analyses</h2>
 <p>We can then convert the whole project and all analyses in it, this just translates the code that Distance uses to fit the model into R code:</p>
 <pre class="sourceCode r"><code class="sourceCode r">converted &lt;-<span class="st"> </span><span class="kw">convert_project</span>(project)</code></pre>
-<pre><code>## Warning in create.bins(data, cuts): Some distances were outside bins and
+<pre><code>## Warning in create_bins(data, cuts): Some distances were outside bins and
 ## have been removed.</code></pre>
 <p>Note the warning generated here is because in the golf tees analysis, one data filter specifies distance bins outside of the truncation points.</p>
 <p>We can see the names of the analyses (as they were given in Distance for Windows) and their analysis IDs by printing the returned object:</p>
@@ -106,7 +103,7 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 ## Data filter :  
 ## mrds call  :
 ## 
-## mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=obs_table)</code></pre>
+## mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=data)</code></pre>
 </div>
 <div id="running-analyses" class="section level2">
 <h2>Running analyses</h2>
@@ -114,7 +111,7 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 <pre class="sourceCode r"><code class="sourceCode r">analysis_1 &lt;-<span class="st"> </span><span class="kw">run_analysis</span>(converted[[<span class="dv">1</span>]], <span class="dt">debug=</span><span class="ot">TRUE</span>)</code></pre>
 <pre><code>## Model name: FI - Petersen 
 ## Call:
-##  mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=obs_table)</code></pre>
+##  mrds::ddf(mrmodel=~glm(~1, link=&quot;logit&quot;), meta.data=list(width=4,left=0), control=list(), method=&quot;trial.fi&quot;, data=data)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(analysis_1)</code></pre>
 <pre><code>## 
 ## Summary for trial.fi object 
@@ -143,7 +140,21 @@ project &lt;-<span class="st"> </span><span class="kw">paste0</span>(project,<sp
 <h2>Testing that Distance and R got the same answer</h2>
 <p>We can test the saved results in Distance against those from R using <code>test_stats</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">test_stats</span>(converted[[<span class="dv">1</span>]])</code></pre>
-<pre><code>## All tests were fine!</code></pre>
+<pre><code>## Warning in data.frame(Statistic = stats$Name, Distance_value =
+## as.numeric(stats$Value), : NAs introduced by coercion</code></pre>
+<pre><code>##          Statistic Distance_value mrds_value Rel_diff Pass
+## 1              AIC      510.76599  510.76603   0.0000    ✓
+## 2   log-likelihood     -254.38300 -254.38302   0.0000    ✓
+## 3          density        0.30965    0.30965   0.0000    ✓
+## 4      CV(density)        0.07345    0.08365   0.1389     
+## 5      density lcl        0.26818    0.22962   0.1438     
+## 6      density ucl        0.35753    0.41757   0.1679     
+## 7       density df        0.00000    2.49433       NA     
+## 8      individuals      520.21149  520.21154   0.0000    ✓
+## 9  CV(individuals)        0.07345    0.08365   0.1389     
+## 10 individuals lcl      450.54651  385.76812   0.1438     
+## 11 individuals ucl      600.64838  701.50961   0.1679     
+## 12  individuals df        0.00000    2.49433       NA</code></pre>
 <p>As we can see here, we did well and there were no differences!</p>
 </div>
 </div>

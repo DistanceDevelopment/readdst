@@ -79,12 +79,11 @@ If one wanted to run all the analysis at once, one could of course simply use `l
 
 ## Testing that Distance and R got the same answer
 
-We can test the saved results in Distance against those from R using `test_stats`:
+We can test the saved results in Distance against those from R using `test_stats`. This produces a table comparing the values stored in the Distance for Windows project database and their corresponding values calculated using R:
 
 ```{r}
 test_stats(converted[[1]])
 ```
 
-As we can see here, we did well and there were no differences!
 
 
