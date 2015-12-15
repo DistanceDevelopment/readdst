@@ -85,12 +85,14 @@ model_selection <- function(analysis, debug=FALSE){
 
     result <- model
 
+    # print the selected model description
+    if(debug){
+      message("\nSelected model:\n  ", model_description(result))
+    }
+
   }else{
 
     result <- eval(parse(text=analysis$call), envir=analysis$env)
-  }
-  if(debug){
-    message("\nSelected model:\n  ", model_description(result))
   }
 
   return(result)
