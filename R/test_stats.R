@@ -61,48 +61,56 @@ test_stats <- function(analysis, statuses=1){
 
     # if there were no results return early
     if(nrow(stats)==0){
-      message(paste0("No results for analysis ",analysis$ID))
+      message(paste0("No results for analysis ", analysis$ID))
       return()
     }
 
     # run the analysis
     model <- run_analysis(analysis)
 
-    ## make an environment with the objects in that we want
-    e <- new.env()
-    # model
-    e$model <- model
-    # its summary
-    e$model_sum <- summary(model)
-    # dht output
-    # first get the conversion between units
-    convert_units <- analysis$env$units
-    if(model$meta.data$point){
-      # no effort for points
-      convert_units <- 1/(convert_units$Conversion[convert_units=="Area"]/
-                        (convert_units$Conversion[convert_units=="distance"]))
+
+    if(!any("ddf_analyses" %in% class(model))){
+      # first get the conversion between units
+      convert_units <- analysis$env$units
+      if(model$meta.data$point){
+        # no effort for points
+        convert_units <- 1/(convert_units$Conversion[convert_units=="Area"]/
+                          (convert_units$Conversion[convert_units=="distance"]))
+      }else{
+        convert_units <- 1/(convert_units$Conversion[convert_units=="Area"]/
+                          (convert_units$Conversion[convert_units=="distance"] *
+                           convert_units$Conversion[convert_units=="Effort"]))
+      }
+
+      ## make an environment with the objects in that we want
+      e <- list()
+      # model
+      e$model <- model
+      # its summary
+      e$model_sum <- summary(model)
+      # dht output
+      # modify the size part of the model to take into account the
+      # estimated group size from any regression or mean size estimate
+      if(!is.null(analysis$group_size)){
+        size_est <- group_size_est(model$data, analysis$group_size, model)
+        model$data$size <- size_est
+      }
+      # then do the call to dht
+      e$dht <- dht(model, obs.table=analysis$env$obs.table,
+                   sample.table=analysis$env$sample.table,
+                   region.table=analysis$env$region.table,
+                   options=list(convert.units=convert_units))
     }else{
-      convert_units <- 1/(convert_units$Conversion[convert_units=="Area"]/
-                        (convert_units$Conversion[convert_units=="distance"] *
-                         convert_units$Conversion[convert_units=="Effort"]))
+
+      e <- merge_results(model, analysis)
+
     }
 
-    # modify the size part of the model to take into account the
-    # estimated group size from any regression or mean size estimate
-    if(!is.null(analysis$group_size)){
-      size_est <- group_size_est(model$data, analysis$group_size, model)
-      model$data$size <- size_est
-    }
-    # then do the call to dht
-    e$dht <- dht(model, obs.table=analysis$env$obs.table,
-                 sample.table=analysis$env$sample.table,
-                 region.table=analysis$env$region.table,
-                 options=list(convert.units=convert_units))
 
     # test function
     test_it <- function(x, tol, env){
       # get the test statistic for this model
-      model_val <- eval(parse(text=x[6]), envir=env)
+      model_val <- eval(parse(text=x[6]), envir=list2env(env))
 
       # get the Distance value and convert to the same mode
       # as that from the model
@@ -126,6 +134,7 @@ test_stats <- function(analysis, statuses=1){
     # format the mean relative difference column
     res_text[res_text=="1"] <- 0
     res_text <- sub("^Mean relative difference: ", "", res_text)
+    res_text <- sub("^Mean absolute difference: ", "", res_text)
 
     # build the data.frame
     res_table <- data.frame(Statistic      = stats$Name,

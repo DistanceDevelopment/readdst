@@ -36,7 +36,25 @@ run_analysis <- function(analysis, debug=FALSE){
     stop("You can only run one analysis at a time with run_analysis, try again selecting only one analysis")
   }
 
-  result <- model_selection(analysis, debug=FALSE)
+  # if we need to fit a separate detection function per stratum
+  if(!is.null(analysis$detection_by) && analysis$detection_by == "Stratum"){
+    save_data <- analysis$env$data
+    result <- list()
+    for(lab in unique(save_data$Region.Label)){
+
+      # select only this stratum
+      analysis$env$data <- save_data[save_data$Region.Label==lab, ]
+
+      result[[lab]] <- model_selection(analysis, debug=debug)
+    }
+
+    # reset region.table
+    analysis$env$data <- save_data
+    class(result) <- "ddf_analyses"
+  }else{
+    # otherwise just run the analysis as-is
+    result <- model_selection(analysis, debug=debug)
+  }
 
   return(result)
 }

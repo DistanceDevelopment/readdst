@@ -45,7 +45,11 @@ make_model <- function(this_analysis, model_definitions, data_filters,
                             method,
                             "data=data", sep=", "), ")")
 
-  # if AIC selection, save max number of terms
+
+  ## now the call is built, need to add in some meta data that is
+  ## going to be necessary later on...
+
+  ## if AIC selection, save max number of terms
   if(!is.null(md$Estimate$Pick) && md$Estimate$Pick == "AIC"){
     # if maxterms is specified set the adjustment order to NULL
     # and do AIC selection
@@ -56,8 +60,6 @@ make_model <- function(this_analysis, model_definitions, data_filters,
       attr(this_call, "aic_select_max") <- NULL
     }
   }
-
-  attr(this_call,"factors") <- md[["Factors"]]
 
   return(this_call)
 }

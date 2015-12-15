@@ -37,10 +37,6 @@ make_analysis <- function(this_analysis, model_definitions,
   filtered <- filter_data(data,
                          data_filters[[as.character(this_analysis$DataFilter)]])
 
-  # set the variable names
-  # is this necessary?
-  #filtered$data <- set_covar_names(filtered$data, attr(this_call,"factors"))
-
   # convert the flatfile to the necessary tables and store the unit conversion
   e <- list2env(unflatfile(filtered$data))
   e$units <- unit_conversion
@@ -49,16 +45,25 @@ make_analysis <- function(this_analysis, model_definitions,
   aic.select <- attr(this_call, "aic_select_max")
   attr(this_call, "aic_select_max") <- NULL
 
+  this_md <- as.character(this_analysis$ModelDefinition)
+  # extract whether we have to fit multiple detection functions
+  detection_by <- model_definitions[[this_md]]$Estimate$Detection$by
+  # extract how the density/abundance estimation is to work
+  estimation <- model_definitions[[this_md]]$Estimate$Density
+  # get the group size info
+  group_size <- model_definitions[[this_md]]$Estimate$Cluster
 
   # build the return object
-  ret <- list(call       = this_call,
-              aic.select = aic.select,
-              status     = this_analysis$Status,
-              env        = e,
-              filter     = filtered$filter,
-              group_size = model_definitions[[as.character(this_analysis$ModelDefinition)]]$Estimate$Cluster,
-              name       = as.character(this_analysis[["Name"]]),
-              ID         = this_analysis[["ID"]])
+  ret <- list(call         = this_call,
+              aic.select   = aic.select,
+              status       = this_analysis$Status,
+              env          = e,
+              filter       = filtered$filter,
+              group_size   = group_size,
+              detection_by = detection_by,
+              estimation   = estimation,
+              name         = as.character(this_analysis[["Name"]]),
+              ID           = this_analysis[["ID"]])
 
   class(ret) <- "converted_distance_analysis"
 
