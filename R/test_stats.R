@@ -68,7 +68,7 @@ test_stats <- function(analysis, statuses=1){
     # run the analysis
     model <- run_analysis(analysis)
 
-
+    # if we didn't have statified detection function fitting
     if(!any("ddf_analyses" %in% class(model))){
       # first get the conversion between units
       convert_units <- analysis$env$units
@@ -101,11 +101,11 @@ test_stats <- function(analysis, statuses=1){
                    region.table=analysis$env$region.table,
                    options=list(convert.units=convert_units))
     }else{
-
+      # if we had stratification for the detection function
+      # then we fitted multiple detection functions, need to aggregate
+      # these over the data and combine results
       e <- merge_results(model, analysis)
-
     }
-
 
     # test function
     test_it <- function(x, tol, env){
@@ -144,23 +144,11 @@ test_stats <- function(analysis, statuses=1){
                             Pass           = ticks)
 
     # give the result a class so it can be pretty-printed
-    class(res_table) <- "distance_stats_table"
+    class(res_table) <- c("distance_stats_table", "data.frame")
     attr(res_table, "print.digits") <- sub("^\\d+\\.*\\d*e[\\+-]", "",
                                        min(stats$Tolerance[stats$Tolerance>0]))
     return(res_table)
   }
 
   invisible()
-}
-
-#' Print tested statistics
-#'
-#' This is simply a \code{print} method to nicely ouput the results of \code{\link{test_stats}}.
-#' @author David L Miller
-#' @param x the result of a call to \code{\link{test_stats}}
-#' @return just prints the results
-#' @export
-print.distance_stats_table <- function(x){
-  class(x) <- NULL
-  print(as.data.frame(x, stringsAsFactors=FALSE), digits=attr(x, "print.digits"))
 }
