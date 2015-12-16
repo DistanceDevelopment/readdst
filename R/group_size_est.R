@@ -58,6 +58,9 @@ group_size_est <- function(data, group_size, model){
     size_lm <- lm(paste0(response, "~", explanatory), data=reg_data)
     # predict the cluster size at zero distance
     cluster <- predict(size_lm, pred_data)
+    if(group_size$Bias %in% c("GXLOG", "XLOG")){
+      cluster <- exp(cluster)
+    }
   }
 
   return(cluster)
