@@ -8,7 +8,8 @@
 print.distance_stats_table <- function(x, ..., digits=NULL){
 
   x <- as.data.frame(x)
-  m <- as.matrix(format(as.data.frame(t(x[,2:4])), drop0trailing = TRUE, digits=digits))
+  m <- as.matrix(format(as.data.frame(t(x[,2:4])), drop0trailing = TRUE,
+                        digits=digits, scientific=8))
 
   x[,2:4] <- t(m)
 
