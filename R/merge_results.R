@@ -47,11 +47,13 @@ merge_results <- function(models, analysis){
   # get a summary
   res$model_sum <- summary(model)
 
+  # make a dummy dht we can slot things into
   base_dht <- dht(model, obs.table=analysis$env$obs.table,
                   sample.table=analysis$env$sample.table,
                   region.table=analysis$env$region.table,
                   options=list(convert.units=convert_units))
 
+  # save the region table before we start messing around...
   save_region <- analysis$env$region.table
 
   # initialize the values we'll be concatenating (or adding)

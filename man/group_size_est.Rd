@@ -4,17 +4,17 @@
 \alias{group_size_est}
 \title{Estimate group size}
 \usage{
-group_size_est(data, model_definition, model)
+group_size_est(data, group_size, model)
 }
 \arguments{
 \item{data}{the data for this analysis}
 
-\item{model_definition}{a model definition}
+\item{group_size}{the \code{group_size} element of an analysis object}
 
 \item{model}{a fitted model}
 }
 \value{
-a single the estimated cluster size, or \code{NULL} if there were no instructions on how to estimate group/cluster size
+estimated cluster sizes (\code{numeric} vector of length \code{nrow(data)}), or \code{NULL} if there were no instructions on how to estimate group/cluster size
 }
 \description{
 Distance for Windows includes a few different methods for accounting for group (or cluster) size (at the adundance/density estimation stage). These include using the mean group size for all observations or using a regression of size against distance or log size against distance.
