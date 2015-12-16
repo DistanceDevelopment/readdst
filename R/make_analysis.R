@@ -46,12 +46,21 @@ make_analysis <- function(this_analysis, model_definitions,
   attr(this_call, "aic_select_max") <- NULL
 
   this_md <- as.character(this_analysis$ModelDefinition)
+  this_df <- as.character(this_analysis$DataFilter)
   # extract whether we have to fit multiple detection functions
   detection_by <- model_definitions[[this_md]]$Estimate$Detection$by
   # extract how the density/abundance estimation is to work
   estimation <- model_definitions[[this_md]]$Estimate$Density
-  # get the group size info
+  # get the group size model info
   group_size <- model_definitions[[this_md]]$Estimate$Cluster
+  # and the group size stratification
+  if(!is.null(model_definitions[[this_md]]$Estimate$Size)){
+    group_size$by <- model_definitions[[this_md]]$Estimate$Size$by
+  }
+  # save additional truncation
+  if(!is.null(data_filters[[this_df]]$Cluster$Width)){
+    group_size$Width <- as.numeric(data_filters[[this_df]]$Cluster$Width)
+  }
 
   # build the return object
   ret <- list(call         = this_call,
