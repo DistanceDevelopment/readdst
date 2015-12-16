@@ -18,6 +18,8 @@ I assume here that you have a Distance for Windows project file (in this case we
 
 To read the Access database files (the `.dst` file and `DistData.mdb` you need to have the `Hmisc` package installed and a copy of [`mdb-tools`](http://mdbtools.sourceforge.net/) installed on your computer. On Mac, if you have [`homebrew`](http://brew.sh/) installed, this consists of simply running `brew install mdb-tools`.
 
+*On my Win7 machine, I have neither mdb-tools installed nor do I load the Hmisc package to use readdst.  However RODBC is required (and loaded by readdst), user must be using 32-bit version of R*
+
 # General principle
 
 `readdst` looks in the project `.dst` file, extracts the analyses, generates the correct calls to `ddf` and then runs those analyses, using the data it extracted from `DistData.mdb`. The various tables in the Distance for Windows databases relate in the following ways (source: Distance Developer's manual):
@@ -29,7 +31,7 @@ Although all of this is going on in the background, there are only a few functio
 
 # Golf tees
 
-We begin by finding the golf tees project on our computer, since this project is shipped with `readdst` we can use `system.file` to find the path to it:
+We begin by finding the golf tees project on our computer, because this project is shipped with `readdst` we can use `system.file` to find the path to it:
 
 ```{r}
 library(readdst)
