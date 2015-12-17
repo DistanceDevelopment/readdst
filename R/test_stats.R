@@ -89,6 +89,9 @@ test_stats <- function(analysis, statuses=1, tolerance=0.01){
       e$model <- model
       # its summary
       e$model_sum <- summary(model)
+      # chi^2 breaks
+      e$gof <- list()
+      e$gof$intervals <- analysis$gof_intervals
       # dht output
       # modify the size part of the model to take into account the
       # estimated group size from any regression or mean size estimate

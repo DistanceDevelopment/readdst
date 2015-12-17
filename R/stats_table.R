@@ -38,7 +38,7 @@ stats_table <- function(){
         2  | NULL            |           | NULL                                                 | Number of sampler points
      2010  | parameters      | 0         | length(model$par)                                    | Total number of parameters
      2020  | AIC             | 1e-3      | model$criterion                                      | Akaike Information Criterion
-     2030  | Chi^2 p         | 1e-3      | ddf.gof(model, qq=FALSE)$chisquare$chi1$p            | Goodness-of-fit chi-square test probability (test 1, after pooling)
+     2030  | Chi^2 p         | 1e-3      | ddf.gof(model, breaks=gof$intervals, qq=FALSE)$chisquare$chi1$p            | Goodness-of-fit chi-square test probability (test 1, after pooling)
      2040  | NULL            |           | NULL                                                 | PDF (lines) or slope of PDF (points) at x=0
      2050  | P_a             | 1e-3      | model_sum$average.p                                  | Probability of detection
      2051  | CV(P_a)         | 1e-3      | as.numeric(model_sum$average.p.se)/model_sum$average.p | Probability of detection coeff. of var.

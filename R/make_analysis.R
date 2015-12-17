@@ -61,18 +61,26 @@ make_analysis <- function(this_analysis, model_definitions,
   if(!is.null(data_filters[[this_df]]$Cluster$Width)){
     group_size$Width <- as.numeric(data_filters[[this_df]]$Cluster$Width)
   }
+  # save the Chi^2 intervals
+  gof_intervals <- NULL
+  if(!is.null(model_definitions[[this_md]]$Estimate$GOF$Intervals)){
+    gof_intervals <- strsplit(model_definitions[[this_md]]$Estimate$GOF$Intervals,
+                              ",")[[1]]
+    gof_intervals <- as.numeric(gof_intervals)
+  }
 
   # build the return object
-  ret <- list(call         = this_call,
-              aic.select   = aic.select,
-              status       = this_analysis$Status,
-              env          = e,
-              filter       = filtered$filter,
-              group_size   = group_size,
-              detection_by = detection_by,
-              estimation   = estimation,
-              name         = as.character(this_analysis[["Name"]]),
-              ID           = this_analysis[["ID"]])
+  ret <- list(call          = this_call,
+              aic.select    = aic.select,
+              status        = this_analysis$Status,
+              env           = e,
+              filter        = filtered$filter,
+              group_size    = group_size,
+              detection_by  = detection_by,
+              gof_intervals = gof_intervals,
+              estimation    = estimation,
+              name          = as.character(this_analysis[["Name"]]),
+              ID            = this_analysis[["ID"]])
 
   class(ret) <- "converted_distance_analysis"
 

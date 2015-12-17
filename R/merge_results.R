@@ -145,6 +145,7 @@ merge_results <- function(models, analysis){
   # put the dht and model objects into the return list
   res$dht <- base_dht
   res$model <- model
+  res$gof_intervals <- analysis$gof_intervals
 
   return(res)
 }
