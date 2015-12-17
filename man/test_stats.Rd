@@ -12,7 +12,7 @@ test_stats(analysis, statuses = 1)
 \item{statuses}{for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).}
 }
 \value{
-a \code{data.frame} with two columns: \code{Statistic}, a description of the tested statistic; and \code{Result} a series of ticks, indicating that values were the same (or similar enough in the case of numeric values; see \code{\link{stats_table}}).
+a \code{data.frame} with five columns: \code{Statistic}, a description of the tested statistic; \code{Distance_value} the value of the statistic stored by Distance for Windows; \code{mrds_value} the value of the statistic calculated by \code{mrds}; \code{Difference} the (scaled, relative) difference between the previous two columns (computed using \code{\link{all.equal}}); \code{Pass} a series of ticks, indicating that the value in the \code{Difference} column is less than 0.05.
 }
 \description{
 Tests the results stored in the Distance for Windows project file against those generated from running the same analysis in R.

@@ -22,7 +22,8 @@
 #'
 #' @param analysis a converted (but not run) analysis
 #' @param statuses for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).
-#' @return a \code{data.frame} with two columns: \code{Statistic}, a description of the tested statistic; and \code{Result} a series of ticks, indicating that values were the same (or similar enough in the case of numeric values; see \code{\link{stats_table}}).
+#' @param tolerance the tolerance of the test (default 0.01)
+#' @return a \code{data.frame} with five columns: \code{Statistic}, a description of the tested statistic; \code{Distance_value} the value of the statistic stored by Distance for Windows; \code{mrds_value} the value of the statistic calculated by \code{mrds}; \code{Difference} the (scaled, relative) difference between the previous two columns (computed using \code{\link{all.equal}}); \code{Pass} a series of ticks, indicating that the value in the \code{Difference} column is less than 0.05.
 #'
 #' @export
 #' @importFrom testthat test_that context expect_equal
@@ -39,7 +40,7 @@
 #' # run tests for analysis 1
 #' test_stats(converted[[1]])
 #' }
-test_stats <- function(analysis, statuses=1){
+test_stats <- function(analysis, statuses=1, tolerance=0.01){
 
   # stop if we got passed more than one analysis
   if("converted_distance_analyses" %in% class(analysis)){
@@ -119,7 +120,8 @@ test_stats <- function(analysis, statuses=1){
 
       # test!
       test <- all.equal(test_val, model_val, check.attributes = FALSE,
-                        tolerance = as.numeric(x[5]))
+                        scale=test_val)
+                        #tolerance = as.numeric(x[5]), scale=test_val)
       # form result
       return(c(test=test, mrds_val=model_val))
     }
@@ -127,26 +129,28 @@ test_stats <- function(analysis, statuses=1){
     res <- t(apply(stats, 1, test_it, tol=tol, env=e))
     res_text <- res[,1]
 
-    # make some ticks
-    ticks <- rep("\U2713", nrow(stats))
-    ticks[res_text!="1"] <- ""
-
-    # format the mean relative difference column
+    # format the difference column
     res_text[res_text=="1"] <- 0
     res_text <- sub("^Mean relative difference: ", "", res_text)
     res_text <- sub("^Mean absolute difference: ", "", res_text)
+    res_text <- sub("^Mean scaled difference: ", "", res_text)
+
+    # make some ticks
+    ticks <- rep("\U2713", nrow(stats))
+    #ticks[res_text!="1"] <- ""
+    ticks[as.numeric(res_text) >= tolerance] <- ""
 
     # build the data.frame
     res_table <- data.frame(Statistic      = stats$Name,
                             Distance_value = as.numeric(stats$Value),
                             mrds_value     = as.numeric(res[,2]),
-                            Rel_diff       = as.numeric(res_text),
+                            Difference     = as.numeric(res_text),
                             Pass           = ticks)
 
     # give the result a class so it can be pretty-printed
     class(res_table) <- c("distance_stats_table", "data.frame")
-    attr(res_table, "print.digits") <- sub("^\\d+\\.*\\d*e[\\+-]", "",
-                                       min(stats$Tolerance[stats$Tolerance>0]))
+#    attr(res_table, "print.digits") <- sub("^\\d+\\.*\\d*e[\\+-]", "",
+#                                       min(stats$Tolerance[stats$Tolerance>0]))
     return(res_table)
   }
 
