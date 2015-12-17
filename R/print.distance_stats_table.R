@@ -8,9 +8,12 @@
 print.distance_stats_table <- function(x, ..., digits=NULL){
 
   x <- as.data.frame(x)
+
+  # do table formatting so that rows use the same notation
+  # making them easier to compare
   m <- as.matrix(format(as.data.frame(t(x[,2:4])), drop0trailing = TRUE,
                         digits=digits, scientific=8))
-
+  # transpose back and insert into the matrix to print
   x[,2:4] <- t(m)
 
   print(x, ...)
