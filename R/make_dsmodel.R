@@ -38,15 +38,20 @@ make_dsmodel <- function(md){
                   UN = "unif")
     key <- paste0("key=\"", key, "\"")
 
-    adj.series <- switch(md$Estimate$Estimator$Adjust,
-                         CO = "cos",
-                         HE = "herm",
-                         PO = "poly",
-                         NULL)
-    adj.series <- paste0("adj.series=\"", adj.series,"\"")
+    # NAP is number of adjustment parameters if zero then no
+    # adjustments are to be fitted
+    if(!is.null(md$Estimate$Estimator$NAP) && md$Estimate$Estimator$NAP != 0){
+      adj.series <- switch(md$Estimate$Estimator$Adjust,
+                           CO = "cos",
+                           HE = "herm",
+                           PO = "poly",
+                           NULL)
+      adj.series <- paste0("adj.series=\"", adj.series,"\"")
+    }
 
     # if we use AIC for selection....
-    if(md$Estimate$Pick=="AIC"){
+    if(md$Estimate$Pick=="AIC" &
+       (!is.null(md$Estimate$Estimator$NAP) && md$Estimate$Estimator$NAP != 0)){
       # if maxterms is specified set the adjustment order to NULL
       # and do AIC selection
       if(!is.null(md$Options$Maxterms)){
