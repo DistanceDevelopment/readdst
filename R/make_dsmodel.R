@@ -40,7 +40,7 @@ make_dsmodel <- function(md){
 
     # NAP is number of adjustment parameters if zero then no
     # adjustments are to be fitted
-    if(!is.null(md$Estimate$Estimator$NAP) && md$Estimate$Estimator$NAP != 0){
+    if(is.null(md$Estimate$Estimator$NAP) || md$Estimate$Estimator$NAP != 0){
       adj.series <- switch(md$Estimate$Estimator$Adjust,
                            CO = "cos",
                            HE = "herm",
@@ -51,7 +51,7 @@ make_dsmodel <- function(md){
 
     # if we use AIC for selection....
     if(md$Estimate$Pick=="AIC" &
-       (!is.null(md$Estimate$Estimator$NAP) && md$Estimate$Estimator$NAP != 0)){
+       (is.null(md$Estimate$Estimator$NAP) || md$Estimate$Estimator$NAP != 0)){
       # if maxterms is specified set the adjustment order to NULL
       # and do AIC selection
       if(!is.null(md$Options$Maxterms)){
