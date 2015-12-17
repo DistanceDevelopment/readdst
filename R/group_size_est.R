@@ -7,6 +7,7 @@
 #' @param model a fitted model
 #' @return estimated cluster sizes (\code{numeric} vector of length \code{nrow(data)}), or \code{NULL} if there were no instructions on how to estimate group/cluster size
 #' @author David L Miller
+#' @importFrom plyr ddply
 group_size_est <- function(data, group_size, model){
 
 ### Need to also take into account SIZE p. 328
