@@ -10,7 +10,7 @@
 
 <meta name="author" content="Eric Rexstad" />
 
-<meta name="date" content="2016-02-15" />
+<meta name="date" content="2016-02-17" />
 
 <title>Transforming DistWin projects to the R environment</title>
 
@@ -28,7 +28,7 @@
 <div id="header">
 <h1 class="title">Transforming DistWin projects to the <code>R</code> environment</h1>
 <h4 class="author"><em>Eric Rexstad</em></h4>
-<h4 class="date"><em>2016-02-15</em></h4>
+<h4 class="date"><em>2016-02-17</em></h4>
 </div>
 
 
@@ -45,18 +45,30 @@
 <li>Survey information includes point or line transect types, whether animals were recorded as individuals or clusters, whether perpendicular distances or radial distances and angles were recorded.</li>
 <li>Data filters possess information about sightings to include in analysis (truncation distance, species indicators for multi-species surveys)</li>
 <li>Model definitions describe the key function and adjustment term combinations to be fitted as the detection function, whether data will be combined across strata for detection function fitting, etc.</li>
+<li>Analysis results are the product of submitting the survei/filter/model combination to the analysis engines in <code>DistWin</code>.</li>
 </ul>
 </div>
 <div id="example-project-files-to-transform" class="section level1">
 <h1>Example project files to transform</h1>
-<div id="ducknests" class="section level2">
-<h2>Ducknests</h2>
+<p>There are two projects that come with the distribution of <code>DistWin</code> located in <code>My Documents\My Distance Projects\Sample Projects</code> I will use to demonstrate the use of <code>DistWin</code>. In addition, I have taken another project that ships with <code>DistWin</code>, <code>Stratify example</code>, renamed it <code>Vignette-stratify</code> and added further analyses to that project for use in this vignette. This third example ships with the <code>readdst</code> R package and is found in the library folder associated with the <code>readdst</code> package (see below).</p>
+<div id="ducknest" class="section level2">
+<h2>Ducknest</h2>
+<p>This project consists of an artificial example in which duck nest objects are collected as <em>binned</em> data. The units of the project are non-SI miles and feet. There is one non-default data filter, specifying a 6 foot perpendicular truncation distance. There are four model definitions present:</p>
+<ul>
+<li>half-normal with cosine adjustment</li>
+<li>hazard rate with polynomial adjustment</li>
+<li>uniform with cosine adjustment, and</li>
+<li>half-normal with Hermite adjustment.</li>
+</ul>
 </div>
 <div id="vignette-stratify" class="section level2">
 <h2>Vignette-stratify</h2>
+<p>Synthetic line transect data, units of measure in non-SI units (effort and perpendicular distance in nautical miles). Animals were detected in groups, so cluster size enters into the calculation of animal density. The project contains a multiplier derived from an external estimate of <span class="math inline">\(\widehat{g(0)}\)</span>, but for purposes of this vignette, the use of the multiplier has been removed from the <code>DistWin</code> analysis.</p>
+<p>The study area also contains two types of habitat and the design incorporated habitat information. Consequently, the brief analysis focuses upon whether it is most parsimonious to fit habitat-specific detection functions, or whether a single detection function pooled across habitat types.</p>
 </div>
 <div id="amakihi" class="section level2">
 <h2>Amakihi</h2>
+<p>This project demonstrates the use of the MRDS (multiple covariate) analysis engine in conjunction with a point transect sampling survey (using conventional SI measurement units). The analyses present in the project represent 16 model results presented in Marques et al. (2007). All analyses employ a data filter specifying an 82.5m truncation distance.</p>
 </div>
 </div>
 <div id="conversion-process" class="section level1">
@@ -66,7 +78,7 @@
 </div>
 </div>
 <div id="comparing-results-of-distwin-and-r-analyses" class="section level1">
-<h1>Comparing results of DistWin and R analyses</h1>
+<h1>Comparing results of <code>DistWin</code> and R analyses</h1>
 </div>
 <div id="migrations-not-performed-by-readdst" class="section level1">
 <h1>Migrations not performed by <code>readdst</code></h1>
