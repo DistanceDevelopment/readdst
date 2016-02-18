@@ -17,9 +17,11 @@ As a portal for statisticans and biologists who have existing `DistWin` projects
 
 This vignette is intended to give a few examples of the capabilities of `readdst`.  Readers of this vignette should have some familiarity with the organisation of `DistWin` projects along with functions in the `mrds` library for fitting detection functions.
 
+Note too, `readdst` can only work with `DistWin` projects created by `DistWin` versions 6 or 7.
+
 # Structure of `DistWin` project
 
-`DistWin` projects carry not only the data collected in the field, but also survey descriptions, data filters, model definitions and analysis results.
+`DistWin` projects carry not only the data collected in the field, but also survey descriptions, data filters, model definitions and analysis results.  All of these facets are stored in Access database files created by `DistWin`.  Reading the Access files into `R` is at the heart of `readdst`.
 
 * Survey information includes point or line transect types, whether animals were recorded as individuals or clusters, whether perpendicular distances or radial distances and angles were recorded.
 * Data filters possess information about sightings to include in analysis (truncation distance, species indicators for multi-species surveys)
@@ -28,8 +30,9 @@ This vignette is intended to give a few examples of the capabilities of `readdst
 
 # Example project files to transform
 
-There are two projects that come with the distribution of `DistWin` located in `My Documents\My Distance Projects\Sample Projects` I will use to demonstrate the use of `DistWin`.  In addition, I have taken another project that ships with `DistWin`, `Stratify example`, renamed it `Vignette-stratify` and added further analyses to that project for use in this vignette.  This third example ships with the `readdst` R package and is found in the library folder associated with the `readdst` package (see below).
+There is a project that comes with the distribution of `DistWin` located in `My Documents\My Distance Projects\Sample Projects` I will use to demonstrate the use of `DistWin`.  In addition, I have taken another project that ships with `DistWin`, `Stratify example`, renamed it `Vignette-stratify` and added further analyses to that project for use in this vignette.  This third example ships with the `readdst` R package and is found in the library folder associated with the `readdst` package (see below).
 
+```{asis, echo=FALSE}
 ## Ducknest
 This project consists of an artificial example in which duck nest objects are collected as *binned* data.  The units of the project are non-SI miles and feet.  There is one non-default data filter, specifying a 6 foot perpendicular truncation distance.  There are four model definitions present:
 
@@ -37,6 +40,7 @@ This project consists of an artificial example in which duck nest objects are co
 * hazard rate with polynomial adjustment
 * uniform with cosine adjustment, and
 * half-normal with Hermite adjustment.
+```
 
 ## Vignette-stratify
 Synthetic line transect data, units of measure in non-SI units (effort and perpendicular distance in nautical miles).  Animals were detected in groups, so cluster size enters into the calculation of animal density.  The project contains a multiplier derived from an external estimate of $\widehat{g(0)}$, but for purposes of this vignette, the use of the multiplier has been removed from the `DistWin` analysis.
@@ -47,6 +51,32 @@ The study area also contains two types of habitat and the design incorporated ha
 This project demonstrates the use of the MRDS (multiple covariate) analysis engine in conjunction with a point transect sampling survey (using conventional SI measurement units).  The analyses present in the project represent 16 model results presented in Marques et al. (2007).  All analyses employ a data filter specifying an 82.5m truncation distance.
 
 # Conversion process
+
+The following code chunk performs some preliminary setup before conducting any conversions.  First, if running on a Windows machine, the code checks that the 32-bit version of R is being used.  R uses the `RODBC` package to read Access files; this package is only supported by 32-bit versions of R.
+
+Second, a path to the `Sample Projects` directory is created for subsequent use when accessing projects that ship with `DistWin`.
+
+```{r}
+library(readdst)
+if (.Platform$OS.type=="windows" && R.Version()$platform!="i386-w64-mingw32") print("32-bit version of R needed to run RODBC")
+home.dir <- path.expand("~")
+sample.proj.dir <- paste(home.dir, "/My Distance Projects/Sample Projects/",sep="")
+```
+
+```{r, echo=FALSE, eval=FALSE}
+ducknest.proj.file <- paste(sample.proj.dir, "Ducknest",sep = "")
+ducknest.proj <- convert_project(ducknest.proj.file)
+```
+
+```{r}
+amakihi.proj.file <- paste(sample.proj.dir, "Amakihi",sep = "")
+amakihi.proj <- convert_project(amakihi.proj.file)
+```
+
+```{r}
+stratify.proj.file <- paste(sample.proj.dir, "Vignette-stratify",sep = "")
+stratify.proj <- convert_project(stratify.proj.file)
+```
 
 ## Additional analysis of converted project
 
