@@ -10,7 +10,7 @@
 
 <meta name="author" content="Eric Rexstad" />
 
-<meta name="date" content="2016-02-18" />
+<meta name="date" content="2016-02-19" />
 
 <title>Transforming DistWin projects to the R environment</title>
 
@@ -72,14 +72,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Transforming DistWin projects to the <code>R</code> environment</h1>
 <h4 class="author"><em>Eric Rexstad</em></h4>
-<h4 class="date"><em>2016-02-18</em></h4>
+<h4 class="date"><em>19 February 2016</em></h4>
 </div>
 
 
 <div id="migration-of-distwin-analysis-structure-to-r" class="section level1">
 <h1>Migration of DistWin analysis structure to R</h1>
 <p>The Windows-based GUI software for conducting distance sampling analysis (<em>Distance for Windows</em>, heretofore <em>DistWin</em>) has been the industry-standard for two decades. Our development work continues to incorporate state-of-the-art analytical methods for software users. Most of that software development takes place in the <code>R</code> language.</p>
-<p>As a portal for statisticans and biologists who have existing <code>DistWin</code> projects, the <code>readdst</code> package was created. It was originally intended as an <em>in-house</em> testing tool to enable comparison of analysis results of newly-developed analysis software, with results produced by <code>Distwin</code>. The purpose of the package is to convert data and analyses stored in <code>DistWin</code> projects into data objects and function calls for analysis using <code>R</code>.</p>
+<p>The <code>readdst</code> package was created a portal for statisticans and biologists who have existing <code>DistWin</code> projects to be ported into the <code>R</code> environment. It was originally intended as an <em>in-house</em> testing tool to enable comparison of analysis results of newly-developed analysis software, with results produced by <code>Distwin</code>. The purpose of the package is to convert data and analyses stored in <code>DistWin</code> projects into data objects and function calls for analysis using <code>R</code>.</p>
 <p>This vignette is intended to give a few examples of the capabilities of <code>readdst</code>. Readers of this vignette should have some familiarity with the organisation of <code>DistWin</code> projects along with functions in the <code>mrds</code> library for fitting detection functions.</p>
 <p>Note too, <code>readdst</code> can only work with <code>DistWin</code> projects created by <code>DistWin</code> versions 6 or 7.</p>
 </div>

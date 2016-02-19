@@ -1,7 +1,7 @@
 ---
 title: "Transforming DistWin projects to the `R` environment"
 author: "Eric Rexstad"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -13,7 +13,7 @@ vignette: >
 
 The Windows-based GUI software for conducting distance sampling analysis (*Distance for Windows*, heretofore *DistWin*) has been the industry-standard for two decades.  Our development work continues to incorporate state-of-the-art analytical methods for software users.  Most of that software development takes place in the `R` language.
 
-As a portal for statisticans and biologists who have existing `DistWin` projects, the `readdst` package was created.  It was originally intended as an *in-house* testing tool to enable comparison of analysis results of newly-developed analysis software, with results produced by `Distwin`. The purpose of the package is to convert data and analyses stored in `DistWin` projects into data objects and function calls for analysis using `R`.
+The `readdst` package was created a portal for statisticans and biologists who have existing `DistWin` projects to be ported into the `R` environment.  It was originally intended as an *in-house* testing tool to enable comparison of analysis results of newly-developed analysis software, with results produced by `Distwin`. The purpose of the package is to convert data and analyses stored in `DistWin` projects into data objects and function calls for analysis using `R`.
 
 This vignette is intended to give a few examples of the capabilities of `readdst`.  Readers of this vignette should have some familiarity with the organisation of `DistWin` projects along with functions in the `mrds` library for fitting detection functions.
 
@@ -26,7 +26,7 @@ Note too, `readdst` can only work with `DistWin` projects created by `DistWin` v
 * Survey information includes point or line transect types, whether animals were recorded as individuals or clusters, whether perpendicular distances or radial distances and angles were recorded.
 * Data filters possess information about sightings to include in analysis (truncation distance, species indicators for multi-species surveys)
 * Model definitions describe the key function and adjustment term combinations to be fitted as the detection function, whether data will be combined across strata for detection function fitting, etc.
-* Analysis results are the product of submitting the survei/filter/model combination to the analysis engines in `DistWin`.
+* Analysis results are the product of submitting the survey/filter/model combination to the analysis engines in `DistWin`.
 
 # Example project files to transform
 
