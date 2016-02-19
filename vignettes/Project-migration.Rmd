@@ -1,6 +1,6 @@
 ---
 title: "Transforming DistWin projects to the `R` environment"
-author: "Eric Rexstad"
+author: "Eric Rexstad and David L. Miller"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -52,34 +52,134 @@ This project demonstrates the use of the MRDS (multiple covariate) analysis engi
 
 # Conversion process
 
-The following code chunk performs some preliminary setup before conducting any conversions.  First, if running on a Windows machine, the code checks that the 32-bit version of R is being used.  R uses the `RODBC` package to read Access files; this package is only supported by 32-bit versions of R.
+The following code chunk performs some preliminary setup before conducting any conversions.  First, if running on a Windows machine, the code checks that the 32-bit version of R is being used.  R uses the `RODBC` package to read Access files; this package is only supported by 32-bit versions of R.  On a *nix machine, `readdst` makes use of [`mdb-tools`](http://mdbtools.sourceforge.net) and the `Hmisc` `R` package.
 
 Second, a path to the `Sample Projects` directory is created for subsequent use when accessing projects that ship with `DistWin`.
 
-```{r}
+```{r, setup}
 library(readdst)
 if (.Platform$OS.type=="windows" && R.Version()$platform!="i386-w64-mingw32") print("32-bit version of R needed to run RODBC")
 home.dir <- path.expand("~")
-sample.proj.dir <- paste(home.dir, "/My Distance Projects/Sample Projects/",sep="")
+sample.proj.dir <- paste0(home.dir, "/My Distance Projects/Sample Projects/")
 ```
 
-```{r, echo=FALSE, eval=FALSE}
-ducknest.proj.file <- paste(sample.proj.dir, "Ducknest",sep = "")
+```{r, convert-ducknest, echo=FALSE, eval=FALSE}
+ducknest.proj.file <- paste0(sample.proj.dir, "Ducknest")
 ducknest.proj <- convert_project(ducknest.proj.file)
 ```
 
-```{r}
-amakihi.proj.file <- paste(sample.proj.dir, "Amakihi",sep = "")
+
+The Amakihi project that ships with `DistWin` and resides in `My Documents\My Distance Projects\Sample Projects` is converted with these two commands.  There are no arguments to the function `convert_project()` other than the absolute path to the `DistWin` project (without the `.dst` file extension).
+```{r, convert-amakihi}
+amakihi.proj.file <- paste0(sample.proj.dir, "Amakihi")
 amakihi.proj <- convert_project(amakihi.proj.file)
 ```
 
-```{r}
-stratify.proj.file <- paste(sample.proj.dir, "Vignette-stratify",sep = "")
-stratify.proj <- convert_project(stratify.proj.file)
+
+The `Vignette-stratify` project that ships with `readdst` and resides wherever `R` libraries are stored, is covered with these three commands.
+```{r, convert-stratify}
+stratify.proj.directory <- system.file("Stratify", package="readdst")
+stratify.proj.name <- paste0(stratify.proj.directory, "/Vignette-stratify")
+stratify.proj <- convert_project(stratify.proj.name)
 ```
 
-## Additional analysis of converted project
+## Components of converted `DistWin` projects
+
+### Analyses
+The object created by `convert_project()` is a named list.  There are as many elements in the list as analyses (run or not run) defined in the `DistWin` project.  The names of the list elements correspond to the names of the analyses:
+
+```{r, stratify-list-names, comment=NA}
+length(stratify.proj)
+names(stratify.proj)
+```
+
+Each analysis is itself a named list, with list elements describing such things as data filter used and the equivalent call to  `mrds::ddf()` to fit the detection function specified in the analysis.  Several of these components will be discussed later.
+
+### Data for each analysis
+Stored with each analysis are the data that were used in the analysis.  Recall that `DistWin` allowed seperate specification of model definitions and data filters, which could be coupled to form an analysis.  The data (in two forms) as well as the measurement units for effort, perpendicular (radial) distances and area are all stored in the `env` element of each analysis list element.
+
+```{r, stratify-environment, comment=NA}
+ls(stratify.proj$'Half-normal cosine no stratification exact'$env)
+```
+
+Data are stored both in the `flatfile` format with all levels of the data hierarchy in a single object,  
+```{r, stratify-data}
+knitr:::kable(head(stratify.proj$'Half-normal cosine no stratification exact'$env$data, n = 3))
+```
+
+or in the multiple object form with a separate data frame for the `region.table`, `sample.table` and `obs.table`.
+
+
+## Analysis of converted project
+The `convert_project()` function makes the data for a distance sampling analysis available and transforms the syntax of detection function fitting into calls to `mrds:::ddf()`.  This makes it possible to 
+* repeat the analyses performed by `DistWin` in `R`, and/or
+* conduct new analyses of data that have been stored in `DistWin`.
+
+### Repeating an analysis
+Recall each analysis from a `DistWin` project is represented as a list element of an object created by `convert_project()`.  The function `run_analysis()` takes as an argument an analysis and conducts that analysis in `R` using `ddf()` to fit a detection function and produce estimates of detection probability and $\hat{N}$ in the covered region.
+
+```{r, stratify-ddf, comment=NA}
+stratify.reanalyse <- run_analysis(stratify.proj$'Half-normal cosine no stratification exact')
+plot(stratify.reanalyse, showpoints=FALSE, pl.den=0)
+gof.test <- mrds::ddf.gof(stratify.reanalyse, qq=FALSE)
+text(1.2,0.9, cex=0.6,
+     paste("K-S GOF D=",round(gof.test$dsgof$ks$Dn, 4), "\nP=", round(gof.test$dsgof$ks$p,3)))
+summary(stratify.reanalyse)
+```
+
+Producing estimates of abundance from the fitted `ddf()` model requires a call to `dht()`.
+
+```{r, stratify-dht}
+stratify.abund <- mrds:::dht(stratify.reanalyse, 
+                             region.table = stratify.proj$`Half-normal cosine no stratification exact`$env$region.table, 
+                             sample.table = stratify.proj$`Half-normal cosine no stratification exact`$env$sample.table, 
+                             obs.table = stratify.proj$`Half-normal cosine no stratification exact`$env$obs.table)
+knitr::kable(stratify.abund$individuals$summary)
+knitr::kable(stratify.abund$individuals$N[1:6])
+
+```
+
+The call to `dht()` shows the use of the hierarchial data type (region, sample and observation tables) available within each analysis.
+
+It would be possible to perform new analyses of data present in `DistWin` projects, such as fitting a hazard-rate key function to the `stratify` data set that had only been fitted with half-normal detection functions.
+
+```{r, stratify-hazard}
+stratify.hazard <- mrds::ddf(dsmodel=~cds(key="hr", formula=~1, adj.series="cos", adj.order=2),
+                   meta.data=list(width=1.94000005722046,left=0), 
+                   control=list(mono=TRUE, mono.strict=TRUE), method="ds", 
+                   data=stratify.proj$'Half-normal cosine no stratification exact'$env$data)
+hazard.aic <- stratify.hazard$criterion
+halfnorm.aic <- stratify.reanalyse$criterion
+
+```
+The hazard rate model (with a cosine adjustment) had an AIC of `r round(hazard.aic,1)` while the unadjusted half-normal model had an AIC of `r round(halfnorm.aic,1)` suggesting we were on firm footing when fitting the half-normal model to the `stratify` dataset.
 
 # Comparing results of `DistWin` and R analyses
+`DistWin` projects contain not only the analyses but also the results of those analyses.  Analysis results are stored in `DistWin` projects according to a coding scheme to identify the statistics or parameter estimates.  Values of statistic and estimates can be extracted from a `DistWin` project using `get_stats()`; however this function is not intended for use by users. 
+
+Instead, `get_stats()` is more likely to be called from within the function `test_stats()`.  The `test_stats()` function takes as its first argument a single analysis from a converted `DistWin` project.  The tasks performed by `test_stats()` are
+
+* runs the specified analysis in `R`, 
+* extract the `DistWin`-generated results from the `DistWin` project and
+* compare the two sets of results producing a table showing agreement (or disagreement) between `DistWin` and `R` results.
+
+```{r, stratify-compare, comment=NA}
+knitr::kable(test_stats(stratify.proj$'Half-normal cosine no stratification exact'))
+```
+
+Note that multiple rows of statistics or estimates are shown in the preceeding table because there are values for each of two strata and for the study area as a whole.
+
+Lastly note `test_stats()` can take only a single analysis as an argument, rather than a complete set of analyses that may be embedded within a `DistWin` project.  To test multiple analyses, `lapply()` could be wrapped around the call to `test_stats()`.
+
+There are a large number of reasons for disagreement between `DistWin` and `R` results.  Reasons may include differences in 
+
+* convergence between optimisation engines in the two pieces of software, 
+* treatment of size-biased regression adjustment for objects detected in clusters.
 
 # Migrations not performed by `readdst`
+`readdst` is a work in progress.  As noted, it was developed for in-house testing of developing code against known solutions produced by `DistWin`.  There are many nuances of analyses that can be performed by `DistWin` that have not been included in `readdst` conversion feature.  The following list is incomplete, but gives a general idea of what is *not* included in `readdst` capabilities.
+
+* multipliers
+* bootstrapping of variances
+* analyses involving the `dsm`, `mads` or `DSsim` engines
+* post-stratification.

@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Eric Rexstad" />
+<meta name="author" content="Eric Rexstad and David L. Miller" />
 
 <meta name="date" content="2016-02-19" />
 
@@ -71,7 +71,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="header">
 <h1 class="title">Transforming DistWin projects to the <code>R</code> environment</h1>
-<h4 class="author"><em>Eric Rexstad</em></h4>
+<h4 class="author"><em>Eric Rexstad and David L. Miller</em></h4>
 <h4 class="date"><em>19 February 2016</em></h4>
 </div>
 
@@ -90,7 +90,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Survey information includes point or line transect types, whether animals were recorded as individuals or clusters, whether perpendicular distances or radial distances and angles were recorded.</li>
 <li>Data filters possess information about sightings to include in analysis (truncation distance, species indicators for multi-species surveys)</li>
 <li>Model definitions describe the key function and adjustment term combinations to be fitted as the detection function, whether data will be combined across strata for detection function fitting, etc.</li>
-<li>Analysis results are the product of submitting the survei/filter/model combination to the analysis engines in <code>DistWin</code>.</li>
+<li>Analysis results are the product of submitting the survey/filter/model combination to the analysis engines in <code>DistWin</code>.</li>
 </ul>
 </div>
 <div id="example-project-files-to-transform" class="section level1">
@@ -108,26 +108,368 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="conversion-process" class="section level1">
 <h1>Conversion process</h1>
-<p>The following code chunk performs some preliminary setup before conducting any conversions. First, if running on a Windows machine, the code checks that the 32-bit version of R is being used. R uses the <code>RODBC</code> package to read Access files; this package is only supported by 32-bit versions of R.</p>
+<p>The following code chunk performs some preliminary setup before conducting any conversions. First, if running on a Windows machine, the code checks that the 32-bit version of R is being used. R uses the <code>RODBC</code> package to read Access files; this package is only supported by 32-bit versions of R. On a *nix machine, <code>readdst</code> makes use of <a href="http://mdbtools.sourceforge.net"><code>mdb-tools</code></a> and the <code>Hmisc</code> <code>R</code> package.</p>
 <p>Second, a path to the <code>Sample Projects</code> directory is created for subsequent use when accessing projects that ship with <code>DistWin</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readdst)
 if (.Platform$OS.type==<span class="st">&quot;windows&quot;</span> &amp;&amp;<span class="st"> </span><span class="kw">R.Version</span>()$platform!=<span class="st">&quot;i386-w64-mingw32&quot;</span>) <span class="kw">print</span>(<span class="st">&quot;32-bit version of R needed to run RODBC&quot;</span>)
 home.dir &lt;-<span class="st"> </span><span class="kw">path.expand</span>(<span class="st">&quot;~&quot;</span>)
-sample.proj.dir &lt;-<span class="st"> </span><span class="kw">paste</span>(home.dir, <span class="st">&quot;/My Distance Projects/Sample Projects/&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">amakihi.proj.file &lt;-<span class="st"> </span><span class="kw">paste</span>(sample.proj.dir, <span class="st">&quot;Amakihi&quot;</span>,<span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
+sample.proj.dir &lt;-<span class="st"> </span><span class="kw">paste0</span>(home.dir, <span class="st">&quot;/My Distance Projects/Sample Projects/&quot;</span>)</code></pre></div>
+<p>The Amakihi project that ships with <code>DistWin</code> and resides in <code>My Documents\My Distance Projects\Sample Projects</code> is converted with these two commands. There are no arguments to the function <code>convert_project()</code> other than the absolute path to the <code>DistWin</code> project (without the <code>.dst</code> file extension).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">amakihi.proj.file &lt;-<span class="st"> </span><span class="kw">paste0</span>(sample.proj.dir, <span class="st">&quot;Amakihi&quot;</span>)
 amakihi.proj &lt;-<span class="st"> </span><span class="kw">convert_project</span>(amakihi.proj.file)</code></pre></div>
 <pre><code>## Loading required package: RODBC</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stratify.proj.file &lt;-<span class="st"> </span><span class="kw">paste</span>(sample.proj.dir, <span class="st">&quot;Vignette-stratify&quot;</span>,<span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
-stratify.proj &lt;-<span class="st"> </span><span class="kw">convert_project</span>(stratify.proj.file)</code></pre></div>
-<div id="additional-analysis-of-converted-project" class="section level2">
-<h2>Additional analysis of converted project</h2>
+<p>The <code>Vignette-stratify</code> project that ships with <code>readdst</code> and resides wherever <code>R</code> libraries are stored, is covered with these three commands.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stratify.proj.directory &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;Stratify&quot;</span>, <span class="dt">package=</span><span class="st">&quot;readdst&quot;</span>)
+stratify.proj.name &lt;-<span class="st"> </span><span class="kw">paste0</span>(stratify.proj.directory, <span class="st">&quot;/Vignette-stratify&quot;</span>)
+stratify.proj &lt;-<span class="st"> </span><span class="kw">convert_project</span>(stratify.proj.name)</code></pre></div>
+<div id="components-of-converted-distwin-projects" class="section level2">
+<h2>Components of converted <code>DistWin</code> projects</h2>
+<div id="analyses" class="section level3">
+<h3>Analyses</h3>
+<p>The object created by <code>convert_project()</code> is a named list. There are as many elements in the list as analyses (run or not run) defined in the <code>DistWin</code> project. The names of the list elements correspond to the names of the analyses:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(stratify.proj)</code></pre></div>
+<pre><code>[1] 3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(stratify.proj)</code></pre></div>
+<pre><code>[1] &quot;Half-normal cosine no stratification exact&quot;
+[2] &quot;Half-normal cosine strat-specific detfn&quot;   
+[3] &quot;Half-normal cosine pooled detfn&quot;           </code></pre>
+<p>Each analysis is itself a named list, with list elements describing such things as data filter used and the equivalent call to <code>mrds::ddf()</code> to fit the detection function specified in the analysis. Several of these components will be discussed later.</p>
+</div>
+<div id="data-for-each-analysis" class="section level3">
+<h3>Data for each analysis</h3>
+<p>Stored with each analysis are the data that were used in the analysis. Recall that <code>DistWin</code> allowed seperate specification of model definitions and data filters, which could be coupled to form an analysis. The data (in two forms) as well as the measurement units for effort, perpendicular (radial) distances and area are all stored in the <code>env</code> element of each analysis list element.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ls</span>(stratify.proj$<span class="st">'Half-normal cosine no stratification exact'</span>$env)</code></pre></div>
+<pre><code>[1] &quot;data&quot;         &quot;obs.table&quot;    &quot;region.table&quot; &quot;sample.table&quot;
+[5] &quot;units&quot;       </code></pre>
+<p>Data are stored both in the <code>flatfile</code> format with all levels of the data hierarchy in a single object,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr:::<span class="kw">kable</span>(<span class="kw">head</span>(stratify.proj$<span class="st">'Half-normal cosine no stratification exact'</span>$env$data, <span class="dt">n =</span> <span class="dv">3</span>))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">G0</th>
+<th align="right">G0.SE</th>
+<th align="right">Cluster.strat</th>
+<th align="right">distance</th>
+<th align="right">size</th>
+<th align="right">object</th>
+<th align="left">Study.Area</th>
+<th align="left">Region.Label</th>
+<th align="right">Sample.Label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.8367</td>
+<td align="right">0.1738</td>
+<td align="right">1</td>
+<td align="right">0.10</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Stratify example</td>
+<td align="left">Ideal Habitat</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0.8367</td>
+<td align="right">0.1738</td>
+<td align="right">1</td>
+<td align="right">0.22</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Stratify example</td>
+<td align="left">Ideal Habitat</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0.8367</td>
+<td align="right">0.1738</td>
+<td align="right">2</td>
+<td align="right">0.16</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="left">Stratify example</td>
+<td align="left">Ideal Habitat</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>or in the multiple object form with a separate data frame for the <code>region.table</code>, <code>sample.table</code> and <code>obs.table</code>.</p>
+</div>
+</div>
+<div id="analysis-of-converted-project" class="section level2">
+<h2>Analysis of converted project</h2>
+<p>The <code>convert_project()</code> function makes the data for a distance sampling analysis available and transforms the syntax of detection function fitting into calls to <code>mrds:::ddf()</code>. This makes it possible to * repeat the analyses performed by <code>DistWin</code> in <code>R</code>, and/or * conduct new analyses of data that have been stored in <code>DistWin</code>.</p>
+<div id="repeating-an-analysis" class="section level3">
+<h3>Repeating an analysis</h3>
+<p>Recall each analysis from a <code>DistWin</code> project is represented as a list element of an object created by <code>convert_project()</code>. The function <code>run_analysis()</code> takes as an argument an analysis and conducts that analysis in <code>R</code> using <code>ddf()</code> to fit a detection function and produce estimates of detection probability and <span class="math inline">\(\hat{N}\)</span> in the covered region.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stratify.reanalyse &lt;-<span class="st"> </span><span class="kw">run_analysis</span>(stratify.proj$<span class="st">'Half-normal cosine no stratification exact'</span>)
+<span class="kw">plot</span>(stratify.reanalyse, <span class="dt">showpoints=</span><span class="ot">FALSE</span>, <span class="dt">pl.den=</span><span class="dv">0</span>)
+gof.test &lt;-<span class="st"> </span>mrds::<span class="kw">ddf.gof</span>(stratify.reanalyse, <span class="dt">qq=</span><span class="ot">FALSE</span>)
+<span class="kw">text</span>(<span class="fl">1.2</span>,<span class="fl">0.9</span>, <span class="dt">cex=</span><span class="fl">0.6</span>,
+     <span class="kw">paste</span>(<span class="st">&quot;K-S GOF D=&quot;</span>,<span class="kw">round</span>(gof.test$dsgof$ks$Dn, <span class="dv">4</span>), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">P=&quot;</span>, <span class="kw">round</span>(gof.test$dsgof$ks$p,<span class="dv">3</span>)))</code></pre></div>
+<p><img src="data:image/png;base64,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" alt /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(stratify.reanalyse)</code></pre></div>
+<pre><code>
+Summary for ds object 
+Number of observations :  90 
+Distance range         :  0  -  1.94 
+AIC                    :  63.87982 
+
+Detection function:
+ Half-normal key function 
+
+Detection function parameters 
+Scale coefficient(s):  
+              estimate         se
+(Intercept) -0.3514199 0.08078866
+
+                       Estimate          SE         CV
+Average p             0.4519568  0.03470614 0.07679084
+N in covered region 199.1340967 21.80150341 0.10948152</code></pre>
+<p>Producing estimates of abundance from the fitted <code>ddf()</code> model requires a call to <code>dht()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stratify.abund &lt;-<span class="st"> </span>mrds:::<span class="kw">dht</span>(stratify.reanalyse, 
+                             <span class="dt">region.table =</span> stratify.proj$<span class="st">`</span><span class="dt">Half-normal cosine no stratification exact</span><span class="st">`</span>$env$region.table, 
+                             <span class="dt">sample.table =</span> stratify.proj$<span class="st">`</span><span class="dt">Half-normal cosine no stratification exact</span><span class="st">`</span>$env$sample.table, 
+                             <span class="dt">obs.table =</span> stratify.proj$<span class="st">`</span><span class="dt">Half-normal cosine no stratification exact</span><span class="st">`</span>$env$obs.table)
+knitr::<span class="kw">kable</span>(stratify.abund$individuals$summary)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Region</th>
+<th align="right">Area</th>
+<th align="right">CoveredArea</th>
+<th align="right">Effort</th>
+<th align="right">n</th>
+<th align="right">ER</th>
+<th align="right">se.ER</th>
+<th align="right">cv.ER</th>
+<th align="right">mean.size</th>
+<th align="right">se.mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Ideal Habitat</td>
+<td align="right">85000</td>
+<td align="right">1470.52</td>
+<td align="right">379</td>
+<td align="right">84</td>
+<td align="right">0.2216359</td>
+<td align="right">0.0668354</td>
+<td align="right">0.3015550</td>
+<td align="right">2.153846</td>
+<td align="right">0.2905123</td>
+</tr>
+<tr class="even">
+<td align="left">Marginal Habitat</td>
+<td align="right">600000</td>
+<td align="right">3918.80</td>
+<td align="right">1010</td>
+<td align="right">123</td>
+<td align="right">0.1217822</td>
+<td align="right">0.0523166</td>
+<td align="right">0.4295915</td>
+<td align="right">2.411765</td>
+<td align="right">0.3477394</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">685000</td>
+<td align="right">5389.32</td>
+<td align="right">1389</td>
+<td align="right">207</td>
+<td align="right">0.1490281</td>
+<td align="right">0.0412544</td>
+<td align="right">0.2768229</td>
+<td align="right">2.300000</td>
+<td align="right">0.2330121</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(stratify.abund$individuals$N[<span class="dv">1</span>:<span class="dv">6</span>])</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Label</th>
+<th align="right">Estimate</th>
+<th align="right">se</th>
+<th align="right">cv</th>
+<th align="right">lcl</th>
+<th align="right">ucl</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Ideal Habitat</td>
+<td align="right">10743.12</td>
+<td align="right">3343.031</td>
+<td align="right">0.3111788</td>
+<td align="right">5212.731</td>
+<td align="right">22140.91</td>
+</tr>
+<tr class="even">
+<td align="left">Marginal Habitat</td>
+<td align="right">41668.36</td>
+<td align="right">18184.107</td>
+<td align="right">0.4364009</td>
+<td align="right">16071.287</td>
+<td align="right">108034.41</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">52411.48</td>
+<td align="right">18631.076</td>
+<td align="right">0.3554770</td>
+<td align="right">24130.762</td>
+<td align="right">113836.55</td>
+</tr>
+</tbody>
+</table>
+<p>The call to <code>dht()</code> shows the use of the hierarchial data type (region, sample and observation tables) available within each analysis.</p>
+<p>It would be possible to perform new analyses of data present in <code>DistWin</code> projects, such as fitting a hazard-rate key function to the <code>stratify</code> data set that had only been fitted with half-normal detection functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stratify.hazard &lt;-<span class="st"> </span>mrds::<span class="kw">ddf</span>(<span class="dt">dsmodel=</span>~<span class="kw">cds</span>(<span class="dt">key=</span><span class="st">&quot;hr&quot;</span>, <span class="dt">formula=</span>~<span class="dv">1</span>, <span class="dt">adj.series=</span><span class="st">&quot;cos&quot;</span>, <span class="dt">adj.order=</span><span class="dv">2</span>),
+                   <span class="dt">meta.data=</span><span class="kw">list</span>(<span class="dt">width=</span><span class="fl">1.94000005722046</span>,<span class="dt">left=</span><span class="dv">0</span>), 
+                   <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">mono=</span><span class="ot">TRUE</span>, <span class="dt">mono.strict=</span><span class="ot">TRUE</span>), <span class="dt">method=</span><span class="st">&quot;ds&quot;</span>, 
+                   <span class="dt">data=</span>stratify.proj$<span class="st">'Half-normal cosine no stratification exact'</span>$env$data)
+hazard.aic &lt;-<span class="st"> </span>stratify.hazard$criterion
+halfnorm.aic &lt;-<span class="st"> </span>stratify.reanalyse$criterion</code></pre></div>
+<p>The hazard rate model (with a cosine adjustment) had an AIC of 67.6 while the unadjusted half-normal model had an AIC of 63.9 suggesting we were on firm footing when fitting the half-normal model to the <code>stratify</code> dataset.</p>
+</div>
 </div>
 </div>
 <div id="comparing-results-of-distwin-and-r-analyses" class="section level1">
 <h1>Comparing results of <code>DistWin</code> and R analyses</h1>
+<p><code>DistWin</code> projects contain not only the analyses but also the results of those analyses. Analysis results are stored in <code>DistWin</code> projects according to a coding scheme to identify the statistics or parameter estimates. Values of statistic and estimates can be extracted from a <code>DistWin</code> project using <code>get_stats()</code>; however this function is not intended for use by users.</p>
+<p>Instead, <code>get_stats()</code> is more likely to be called from within the function <code>test_stats()</code>. The <code>test_stats()</code> function takes as its first argument a single analysis from a converted <code>DistWin</code> project. The tasks performed by <code>test_stats()</code> are</p>
+<ul>
+<li>runs the specified analysis in <code>R</code>,</li>
+<li>extract the <code>DistWin</code>-generated results from the <code>DistWin</code> project and</li>
+<li>compare the two sets of results producing a table showing agreement (or disagreement) between <code>DistWin</code> and <code>R</code> results.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">test_stats</span>(stratify.proj$<span class="st">'Half-normal cosine no stratification exact'</span>))</code></pre></div>
+<pre><code>Warning in predict.lm(size_lm, pred_data): prediction from a rank-deficient
+fit may be misleading</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Statistic</th>
+<th align="right">Distance_value</th>
+<th align="right">mrds_value</th>
+<th align="right">Difference</th>
+<th align="left">Pass</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">n</td>
+<td align="right">90.0000000</td>
+<td align="right">90.0000000</td>
+<td align="right">0.0000000</td>
+<td align="left"><U+2713></td>
+</tr>
+<tr class="even">
+<td align="left">parameters</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+<td align="right">0.0000000</td>
+<td align="left"><U+2713></td>
+</tr>
+<tr class="odd">
+<td align="left">AIC</td>
+<td align="right">63.8801003</td>
+<td align="right">63.8798192</td>
+<td align="right">0.0000044</td>
+<td align="left"><U+2713></td>
+</tr>
+<tr class="even">
+<td align="left">Chi^2 p</td>
+<td align="right">0.1707298</td>
+<td align="right">0.9906514</td>
+<td align="right">4.8024520</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">P_a</td>
+<td align="right">0.4519590</td>
+<td align="right">0.4519568</td>
+<td align="right">0.0000050</td>
+<td align="left"><U+2713></td>
+</tr>
+<tr class="even">
+<td align="left">CV(P_a)</td>
+<td align="right">0.0767919</td>
+<td align="right">0.0767908</td>
+<td align="right">0.0000136</td>
+<td align="left"><U+2713></td>
+</tr>
+<tr class="odd">
+<td align="left">log-likelihood</td>
+<td align="right">-30.9400501</td>
+<td align="right">-30.9399096</td>
+<td align="right">0.0000000</td>
+<td align="left"><U+2713></td>
+</tr>
+<tr class="even">
+<td align="left">K-S p</td>
+<td align="right">0.6884868</td>
+<td align="right">0.6884929</td>
+<td align="right">0.0000089</td>
+<td align="left"><U+2713></td>
+</tr>
+<tr class="odd">
+<td align="left">C-vM p</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9000000</td>
+<td align="right">0.1000000</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">density</td>
+<td align="right">0.0505962</td>
+<td align="right">0.0573726</td>
+<td align="right">0.1339330</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">CV(density)</td>
+<td align="right">0.2693232</td>
+<td align="right">0.2818972</td>
+<td align="right">0.0466873</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">individuals</td>
+<td align="right">34658.0000000</td>
+<td align="right">39300.2621536</td>
+<td align="right">0.1339449</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">CV(individuals)</td>
+<td align="right">0.2693232</td>
+<td align="right">0.2818972</td>
+<td align="right">0.0466873</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>Note that multiple rows of statistics or estimates are shown in the preceeding table because there are values for each of two strata and for the study area as a whole.</p>
+<p>Lastly note <code>test_stats()</code> can take only a single analysis as an argument, rather than a complete set of analyses that may be embedded within a <code>DistWin</code> project. To test multiple analyses, <code>lapply()</code> could be wrapped around the call to <code>test_stats()</code>.</p>
+<p>There are a large number of reasons for disagreement between <code>DistWin</code> and <code>R</code> results. Reasons may include differences in</p>
+<ul>
+<li>convergence between optimisation engines in the two pieces of software,</li>
+<li>treatment of size-biased regression adjustment for objects detected in clusters.</li>
+</ul>
 </div>
 <div id="migrations-not-performed-by-readdst" class="section level1">
 <h1>Migrations not performed by <code>readdst</code></h1>
+<p><code>readdst</code> is a work in progress. As noted, it was developed for in-house testing of developing code against known solutions produced by <code>DistWin</code>. There are many nuances of analyses that can be performed by <code>DistWin</code> that have not been included in <code>readdst</code> conversion feature. The following list is incomplete, but gives a general idea of what is <em>not</em> included in <code>readdst</code> capabilities.</p>
+<ul>
+<li>multipliers</li>
+<li>bootstrapping of variances</li>
+<li>analyses involving the <code>dsm</code>, <code>mads</code> or <code>DSsim</code> engines</li>
+<li>post-stratification.</li>
+</ul>
 </div>
 
 
