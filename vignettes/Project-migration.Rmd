@@ -13,7 +13,7 @@ vignette: >
 
 The Windows-based GUI software for conducting distance sampling analysis (*Distance for Windows*, heretofore *DistWin*) has been the industry-standard for two decades.  Our development work continues to incorporate state-of-the-art analytical methods for software users.  Most of that software development takes place in the `R` language.
 
-The `readdst` package was created a portal for statisticans and biologists who have existing `DistWin` projects to be ported into the `R` environment.  It was originally intended as an *in-house* testing tool to enable comparison of analysis results of newly-developed analysis software, with results produced by `Distwin`. The purpose of the package is to convert data and analyses stored in `DistWin` projects into data objects and function calls for analysis using `R`.
+The `readdst` package was created for statisticans and biologists who have existing `DistWin` projects and wish to port them into the `R` environment.  It was originally intended as an *in-house* testing tool to enable comparison of analysis results of newly-developed analysis software, with results produced by `DistWin`. The purpose of the package is to convert data and analyses stored in `DistWin` projects into data objects and function calls for analysis using `R`.
 
 This vignette is intended to give a few examples of the capabilities of `readdst`.  Readers of this vignette should have some familiarity with the organisation of `DistWin` projects along with functions in the `mrds` library for fitting detection functions.
 
@@ -43,16 +43,18 @@ This project consists of an artificial example in which duck nest objects are co
 ```
 
 ## Vignette-stratify
+
 Synthetic line transect data, units of measure in non-SI units (effort and perpendicular distance in nautical miles).  Animals were detected in groups, so cluster size enters into the calculation of animal density.  The project contains a multiplier derived from an external estimate of $\widehat{g(0)}$, but for purposes of this vignette, the use of the multiplier has been removed from the `DistWin` analysis.
 
 The study area also contains two types of habitat and the design incorporated habitat information.  Consequently, the brief analysis focuses upon whether it is most parsimonious to fit habitat-specific detection functions, or whether a single detection function pooled across habitat types.
 
 ## Amakihi
+
 This project demonstrates the use of the MRDS (multiple covariate) analysis engine in conjunction with a point transect sampling survey (using conventional SI measurement units).  The analyses present in the project represent 16 model results presented in Marques et al. (2007).  All analyses employ a data filter specifying an 82.5m truncation distance.
 
 # Conversion process
 
-The following code chunk performs some preliminary setup before conducting any conversions.  First, if running on a Windows machine, the code checks that the 32-bit version of R is being used.  R uses the `RODBC` package to read Access files; this package is only supported by 32-bit versions of R.  On a *nix machine, `readdst` makes use of [`mdb-tools`](http://mdbtools.sourceforge.net) and the `Hmisc` `R` package.
+The following code chunk performs some preliminary setup before conducting any conversions.  First, if running on a Windows machine, the code checks that the 32-bit version of R is being used.  R uses the `RODBC` package to read Access files; this package is only supported by 32-bit versions of R.  On a Mac OS X or Linux/Unix machine, `readdst` makes use of [`mdb-tools`](http://mdbtools.sourceforge.net) and the `Hmisc` `R` package.
 
 Second, a path to the `Sample Projects` directory is created for subsequent use when accessing projects that ship with `DistWin`.
 
@@ -86,6 +88,7 @@ stratify.proj <- convert_project(stratify.proj.name)
 ## Components of converted `DistWin` projects
 
 ### Analyses
+
 The object created by `convert_project()` is a named list.  There are as many elements in the list as analyses (run or not run) defined in the `DistWin` project.  The names of the list elements correspond to the names of the analyses:
 
 ```{r, stratify-list-names, comment=NA}
@@ -96,6 +99,7 @@ names(stratify.proj)
 Each analysis is itself a named list, with list elements describing such things as data filter used and the equivalent call to  `mrds::ddf()` to fit the detection function specified in the analysis.  Several of these components will be discussed later.
 
 ### Data for each analysis
+
 Stored with each analysis are the data that were used in the analysis.  Recall that `DistWin` allowed seperate specification of model definitions and data filters, which could be coupled to form an analysis.  The data (in two forms) as well as the measurement units for effort, perpendicular (radial) distances and area are all stored in the `env` element of each analysis list element.
 
 ```{r, stratify-environment, comment=NA}
@@ -111,11 +115,14 @@ or in the multiple object form with a separate data frame for the `region.table`
 
 
 ## Analysis of converted project
-The `convert_project()` function makes the data for a distance sampling analysis available and transforms the syntax of detection function fitting into calls to `mrds:::ddf()`.  This makes it possible to 
+
+The `convert_project()` function makes the data for a distance sampling analysis available and transforms the syntax of detection function fitting into calls to `mrds:::ddf()`.  This makes it possible to:
+
 * repeat the analyses performed by `DistWin` in `R`, and/or
 * conduct new analyses of data that have been stored in `DistWin`.
 
 ### Repeating an analysis
+
 Recall each analysis from a `DistWin` project is represented as a list element of an object created by `convert_project()`.  The function `run_analysis()` takes as an argument an analysis and conducts that analysis in `R` using `ddf()` to fit a detection function and produce estimates of detection probability and $\hat{N}$ in the covered region.
 
 ```{r, stratify-ddf, comment=NA}
@@ -130,7 +137,7 @@ summary(stratify.reanalyse)
 Producing estimates of abundance from the fitted `ddf()` model requires a call to `dht()`.
 
 ```{r, stratify-dht}
-stratify.abund <- mrds:::dht(stratify.reanalyse, 
+stratify.abund <- mrds::dht(stratify.reanalyse, 
                              region.table = stratify.proj$`Half-normal cosine no stratification exact`$env$region.table, 
                              sample.table = stratify.proj$`Half-normal cosine no stratification exact`$env$sample.table, 
                              obs.table = stratify.proj$`Half-normal cosine no stratification exact`$env$obs.table)
@@ -155,11 +162,12 @@ halfnorm.aic <- stratify.reanalyse$criterion
 The hazard rate model (with a cosine adjustment) had an AIC of `r round(hazard.aic,1)` while the unadjusted half-normal model had an AIC of `r round(halfnorm.aic,1)` suggesting we were on firm footing when fitting the half-normal model to the `stratify` dataset.
 
 # Comparing results of `DistWin` and R analyses
-`DistWin` projects contain not only the analyses but also the results of those analyses.  Analysis results are stored in `DistWin` projects according to a coding scheme to identify the statistics or parameter estimates.  Values of statistic and estimates can be extracted from a `DistWin` project using `get_stats()`; however this function is not intended for use by users. 
 
-Instead, `get_stats()` is more likely to be called from within the function `test_stats()`.  The `test_stats()` function takes as its first argument a single analysis from a converted `DistWin` project.  The tasks performed by `test_stats()` are
+`DistWin` projects contain not only the analyses but also the results of those analyses.  Analysis results are stored in `DistWin` projects according to a coding scheme to identify the statistics or parameter estimates.  Values of statistic and estimates can be extracted from a `DistWin` project using `get_stats()`; however this function is not intended for use by users.
 
-* runs the specified analysis in `R`, 
+Instead, `get_stats()` is usually called from within the function `test_stats()`.  The `test_stats()` function takes as its first argument a single analysis from a converted `DistWin` project.  The tasks performed by `test_stats()` are:
+
+* run the specified analysis in `R`,
 * extract the `DistWin`-generated results from the `DistWin` project and
 * compare the two sets of results producing a table showing agreement (or disagreement) between `DistWin` and `R` results.
 
@@ -171,15 +179,24 @@ Note that multiple rows of statistics or estimates are shown in the preceeding t
 
 Lastly note `test_stats()` can take only a single analysis as an argument, rather than a complete set of analyses that may be embedded within a `DistWin` project.  To test multiple analyses, `lapply()` could be wrapped around the call to `test_stats()`.
 
-There are a large number of reasons for disagreement between `DistWin` and `R` results.  Reasons may include differences in 
+There are a large number of reasons for disagreement between `DistWin` and `R` results.  Reasons may include differences in:
 
-* convergence between optimisation engines in the two pieces of software, 
+* convergence between optimisation engines in the two pieces of software,
 * treatment of size-biased regression adjustment for objects detected in clusters.
 
 # Migrations not performed by `readdst`
+
 `readdst` is a work in progress.  As noted, it was developed for in-house testing of developing code against known solutions produced by `DistWin`.  There are many nuances of analyses that can be performed by `DistWin` that have not been included in `readdst` conversion feature.  The following list is incomplete, but gives a general idea of what is *not* included in `readdst` capabilities.
 
 * multipliers
 * bootstrapping of variances
 * analyses involving the `dsm`, `mads` or `DSsim` engines
 * post-stratification.
+
+For this reason we recommend using the latest version of `readdst` from GitHub using the following commands:
+
+```{r, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("DistanceDevelopment/readdst")
+```
+
