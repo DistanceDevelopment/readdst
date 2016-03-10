@@ -70,7 +70,6 @@ ducknest.proj.file <- paste0(sample.proj.dir, "Ducknest")
 ducknest.proj <- convert_project(ducknest.proj.file)
 ```
 
-
 The Amakihi project that ships with `DistWin` and resides in `My Documents\My Distance Projects\Sample Projects` is converted with these two commands.  There are no arguments to the function `convert_project()` other than the absolute path to the `DistWin` project (without the `.dst` file extension).
 ```{r, convert-amakihi}
 amakihi.proj.file <- paste0(sample.proj.dir, "Amakihi")
@@ -100,7 +99,7 @@ Each analysis is itself a named list, with list elements describing such things 
 
 ### Data for each analysis
 
-Stored with each analysis are the data that were used in the analysis.  Recall that `DistWin` allowed seperate specification of model definitions and data filters, which could be coupled to form an analysis.  The data (in two forms) as well as the measurement units for effort, perpendicular (radial) distances and area are all stored in the `env` element of each analysis list element.
+Stored with each analysis are the data that were used in the analysis.  Recall that `DistWin` allowed seperate specification of model definitions and data filters, which could be coupled to form an analysis.  The data (in two forms) as well as the measurement units for effort, perpendicular (radial) distances and area are all stored in the `env` element of each analysis list element[^environment].
 
 ```{r, stratify-environment, comment=NA}
 ls(stratify.proj$'Half-normal cosine no stratification exact'$env)
@@ -200,3 +199,6 @@ install.packages("devtools")
 devtools::install_github("DistanceDevelopment/readdst")
 ```
 
+
+
+[^environment]: Note that environments in R have rather different behaviour to other R objects -- if you modify them within a function, you modify the object everywhere (so called "reference semantics"). This can have unexpected consequences when you pass them to your own functions. See [http://adv-r.had.co.nz/Environments.html](http://adv-r.had.co.nz/Environments.html) for more information.
