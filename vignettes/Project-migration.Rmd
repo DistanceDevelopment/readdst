@@ -30,7 +30,13 @@ Note too, `readdst` can only work with `DistWin` projects created by `DistWin` v
 
 # Example project files to transform
 
-There is a project that comes with the distribution of `DistWin` located in `My Documents\My Distance Projects\Sample Projects` I will use to demonstrate the use of `DistWin`.  In addition, I have taken another project that ships with `DistWin`, `Stratify example`, renamed it `Vignette-stratify` and added further analyses to that project for use in this vignette.  This third example ships with the `readdst` R package and is found in the library folder associated with the `readdst` package (see below).
+An editorial interlude:
+
+> The authors of this vignette use computers that work under different operating systems.  ER uses a Windows computer, whereas DLM is fond of his Mac.  Consequently, we have different perspectives regarding how to demonstrate the use of `readdst`.  If you are a regular user of `DistWin` under the Windows operating system, you will recognise the directory structure that the _usual_ installation of `DistWin` creates for storing `DistWin` projects.  The examples presented in this vignette were prepared under the assumption `readdst` would be used on a Windows machine, under this directory structure.  If we ever submit this package to CRAN, we will need to ship the `DistWin` example projects with `readdst`, using a directory structure different from that used by `DistWin`.
+
+> Purists among the readers will recognise that spaces in directory names can cause problems for `R`.  If you will be converting `DistWin` projects located in other locations on a Windows machine, or are working under a different operating system where spaces in pathnames are forbidden, then you may need to make some alterations to the example code provided in this vignette.
+
+There is a project that comes with the distribution of `DistWin` located in `My Documents\My Distance Projects\Sample Projects` We will use to demonstrate the use of `DistWin`.  In addition, we have taken another project that ships with `DistWin`, `Stratify example`, renamed it `Vignette-stratify` and added further analyses to that project for use in this vignette.  This third example ships with the `readdst` R package and is found in the library folder associated with the `readdst` package (see below).
 
 ```{asis, echo=FALSE}
 ## Ducknest
@@ -95,7 +101,7 @@ length(stratify.proj)
 names(stratify.proj)
 ```
 
-Each analysis is itself a named list, with list elements describing such things as data filter used and the equivalent call to  `mrds::ddf()` to fit the detection function specified in the analysis.  Several of these components will be discussed later.
+Each analysis is itself a named list, with list elements describing such things as data filter used and the equivalent call to  `ddf()` from the `mrds` library to fit the detection function specified in the analysis.  Several of these components will be discussed later.
 
 ### Data for each analysis
 
@@ -106,7 +112,7 @@ ls(stratify.proj$'Half-normal cosine no stratification exact'$env)
 ```
 
 Data are stored both in the `flatfile` format with all levels of the data hierarchy in a single object,  
-```{r, stratify-data}
+```{r, stratify-data, echo=FALSE}
 knitr:::kable(head(stratify.proj$'Half-normal cosine no stratification exact'$env$data, n = 3))
 ```
 
@@ -115,7 +121,7 @@ or in the multiple object form with a separate data frame for the `region.table`
 
 ## Analysis of converted project
 
-The `convert_project()` function makes the data for a distance sampling analysis available and transforms the syntax of detection function fitting into calls to `mrds:::ddf()`.  This makes it possible to:
+The `convert_project()` function makes the data for a distance sampling analysis available and transforms the syntax of detection function fitting into calls to `ddf()`.  This makes it possible to:
 
 * repeat the analyses performed by `DistWin` in `R`, and/or
 * conduct new analyses of data that have been stored in `DistWin`.
@@ -125,9 +131,10 @@ The `convert_project()` function makes the data for a distance sampling analysis
 Recall each analysis from a `DistWin` project is represented as a list element of an object created by `convert_project()`.  The function `run_analysis()` takes as an argument an analysis and conducts that analysis in `R` using `ddf()` to fit a detection function and produce estimates of detection probability and $\hat{N}$ in the covered region.
 
 ```{r, stratify-ddf, comment=NA}
+library(mrds)  # to access GOF function and dht()
 stratify.reanalyse <- run_analysis(stratify.proj$'Half-normal cosine no stratification exact')
 plot(stratify.reanalyse, showpoints=FALSE, pl.den=0)
-gof.test <- mrds::ddf.gof(stratify.reanalyse, qq=FALSE)
+gof.test <- ddf.gof(stratify.reanalyse, qq=FALSE)
 text(1.2,0.9, cex=0.6,
      paste("K-S GOF D=",round(gof.test$dsgof$ks$Dn, 4), "\nP=", round(gof.test$dsgof$ks$p,3)))
 summary(stratify.reanalyse)
@@ -136,13 +143,15 @@ summary(stratify.reanalyse)
 Producing estimates of abundance from the fitted `ddf()` model requires a call to `dht()`.
 
 ```{r, stratify-dht}
-stratify.abund <- mrds::dht(stratify.reanalyse, 
-                             region.table = stratify.proj$`Half-normal cosine no stratification exact`$env$region.table, 
-                             sample.table = stratify.proj$`Half-normal cosine no stratification exact`$env$sample.table, 
-                             obs.table = stratify.proj$`Half-normal cosine no stratification exact`$env$obs.table)
+stratify.abund <- dht(stratify.reanalyse, 
+                      region = stratify.proj$`Half-normal cosine no stratification exact`$env$region.table, 
+                      sample = stratify.proj$`Half-normal cosine no stratification exact`$env$sample.table, 
+                      obs = stratify.proj$`Half-normal cosine no stratification exact`$env$obs.table)
+```
+
+```{r, dht-tables, echo=FALSE}
 knitr::kable(stratify.abund$individuals$summary)
 knitr::kable(stratify.abund$individuals$N[1:6])
-
 ```
 
 The call to `dht()` shows the use of the hierarchial data type (region, sample and observation tables) available within each analysis.
@@ -150,14 +159,22 @@ The call to `dht()` shows the use of the hierarchial data type (region, sample a
 It would be possible to perform new analyses of data present in `DistWin` projects, such as fitting a hazard-rate key function to the `stratify` data set that had only been fitted with half-normal detection functions.
 
 ```{r, stratify-hazard}
-stratify.hazard <- mrds::ddf(dsmodel=~cds(key="hr", formula=~1, adj.series="cos", adj.order=2),
+stratify.hazard <- ddf(dsmodel=~cds(key="hr", formula=~1, adj.series="cos", adj.order=2),
                    meta.data=list(width=1.94000005722046,left=0), 
                    control=list(mono=TRUE, mono.strict=TRUE), method="ds", 
                    data=stratify.proj$'Half-normal cosine no stratification exact'$env$data)
 hazard.aic <- stratify.hazard$criterion
 halfnorm.aic <- stratify.reanalyse$criterion
-
 ```
+
+This hazard rate detection function can also be fitted by an equivalent call to the `ds()` function found in the `Distance` package available on CRAN.  `ds()` serves as a wrapper for `ddf()`.  We show both the `ddf()` (created by `run_analysis()` in `readdst`) and `ds()` so readers can select the approach they desire.
+
+```{r, ds-strat-haz, eval=FALSE}
+stratify.hazard <- ds(key="hr", formula=~1, adj.series="cos", adj.order=2,
+                   truncation=1.94000005722046,
+                   data=stratify.proj$'Half-normal cosine no stratification exact'$env$data)
+```
+
 The hazard rate model (with a cosine adjustment) had an AIC of `r round(hazard.aic,1)` while the unadjusted half-normal model had an AIC of `r round(halfnorm.aic,1)` suggesting we were on firm footing when fitting the half-normal model to the `stratify` dataset.
 
 # Comparing results of `DistWin` and R analyses
@@ -170,13 +187,13 @@ Instead, `get_stats()` is usually called from within the function `test_stats()`
 * extract the `DistWin`-generated results from the `DistWin` project and
 * compare the two sets of results producing a table showing agreement (or disagreement) between `DistWin` and `R` results.
 
-```{r, stratify-compare, comment=NA}
+```{r, stratify-compare, comment=NA, echo=FALSE, warning=FALSE}
 knitr::kable(test_stats(stratify.proj$'Half-normal cosine no stratification exact'))
 ```
 
-Note that multiple rows of statistics or estimates are shown in the preceeding table because there are values for each of two strata and for the study area as a whole.
+The column labeled __Difference__ shows the _ratio_ of the `mrds` value over the `DistWin` value.  When called from the `R` console, the final __Pass__ column will possess ticks if the __ratio__ is less than 0.05 to quickly assess the agreement between `DistWin` and `mrds` result components.
 
-Lastly note `test_stats()` can take only a single analysis as an argument, rather than a complete set of analyses that may be embedded within a `DistWin` project.  To test multiple analyses, `lapply()` could be wrapped around the call to `test_stats()`.
+Note `test_stats()` can take only a single analysis as an argument, rather than a complete set of analyses that may be embedded within a `DistWin` project.  To test multiple analyses, `lapply()` could be wrapped around the call to `test_stats()`.
 
 There are a large number of reasons for disagreement between `DistWin` and `R` results.  Reasons may include differences in:
 
