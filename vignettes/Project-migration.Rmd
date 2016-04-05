@@ -30,13 +30,9 @@ Note too, `readdst` can only work with `DistWin` projects created by `DistWin` v
 
 # Example project files to transform
 
-An editorial interlude:
-
-> The authors of this vignette use computers that work under different operating systems.  ER uses a Windows computer, whereas DLM is fond of his Mac.  Consequently, we have different perspectives regarding how to demonstrate the use of `readdst`.  If you are a regular user of `DistWin` under the Windows operating system, you will recognise the directory structure that the _usual_ installation of `DistWin` creates for storing `DistWin` projects.  The examples presented in this vignette were prepared under the assumption `readdst` would be used on a Windows machine, under this directory structure.  If we ever submit this package to CRAN, we will need to ship the `DistWin` example projects with `readdst`, using a directory structure different from that used by `DistWin`.
+There is a project that comes with the distribution of `DistWin` located in `My Documents\My Distance Projects\Sample Projects` We will use to demonstrate the use of `DistWin`.  In addition, we have taken another project that ships with `DistWin`, `Stratify example`, renamed it `Vignette-stratify` and added further analyses to that project for use in this vignette.  This third example ships with the `readdst` R package and is found in the library folder associated with the `readdst` package (see below).
 
 > Purists among the readers will recognise that spaces in directory names can cause problems for `R`.  If you will be converting `DistWin` projects located in other locations on a Windows machine, or are working under a different operating system where spaces in pathnames are forbidden, then you may need to make some alterations to the example code provided in this vignette.
-
-There is a project that comes with the distribution of `DistWin` located in `My Documents\My Distance Projects\Sample Projects` We will use to demonstrate the use of `DistWin`.  In addition, we have taken another project that ships with `DistWin`, `Stratify example`, renamed it `Vignette-stratify` and added further analyses to that project for use in this vignette.  This third example ships with the `readdst` R package and is found in the library folder associated with the `readdst` package (see below).
 
 ```{asis, echo=FALSE}
 ## Ducknest
@@ -56,7 +52,7 @@ The study area also contains two types of habitat and the design incorporated ha
 
 ## Amakihi
 
-This project demonstrates the use of the MRDS (multiple covariate) analysis engine in conjunction with a point transect sampling survey (using conventional SI measurement units).  The analyses present in the project represent 16 model results presented in Marques et al. (2007).  All analyses employ a data filter specifying an 82.5m truncation distance.
+This project demonstrates the use of the MCDS (multiple covariate) analysis engine in conjunction with a point transect sampling survey (using SI units).  The analyses present in the project represent 16 model results presented in Marques et al. (2007).  All analyses employ a data filter specifying an 82.5m truncation distance.
 
 # Conversion process
 
