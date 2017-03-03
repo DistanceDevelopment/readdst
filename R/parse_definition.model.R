@@ -44,6 +44,11 @@ parse_definition.model <- function(df){
     # get the text for this row
     tx <- df[i]
 
+    # ignore things that start "Assign"
+    if(grepl("^Assign", tx)){
+      next
+    }
+
     # get the Engine
     if(grepl("^Engine=", tx)){
       vals[["Engine"]] <- sub("^Engine=", "", tx)
