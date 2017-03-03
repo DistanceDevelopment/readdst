@@ -6,7 +6,6 @@
 #' @param ... unused additional args for S3 compatibility
 #'
 #' @export
-#' @importFrom readr read_delim
 print.converted_distance_analyses <- function(x, ...){
 
   tab <- data.frame(ID          = unlist(lapply(x, function(x) x$ID)),
@@ -18,7 +17,7 @@ print.converted_distance_analyses <- function(x, ...){
 
   # look up status codes
   # https://github.com/distancedevelopment/readdst/wiki/distance-status-codes
-  status_tab <- read_delim(
+  status_tab <- read.delim(textConnection(
     ' Code | Status
 #    ----- | -----------------
        0   | Not Run
@@ -30,8 +29,8 @@ print.converted_distance_analyses <- function(x, ...){
        6   | Run initializing
        7   | Running
        8   | Reading results
-       9   | Resetting',
-  delim='|', comment="#")
+       9   | Resetting'),
+  sep='|', comment.char="#", strip.white=TRUE)
   tab <- merge(tab, status_tab, by.x="Status_code", by.y="Code")
   tab$Status_code <-NULL
 

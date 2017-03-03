@@ -10,12 +10,11 @@
 #'
 #' @return a \code{data.frame} with statistics Distance for Windows collects that have equivalents in \code{mrds}. The \code{data.frame} has three columns: \code{Code}, the numeric code for the statistic (as used in the Distance for Windows database); \code{Name}, the short name for this statistic; \code{MRDS}, the operation required to obtain the equivalent statistic in \code{mrds}; \code{Description}, a short description of the statistic.
 #' @author David L Miller
-#' @importFrom readr read_delim
 stats_table <- function(){
 
   # here is a lookup table
   # this trick thanks to Noam Ross
-  stat_tab <- read_delim(
+  stat_tab <- read.delim(textConnection(
     ' Code | Name            | Tolerance | MRDS                                                 | Description
 #    ----- | --------------- | --------- | ---------------------------------------------------- | ------------
         1  | NULL            |           | NULL                                                 | Number of sampler points
@@ -107,9 +106,9 @@ stats_table <- function(){
      5030  | NULL            |           | NULL                                                 | Proportion of deviance explained by DSM model
      5040  | NULL            |           | NULL                                                 | The estimated scale parameter/error variance
         6  | NULL            |           | NULL                                                 | Proportion of survey area covered
-        7  | NULL            |           | NULL                                                 | Mean realized sampler line length (mean over strata)',
+        7  | NULL            |           | NULL                                                 | Mean realized sampler line length (mean over strata)'),
 
-  delim='|', comment="#")
+  sep='|', comment.char="#", strip.white=TRUE)
 
   stat_tab <- stat_tab[stat_tab$MRDS!="NULL", ]
 

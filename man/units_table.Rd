@@ -12,4 +12,3 @@ Returns a table of conversions between the units used in Distance for Windows. T
 \author{
 David L Miller
 }
-

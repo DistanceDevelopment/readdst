@@ -14,4 +14,3 @@
 \description{
 Prints a table of the analyses that have been converted and their status from Distance for Windows.
 }
-

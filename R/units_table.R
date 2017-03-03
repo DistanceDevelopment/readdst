@@ -3,12 +3,11 @@
 #' Returns a table of conversions between the units used in Distance for Windows. This is extracted from the \code{DistIni.mdb} default database.
 #'
 #' @author David L Miller
-#' @importFrom readr read_delim
 units_table <- function(){
 
   # here is a lookup table
   # this trick thanks to Noam Ross
-  unit_tab <- read_delim(
+  unit_tab <- read.delim(textConnection(
   '                 Unit     |     Conversion
 # ------------------------ | -----------------------------
                      Degree  | 1.745329251994329547437e-02
@@ -84,9 +83,9 @@ units_table <- function(){
          Yard (Indian 1962)  | 9.143987999999999560785e-01
          Yard (Indian 1975)  | 9.143985000000000029630e-01
               Yard (Indian)  | 9.143985539701268150381e-01
-               Yard (Sears)  | 9.143984146160286652361e-01',
+               Yard (Sears)  | 9.143984146160286652361e-01'),
 
-  delim='|', comment="#")
+  sep='|', comment.char="#", strip.white=TRUE)
 
   unit_tab$Conversion <- as.numeric(unit_tab$Conversion)
 
