@@ -25,7 +25,7 @@ Based on \code{checkdata} from package \code{Distance}.
 \item{data } a \code{data.frame} containing at least a column called \code{distance}. NOTE! If there is a column called \code{size} in the data then it will be interpreted as group/cluster size.
 }
 }
+
 \author{
 David L. Miller
 }
-

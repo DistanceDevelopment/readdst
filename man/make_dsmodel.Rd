@@ -18,4 +18,3 @@ From a model definition build the \code{dsmodel} part of the model.
 \author{
 David L Miller
 }
-

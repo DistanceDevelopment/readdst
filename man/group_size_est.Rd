@@ -22,4 +22,3 @@ Distance for Windows includes a few different methods for accounting for group (
 \author{
 David L Miller
 }
-

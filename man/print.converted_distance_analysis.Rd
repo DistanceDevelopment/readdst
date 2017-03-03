@@ -14,4 +14,3 @@
 \description{
 Prints details of an analyses that has been converted.
 }
-

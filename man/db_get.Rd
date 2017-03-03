@@ -23,4 +23,3 @@ Currently not implemented on Windows systems.
 \author{
 David L Miller
 }
-

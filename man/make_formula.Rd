@@ -20,4 +20,3 @@ Build a formula, ensuring that the correct terms are factors
 \author{
 David L Miller
 }
-

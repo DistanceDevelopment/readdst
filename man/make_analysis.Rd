@@ -26,4 +26,3 @@ This function calls \code{\link{make_model}} to create the call to \code{\link{d
 \author{
 David L Miller
 }
-

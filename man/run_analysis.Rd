@@ -44,4 +44,3 @@ all_analyses_run <- lapply(converted, run_analysis)
 \author{
 David L Miller
 }
-

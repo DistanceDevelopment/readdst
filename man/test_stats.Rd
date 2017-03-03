@@ -4,12 +4,14 @@
 \alias{test_stats}
 \title{Test to see if Distance for Windows and R get the same results}
 \usage{
-test_stats(analysis, statuses = 1)
+test_stats(analysis, statuses = 1, tolerance = 0.01)
 }
 \arguments{
 \item{analysis}{a converted (but not run) analysis}
 
 \item{statuses}{for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).}
+
+\item{tolerance}{the tolerance of the test (default 0.01)}
 }
 \value{
 a \code{data.frame} with five columns: \code{Statistic}, a description of the tested statistic; \code{Distance_value} the value of the statistic stored by Distance for Windows; \code{mrds_value} the value of the statistic calculated by \code{mrds}; \code{Difference} the (scaled, relative) difference between the previous two columns (computed using \code{\link{all.equal}}); \code{Pass} a series of ticks, indicating that the value in the \code{Difference} column is less than 0.05.
@@ -38,6 +40,7 @@ If an analysis has a status of 0 or 3 there will usually not be any statistics a
 
 Note that an analysis that runs with error in Distance for Windows may run fine in R and an analysis that runs fine in Distance for Windows may not work in R. In the latter case, please consider submitting this a a bug to \url{github.com/distancedevelopment/distance-bugs}.
 }
+
 \examples{
 \dontrun{
 library(readdst)
@@ -50,4 +53,3 @@ converted <- convert_project(project)
 test_stats(converted[[1]])
 }
 }
-

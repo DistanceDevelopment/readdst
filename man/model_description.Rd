@@ -18,4 +18,3 @@ This takes a fitted \code{mrds} model object and returns a string that describes
 \author{
 David L Miller
 }
-

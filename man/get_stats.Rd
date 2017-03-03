@@ -18,7 +18,7 @@ At the moment only extracts the AIC and likelihood
 
 Codes used to determine the meanings of statistics are given at \url{https://github.com/DistanceDevelopment/readdst/wiki/distance-results-codes}.
 }
+
 \author{
 David L Miller
 }
-

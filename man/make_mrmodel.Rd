@@ -18,4 +18,3 @@ From a model definition build the \code{mrmodel} part of the model.
 \author{
 David L Miller
 }
-

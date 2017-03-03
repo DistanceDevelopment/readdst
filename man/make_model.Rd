@@ -26,4 +26,3 @@ Reproduce the corresponding call to \code{ddf} to reproduce an analysis from Dis
 \author{
 David L Miller
 }
-

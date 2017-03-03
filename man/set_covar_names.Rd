@@ -14,4 +14,3 @@ set_covar_names(data, covnames)
 \description{
 Set column names in data to be as in formulae
 }
-

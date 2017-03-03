@@ -15,4 +15,3 @@ character string describing the \code{control} \code{list}
 \description{
 Build the \code{control} options for a \code{ddf} call.
 }
-

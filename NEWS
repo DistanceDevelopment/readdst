@@ -1,8 +1,12 @@
 readdst news
 =============
 
-0.0.3
-=====
+# 0.0.4
+
+* use read.delim rather than read_delim, which seems unstable. No dependency on readr any more!
+* ignore "Assign" commands, thanks to Francois Bolduc for reporting this bug
+
+# 0.0.3
 
 * RODBC support is here! You can now use readdst on Windows!
 

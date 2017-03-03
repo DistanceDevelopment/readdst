@@ -18,4 +18,3 @@ This is simply a \code{print} method to nicely ouput the results of \code{\link{
 \author{
 David L Miller
 }
-

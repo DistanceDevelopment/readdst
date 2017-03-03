@@ -20,4 +20,3 @@ Take the "data filters" applied by Distance for Windows to the data and use them
 \author{
 David L Miller
 }
-

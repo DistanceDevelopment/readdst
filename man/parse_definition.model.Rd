@@ -21,7 +21,7 @@ See the "MCDS Command Language" section of the Distance manual for more informat
 
 Note that this function should be called for a single definition, usually using \code{\link{lapply}}.
 }
+
 \author{
 David L Miller
 }
-

@@ -15,4 +15,3 @@ Use the DataLayers table to work out the hierarchy of the tables and layers in t
 \author{
 David L Miller
 }
-

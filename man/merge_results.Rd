@@ -20,4 +20,3 @@ In Distance for Windows, one can choose to estimate the detection function by st
 \author{
 David L Miller
 }
-

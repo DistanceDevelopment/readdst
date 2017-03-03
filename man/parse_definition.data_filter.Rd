@@ -21,7 +21,7 @@ A definition consists either of a key=value pair or a name then key=value pairs 
 
 Note that this function should be called for a single definition, usually using \code{\link{lapply}}.
 }
+
 \author{
 David L Miller
 }
-

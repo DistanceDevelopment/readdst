@@ -20,4 +20,3 @@ Takes the "Definition" column from a table, converts it to \code{character} and 
 \author{
 David L Miller
 }
-

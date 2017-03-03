@@ -2,8 +2,8 @@
 % Please edit documentation in R/readdst-package.R
 \docType{package}
 \name{readdst-package}
-\alias{readdst}
 \alias{readdst-package}
+\alias{readdst}
 \title{Convert Distance for Windows analyses to R code}
 \description{
 This package read data and model definitions from a Distance for Windows project (\code{.dst} and \code{.dat} files) and converts models to run in the R package \code{\link{mrds}}.
@@ -24,4 +24,3 @@ analysis_1 <- run_analysis(converted[[1]], debug=TRUE)
 summary(analysis_1)
 }
 }
-

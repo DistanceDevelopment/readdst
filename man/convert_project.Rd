@@ -21,10 +21,10 @@ Only CDS/MCDS/MRDS analyses are supported.
 
 Model names are as they are in Distance for Windows (so if you have nonsensical names in Distance for Windows they will be the same in R).
 }
-\author{
-David L Miller
-}
+
 \seealso{
 converted_distance_analyses readdst-package
 }
-
+\author{
+David L Miller
+}

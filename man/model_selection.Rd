@@ -23,4 +23,3 @@ Model selection is performed via AIC.
 \author{
 David L Miller
 }
-

@@ -18,4 +18,3 @@ Extracts the relevant tables from the Distance for Windows database to build dat
 \author{
 David L Miller
 }
-
