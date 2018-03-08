@@ -86,7 +86,7 @@ units_table <- function(){
                Yard (Sears)  | 9.143984146160286652361e-01'),
 
   sep='|', comment.char="#", strip.white=TRUE)
-
+  names(unit_tab) <- c("Unit", "Conversion")
   unit_tab$Conversion <- as.numeric(unit_tab$Conversion)
 
   return(unit_tab)
