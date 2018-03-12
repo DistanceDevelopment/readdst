@@ -99,16 +99,25 @@ test_stats <- function(analysis, statuses=1, tolerance=0.01){
         size_est <- group_size_est(model$data, analysis$group_size, model)
         model$data$size <- size_est
       }
-      # then do the call to dht
-      e$dht <- dht(model, obs.table=analysis$env$obs.table,
-                   sample.table=analysis$env$sample.table,
-                   region.table=analysis$env$region.table,
-                   options=list(convert.units=convert_units))
+
+      # don't estimate abundance if any of the regions don't have areas
+      if(all(analysis$env$region.table$Area!=0)){
+        # then do the call to dht
+        e$dht <- dht(model, obs.table=analysis$env$obs.table,
+                     sample.table=analysis$env$sample.table,
+                     region.table=analysis$env$region.table,
+                     options=list(convert.units=convert_units))
+      }
     }else{
       # if we had stratification for the detection function
       # then we fitted multiple detection functions, need to aggregate
       # these over the data and combine results
       e <- merge_results(model, analysis)
+    }
+
+    # if we have zero areas remove the tests where we call dht
+    if(any(analysis$env$region.table$Area==0)){
+      stats <- stats[!grepl("dht", as.character(stats$MRDS)), ]
     }
 
     # test function

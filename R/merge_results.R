@@ -103,22 +103,24 @@ merge_results <- function(models, analysis){
     # select only this stratum
     this_region <- this_region[this_region$Region.Label==lab, ]
 
-    # get the estimates for this model/stratum
-    this_dht <- dht(this_model, obs.table=analysis$env$obs.table,
-                    sample.table=analysis$env$sample.table,
-                    region.table=this_region,
-                    options=list(convert.units=convert_units))
+    if(all(this_region.table$Area!=0)){
+      # get the estimates for this model/stratum
+      this_dht <- dht(this_model, obs.table=analysis$env$obs.table,
+                      sample.table=analysis$env$sample.table,
+                      region.table=this_region,
+                      options=list(convert.units=convert_units))
 
-    # do the addy ups
-    base_dht$individuals$N$Estimate[which_total] <-
-      base_dht$individuals$N$Estimate[which_total] +
-      this_dht$individuals$N$Estimate
+      # do the addy ups
+      base_dht$individuals$N$Estimate[which_total] <-
+        base_dht$individuals$N$Estimate[which_total] +
+        this_dht$individuals$N$Estimate
 
     # for now estimate density via abundance
     #base_dht$individuals$D$Estimate[nrow(base_dht$individuals$D)] <-
     #  base_dht$individuals$D$Estimate[nrow(base_dht$individuals$D)] +
     #  DN_weight[[lab]] *
     #  this_dht$individuals$D$Estimate[nrow(this_dht$individuals$D)]
+    }
 
     model$criterion <- model$criterion + this_model$criterion
     model$lnl <- model$lnl + this_model$lnl
@@ -137,13 +139,17 @@ merge_results <- function(models, analysis){
   #  base_dht$individuals$D$Estimate[nrow(base_dht$individuals$D)]*
   #  base_dht$individuals$summary$Area[base_dht$individuals$summary$Region=="Total"]
 
-  # calculate D from N
-  base_dht$individuals$D$Estimate[which_total] <-
-    base_dht$individuals$N$Estimate[which_total] /
-    base_dht$individuals$summary$Area[which_total]
+  if(all(this_region.table$Area!=0)){
+    # calculate D from N
+    base_dht$individuals$D$Estimate[which_total] <-
+      base_dht$individuals$N$Estimate[which_total] /
+      base_dht$individuals$summary$Area[which_total]
+  }
 
-  # put the dht and model objects into the return list
-  res$dht <- base_dht
+  if(all(this_region.table$Area!=0)){
+    # put the dht and model objects into the return list
+    res$dht <- base_dht
+  }
   res$model <- model
   res$gof_intervals <- analysis$gof_intervals
 
