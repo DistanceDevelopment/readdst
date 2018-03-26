@@ -103,7 +103,7 @@ merge_results <- function(models, analysis){
     # select only this stratum
     this_region <- this_region[this_region$Region.Label==lab, ]
 
-    if(all(this_region.table$Area!=0)){
+    if(all(this_region$Area!=0)){
       # get the estimates for this model/stratum
       this_dht <- dht(this_model, obs.table=analysis$env$obs.table,
                       sample.table=analysis$env$sample.table,
@@ -139,14 +139,14 @@ merge_results <- function(models, analysis){
   #  base_dht$individuals$D$Estimate[nrow(base_dht$individuals$D)]*
   #  base_dht$individuals$summary$Area[base_dht$individuals$summary$Region=="Total"]
 
-  if(all(this_region.table$Area!=0)){
+  if(all(this_region$Area!=0)){
     # calculate D from N
     base_dht$individuals$D$Estimate[which_total] <-
       base_dht$individuals$N$Estimate[which_total] /
       base_dht$individuals$summary$Area[which_total]
   }
 
-  if(all(this_region.table$Area!=0)){
+  if(all(this_region$Area!=0)){
     # put the dht and model objects into the return list
     res$dht <- base_dht
   }
