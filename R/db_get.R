@@ -17,10 +17,9 @@ db_get <- function(file, table=NULL){
 
   # on Windows
   }else{
-    # this will probably consist of the following steps:
     require(RODBC)
-    dsn <- paste0(#"Driver={Microsoft Access Driver (*.mdb)};Dbq=",
-                  "Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=",
+    dsn <- paste0("Driver={Microsoft Access Driver (*.mdb)};Dbq=",
+                  #"Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=",
                   file, ";Uid=;Pwd=;")
     db <- odbcDriverConnect(dsn)
     if(db == -1){
