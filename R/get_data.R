@@ -98,7 +98,7 @@ get_data <- function(data_file){
 
   # join  the observation table on at the end
   obs_table <- merge(dat, obs_table, by.y=ID_field, by.x="ID.last",
-                     all.y=TRUE, suffixes=c(paste0(".", obs_id), ""))
+                     all=TRUE, suffixes=c(paste0(".", obs_id), ""))
 
 
   # deal with multiple visits
