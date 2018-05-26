@@ -68,6 +68,8 @@ make_analysis <- function(this_analysis, model_definitions,
                               ",")[[1]]
     gof_intervals <- as.numeric(gof_intervals)
   }
+  # what engine was used?
+  engine <- model_definitions[[this_md]]$Engine
 
   # build the return object
   ret <- list(call          = this_call,
@@ -80,7 +82,8 @@ make_analysis <- function(this_analysis, model_definitions,
               gof_intervals = gof_intervals,
               estimation    = estimation,
               name          = as.character(this_analysis[["Name"]]),
-              ID            = this_analysis[["ID"]])
+              ID            = this_analysis[["ID"]],
+              engine        = engine)
 
   class(ret) <- "converted_distance_analysis"
 
