@@ -157,7 +157,8 @@ test_stats <- function(analysis, statuses=1, tolerance=0.01){
                             Distance_value = as.numeric(stats$Value),
                             mrds_value     = as.numeric(res[,2]),
                             Difference     = as.numeric(res_text),
-                            Pass           = ticks)
+                            Pass           = ticks,
+                            stringsAsFactors = FALSE)
 
     # give the result a class so it can be pretty-printed
     class(res_table) <- c("distance_stats_table", "data.frame")
