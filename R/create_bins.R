@@ -21,9 +21,10 @@ create_bins <- function(data, cutpoints){
 
   # remove distances outside bins
   in.cp.ind <- data$distance>=cp[1] & data$distance<=cp[length(cp)]
-  if(!all(in.cp.ind)){
-    warning("Some distances were outside bins and have been removed.")
-  }
+  # is this warning really necessary here?
+  #if(!all(in.cp.ind)){
+  #  warning("Some distances were outside bins and have been removed.")
+  #}
   data <- data[in.cp.ind,]
 
   # pull out the distances (removing the NAs for now)
