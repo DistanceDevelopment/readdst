@@ -37,8 +37,8 @@ group_size_est <- function(data, group_size, model){
       # from the distance manual
       # X       Regress cluster size against distance
       # GX      Regress cluster size against g(x)
-      # XLOG    Regress loge(group size) against distance
-      # GXLOG   Regress loge(s) against g(x)
+      # XLOG    Regress log_e(group size) against distance
+      # GXLOG   Regress log_e(s) against g(x)
 
       # make a data.frame
       reg_data <- data[, c("size", "distance")]
