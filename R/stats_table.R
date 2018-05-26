@@ -52,7 +52,7 @@ stats_table <- function(){
      2070  | NULL            |           | NULL                                                 | Small-sample adjusted Akaike Information Criterion value
      2080  | NULL            |           | NULL                                                 | Bayes\' Information Criterion
      2090  | log-likelihood  |  1e-4     | model$lnl                                            | Log likelihood
-     2100  | K-S p           |  1e-5     | ddf.gof(model, qq=FALSE)$dsgof$ks$p                  | Goodness-of-fit Kolmogorov-Smirnov test probability
+     2100  | K-S p           |  1e-5     | NULL                                                 | Goodness-of-fit Kolmogorov-Smirnov test probability
      2110  | C-vM p          |  1e-1     | round(ddf.gof(model, qq=FALSE)$dsgof$CvM$p, 1)       | Goodness-of-fit Cramer-von Mises (uniform weighting) test probability
      2120  | NULL            |           | NULL                                                 | Goodness-of-fit Cramer-von Mises (cosine weighting) test probability
      2150  | NULL            |           | NULL                                                 | Number of key function parameters
