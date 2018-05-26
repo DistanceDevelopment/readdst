@@ -14,7 +14,6 @@ create_bins <- function(data, cutpoints){
 
   # pick out NA data and save for later...
   na_data <- data[is.na(data$distance), , drop=FALSE]
-  na_data$distbegin <- na_data$distend <- NA
   data <- data[!is.na(data$distance), , drop=FALSE]
 
   # lazy typist
@@ -60,7 +59,10 @@ create_bins <- function(data, cutpoints){
                 distend=distend.na)
   data <- data.frame(data)
 
-  data <- rbind(data, na_data)
+  if(nrow(na_data) > 0){
+    na_data$distbegin <- na_data$distend <- NA
+    data <- rbind(data, na_data)
+  }
 
   return(data)
 }
