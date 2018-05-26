@@ -2,6 +2,7 @@
 #'
 #' To use \code{\link{get_stats}} we need a set of statistics to test. We also require their codes (to look up in the Distance for Windows database) and their equivalent values in \code{mrds} (or how to calculate those values). This function provides such a table.
 #'
+#' @param engine which engine do we need to compute stats for?
 #' @section Details:
 #' Data for this table (numeric code and descriptions) is from the \code{DistIni.mdb} which is shipped with Distance for Windows. See also \url{https://github.com/distancedevelopment/readdst/wiki/distance-results-codes}.
 #'
@@ -10,7 +11,7 @@
 #'
 #' @return a \code{data.frame} with statistics Distance for Windows collects that have equivalents in \code{mrds}. The \code{data.frame} has three columns: \code{Code}, the numeric code for the statistic (as used in the Distance for Windows database); \code{Name}, the short name for this statistic; \code{MRDS}, the operation required to obtain the equivalent statistic in \code{mrds}; \code{Description}, a short description of the statistic.
 #' @author David L Miller
-stats_table <- function(){
+stats_table <- function(engine="CDS"){
 
   # here is a lookup table
   # this trick thanks to Noam Ross
@@ -108,11 +109,32 @@ stats_table <- function(){
         6  | NULL            |           | NULL                                                 | Proportion of survey area covered
         7  | NULL            |           | NULL                                                 | Mean realized sampler line length (mean over strata)'),
 
-  sep='|', comment.char="#", strip.white=TRUE)
+  sep='|', comment.char="#", strip.white=TRUE, stringsAsFactors=FALSE)
 
   stat_tab <- stat_tab[stat_tab$MRDS!="NULL", ]
 
   stat_tab$Code <- as.numeric(stat_tab$Code)
+
+
+  # do this properly later...
+  # calculate D/N etc as Distance does rather than back-calculating from
+  # dht() estimates...
+  #   4020  | density         | as.numeric(dht$individuals$D$Estimate)[nrow(dht$individuals$D)] | Density of individuals
+  #   4021  | CV(density)     | as.numeric(dht$individuals$D$cv)[nrow(dht$individuals$D)]       | Density of individuals analytic coeff. of var.
+  #   4022  | density lcl     | NULL                                                 | Density of individuals analytic lower conf. limit
+  #   4023  | density ucl     | NULL                                                 | Density of individuals analytic upper conf. limit
+  #   4024  | density df      | NULL                                                 | Density of individuals degrees of freedom
+  #   4030  | individuals     | as.numeric(dht$individuals$N$Estimate)[nrow(dht$individuals$N)] | Number of individuals
+  #   4031  | CV(individuals) | as.numeric(dht$individuals$N$cv)[nrow(dht$individuals$N)]       | Number of individuals analytic coeff. of var.
+  #   4032  | individuals lcl | NULL                                                 | Number of individuals analytic lower conf. limit
+  #   4033  | individuals ucl | NULL                                                 | Number of individuals analytic upper conf. limit
+  #   4034  | individuals df  | NULL                                                 | Number of individuals analytic degrees of freedom
+  if(engine %in% c("CDS", "MCDS")){
+    # estimate Dhat = n/(2*w*L*P_a) or Dhat = n/(a*P_a)
+    stat_tab[stat_tab$Code==4020,][,4] <- "nrow(model$data)/(model_sum$average.p*e$dht$individuals$summary$CoveredArea[e$dht$individuals$summary$Region==\"Total\"])"
+    # estimate Nhat = A*n/(2*w*L*P_a) or Nhat = A*n/(a*P_a)
+    stat_tab[stat_tab$Code==4030,][,4] <- "e$dht$individuals$summary$Area[e$dht$individuals$summary$Region==\"Total\"]*nrow(model$data)/(model_sum$average.p*e$dht$individuals$summary$CoveredArea[e$dht$individuals$summary$Region==\"Total\"])"
+  }
 
   return(stat_tab)
 }

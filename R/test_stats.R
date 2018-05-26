@@ -54,7 +54,7 @@ test_stats <- function(analysis, statuses=1, tolerance=0.01){
   }else{
 
     # what are the possible stats?
-    stats <- stats_table()
+    stats <- stats_table(engine=analysis$engine)
 
     # get these stats
     stats <- get_stats(analysis$project_file, stats)
