@@ -131,9 +131,9 @@ stats_table <- function(engine="CDS"){
   #   4034  | individuals df  | NULL                                                 | Number of individuals analytic degrees of freedom
   if(engine %in% c("CDS", "MCDS")){
     # estimate Dhat = n/(2*w*L*P_a) or Dhat = n/(a*P_a)
-    stat_tab[stat_tab$Code==4020,][,4] <- "nrow(model$data)/(model_sum$average.p*e$dht$individuals$summary$CoveredArea[e$dht$individuals$summary$Region==\"Total\"])"
+    stat_tab[stat_tab$Code==4020,][,4] <- "nrow(model$data)/(model_sum$average.p*dht$individuals$summary$CoveredArea[dht$individuals$summary$Region==\"Total\"])"
     # estimate Nhat = A*n/(2*w*L*P_a) or Nhat = A*n/(a*P_a)
-    stat_tab[stat_tab$Code==4030,][,4] <- "e$dht$individuals$summary$Area[e$dht$individuals$summary$Region==\"Total\"]*nrow(model$data)/(model_sum$average.p*e$dht$individuals$summary$CoveredArea[e$dht$individuals$summary$Region==\"Total\"])"
+    stat_tab[stat_tab$Code==4030,][,4] <- "dht$individuals$summary$Area[dht$individuals$summary$Region==\"Total\"]*nrow(model$data)/(model_sum$average.p*dht$individuals$summary$CoveredArea[dht$individuals$summary$Region==\"Total\"])"
   }
 
   return(stat_tab)
