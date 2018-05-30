@@ -28,7 +28,7 @@ library(readdst)
 
 # load and convert the golftees project
 project <- system.file("Golftees-example", package="readdst")
-project <- paste0(project,"/Golftees")
+project <- paste0(project, "/Golftees")
 converted <- convert_project(project)
 
 # run the first analysis

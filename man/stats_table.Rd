@@ -4,7 +4,10 @@
 \alias{stats_table}
 \title{Generate table of possible statistics to test}
 \usage{
-stats_table()
+stats_table(engine = "CDS")
+}
+\arguments{
+\item{engine}{which engine do we need to compute stats for?}
 }
 \value{
 a \code{data.frame} with statistics Distance for Windows collects that have equivalents in \code{mrds}. The \code{data.frame} has three columns: \code{Code}, the numeric code for the statistic (as used in the Distance for Windows database); \code{Name}, the short name for this statistic; \code{MRDS}, the operation required to obtain the equivalent statistic in \code{mrds}; \code{Description}, a short description of the statistic.
