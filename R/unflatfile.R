@@ -61,6 +61,11 @@ unflatfile <- function(data){
     stop("Data not interpretable by readdst!")
   }
 
+  # ensure that the Region.Label fields are character
+  region.table$Region.Label <- as.character(region.table$Region.Label)
+  sample.table$Region.Label <- as.character(sample.table$Region.Label)
+  obs.table$Region.Label <- as.character(obs.table$Region.Label)
+
   # nothing bad happened, yay!
   return(list(data         = data,
               region.table = region.table,
