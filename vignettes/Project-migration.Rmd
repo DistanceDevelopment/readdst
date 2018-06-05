@@ -4,7 +4,7 @@ author: "Eric Rexstad and David L. Miller"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Transforming DistWin projects to the R environment}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

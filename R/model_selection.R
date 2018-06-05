@@ -48,42 +48,47 @@ model_selection <- function(analysis, debug=FALSE){
 
     model_call <- analysis$call
 
+    # storage for models
+    models <- list()
+
     # for fourier model, don't run a no adjustments model
     if(key=="unif" & adjustment=="cos"){
-      last.model <- list(criterion=Inf)
+      models[[1]] <- list(criterion=Inf)
     }else{
       # run a model without adjustments first
       first_call <- sub(", adj\\.order=NULL", "", model_call)
       first_call <- sub(", adj\\.series=\"[a-z]+\"", "", first_call)
-      last.model <- eval(parse(text=first_call), envir=analysis$env)
+      models[[1]] <- eval(parse(text=first_call), envir=analysis$env)
       if(debug){
-        message(model_description(last.model))
+        message(model_description(models[[1]]))
       }
     }
+
 
     # now select adjustments
     for(i in seq_along(orders)){
       order <- paste0("c(", paste(orders[1:i], collapse=","),")")
       this_call <- sub("adj\\.order=NULL",
                        paste0("adj.order=", order), model_call)
-      model <- eval(parse(text=this_call), envir=analysis$env)
+      models[[i+1]] <- eval(parse(text=this_call), envir=analysis$env)
 
       if(debug){
-        message(model_description(model))
+        message(model_description(models[[i+1]]))
       }
       # if this models AIC is worse (bigger) than the last
       # return the last model and stop looking.
       # OR if the model failed to converge
-      if((model$criterion >= last.model$criterion) | model$ds$converge!=0){
-        model <- last.model
+      if((models[[i+1]]$criterion >= models[[i]]$criterion) |
+          models[[i+1]]$ds$converge!=0){
+        models[[i+1]]<- NULL
         break
-      }else{
-        # otherwise keep this, best model
-        last.model <- model
+      #}else{
+      #  # otherwise keep this, best model
+      #  last.model <- model
       }
     }
 
-    result <- model
+    result <- models[[length(models)]]
 
     # print the selected model description
     if(debug){
