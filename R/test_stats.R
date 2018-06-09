@@ -23,7 +23,7 @@
 #' @param analysis a converted (but not run) analysis
 #' @param statuses for which statuses should tests be run? See "Status", below (Defaults to \code{1}: analysis that ran without error or warning in Distance for Windows).
 #' @param tolerance the tolerance of the test (default 0.01)
-#' @return a \code{data.frame} with five columns: \code{Statistic}, a description of the tested statistic; \code{Distance_value} the value of the statistic stored by Distance for Windows; \code{mrds_value} the value of the statistic calculated by \code{mrds}; \code{Difference} the (scaled, relative) difference between the previous two columns (computed using \code{\link{all.equal}}); \code{Pass} a series of ticks, indicating that the value in the \code{Difference} column is less than 0.05.
+#' @return a \code{data.frame} with five columns: \code{Statistic}, a description of the tested statistic; \code{Distance_value} the value of the statistic stored by Distance for Windows; \code{mrds_value} the value of the statistic calculated by \code{mrds}; \code{Difference} the proportional difference between the previous two columns (computed using \code{\link{all.equal}}); \code{Pass} a series of ticks, indicating that the value in the \code{Difference} column is less than \code{tolerance}.
 #'
 #' @export
 #' @importFrom testthat test_that context expect_equal
