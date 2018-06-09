@@ -2,7 +2,7 @@
 #'
 #' This package read data and model definitions from a Distance for Windows project (\code{.dst} and \code{.dat} files) and converts models to run in the R package \code{\link{mrds}}.
 #'
-#' Usually, a workflow will look something like that below. See also the vignette shipped with the package for example output.
+#' Usually, a workflow will look something like that below, centred around the functions \code{\link{convert_project}} and \code{\link{run_analysis}} . See also the vignette shipped with the package for example output.
 #'
 #' @name readdst-package
 #' @aliases readdst-package readdst
@@ -31,8 +31,12 @@ NULL
 #'   \item{\code{call}}{ string with the call to \code{\link{ddf}} to build and run the model}
 #'   \item{\code{aic.select}}{ maximum number of terms to select by AIC if AIC term selection has been enabled (for key plus adjustment terms models only)}
 #'   \item{\code{status}}{ what the status of this model was in Distance for Windows (see "Status" below)}
-#'   \item{\code{env}}{ an \code{environment} that contains any data needed to run the model (at the moment only one object, \code{obs.table} containing the observation table)}
+#'   \item{\code{env}}{ an \code{environment} that contains data needed to run the model (\code{data} containing entire dataset in flatfile form, \code{obs.table} containing the observation table, \code{sample.table} is the sample table, \code{reg.table} is the region table and \code{units} is a matrix describing conversion factor of distance measures (effort and detection distance) to areal measurements (for density))}
 #'   \item{\code{filter}}{ string used to subset the data to get the same filter as in Distance for Windows}
+#'   \item{\code{group_size}}{ describes how size bias adjustment is conducted, and the level of hierarchy at which E(s) is computed}
+#'   \item{\code{detection_by}}{ level of design hierarchy at which detection function is computed (e.g. pooled across strata)}
+#'   \item{\code{gof_intervals}}{ if binning is done for GOF testing, cutpoints are provided here}
+#'   \item{\code{estimation}}{ what sort of weighted average is used to compute region-level density estimate}
 #'   \item{\code{name}}{ the name for this analysis, as used in Distance for Windows}
 #'   \item{\code{ID}}{ the ID number for this analysis, as used in Distance for Windows}
 #' }
