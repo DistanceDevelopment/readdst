@@ -14,7 +14,7 @@ test_stats(analysis, statuses = 1, tolerance = 0.01)
 \item{tolerance}{the tolerance of the test (default 0.01)}
 }
 \value{
-a \code{data.frame} with five columns: \code{Statistic}, a description of the tested statistic; \code{Distance_value} the value of the statistic stored by Distance for Windows; \code{mrds_value} the value of the statistic calculated by \code{mrds}; \code{Difference} the (scaled, relative) difference between the previous two columns (computed using \code{\link{all.equal}}); \code{Pass} a series of ticks, indicating that the value in the \code{Difference} column is less than 0.05.
+a \code{data.frame} with five columns: \code{Statistic}, a description of the tested statistic; \code{Distance_value} the value of the statistic stored by Distance for Windows; \code{mrds_value} the value of the statistic calculated by \code{mrds}; \code{Difference} the proportional difference between the previous two columns (computed using \code{\link{all.equal}}); \code{Pass} a series of ticks, indicating that the value in the \code{Difference} column is less than \code{tolerance}.
 }
 \description{
 Tests the results stored in the Distance for Windows project file against those generated from running the same analysis in R.

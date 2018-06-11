@@ -9,7 +9,7 @@
 This package read data and model definitions from a Distance for Windows project (\code{.dst} and \code{.dat} files) and converts models to run in the R package \code{\link{mrds}}.
 }
 \details{
-Usually, a workflow will look something like that below. See also the vignette shipped with the package for example output.
+Usually, a workflow will look something like that below, centred around the functions \code{\link{convert_project}} and \code{\link{run_analysis}} . See also the vignette shipped with the package for example output.
 }
 \examples{
 \dontrun{
