@@ -130,7 +130,7 @@ Recall each analysis from a `DistWin` project is represented as a list element o
 library(mrds)  # to access GOF function and dht()
 stratify.reanalyse <- run_analysis(stratify.proj$'Half-normal cosine no stratification exact')
 plot(stratify.reanalyse, showpoints=FALSE, pl.den=0)
-gof.test <- ddf.gof(stratify.reanalyse, qq=FALSE)
+gof.test <- ddf.gof(stratify.reanalyse, qq=FALSE, ks=TRUE)
 text(1.2,0.9, cex=0.6,
      paste("K-S GOF D=",round(gof.test$dsgof$ks$Dn, 4), "\nP=", round(gof.test$dsgof$ks$p,3)))
 summary(stratify.reanalyse)
@@ -209,7 +209,7 @@ For this reason we recommend using the latest version of `readdst` from GitHub u
 
 ```{r, eval=FALSE}
 install.packages("devtools")
-devtools::install_github("DistanceDevelopment/readdst")
+devtools::install_github("DistanceDevelopment/readdst", build_vignettes=TRUE)
 ```
 
 
