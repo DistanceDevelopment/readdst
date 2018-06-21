@@ -58,7 +58,7 @@ convert_project <- function(project){
 
   # what kind of distances to we have?
   data_names <- db_get(data_file, TRUE)
-  if("Point transect" %in% data_names){
+  if(any(grepl("Point.transect", data_names))){
     transect <- "point"
   }else{
     transect <- "line"
