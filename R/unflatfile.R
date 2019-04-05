@@ -37,7 +37,7 @@ unflatfile <- function(data){
     # possible that Effort is not the same for a given
     # Sample.Label+Region.Label -- this is BAD.
     if(nrow(sample.table)!=nrow(unique(sample.table[,c("Sample.Label",
-                                                "Region.Label")]))){
+                                                       "Region.Label")]))){
       stop("A sample has a non-unique \"Effort\", check data!")
     }
 
@@ -47,7 +47,7 @@ unflatfile <- function(data){
 
 
     ## construct obs
-    obs.table <- unique(data[,c("object", "Region.Label","Sample.Label")])
+    obs.table <- unique(data[,c("object", "Region.Label", "Sample.Label")])
     rownames(obs.table) <- 1:nrow(obs.table)
 
     # drop Region and Sample label columns
