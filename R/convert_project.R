@@ -89,10 +89,21 @@ convert_project <- function(project){
     return(R_analyses)
   }else{
   # if we just have data, return that
+
+    # get conversion table
+    unit_conversion <- attr(data, "unit_conversion")
+
     # apply the data filters
     filtered <- llply(data_filters, filter_data, data=data)
     ds_data <- llply(filtered, function(x) unflatfile(x$data))
 
+    # store the units
+    ds_data <- lapply(ds_data, function(x){
+      x$units <- unit_conversion
+      x
+    })
+
+    # keep it classy
     class(ds_data) <- "converted_distance_data"
 
     return(ds_data)
