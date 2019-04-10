@@ -20,6 +20,10 @@ make_analysis <- function(this_analysis, model_definitions,
   this_call <- make_model(this_analysis, model_definitions, data_filters,
                           transect, data=data)
 
+  # define this model and data filter
+  this_md <- as.character(this_analysis$ModelDefinition)
+  this_df <- as.character(this_analysis$DataFilter)
+
   # deal with binning
   if(grepl("binned=TRUE", this_call)){
     cuts <- gsub(".*breaks=(c\\(.*?\\)),.*", "\\1", this_call)
@@ -33,9 +37,13 @@ make_analysis <- function(this_analysis, model_definitions,
     data <- create_bins(data, cuts)
   }
 
+  # for cue counting
+  if(transect=="cue"){
+    cue_meta <- model_definitions[[this_md]]$Options$CueRateData
+  }
+
   # filter the data
-  filtered <- filter_data(data,
-                         data_filters[[as.character(this_analysis$DataFilter)]])
+  filtered <- filter_data(data, data_filters[[this_df]])
 
   # convert the flatfile to the necessary tables and store the unit conversion
   e <- list2env(unflatfile(filtered$data))
@@ -45,8 +53,6 @@ make_analysis <- function(this_analysis, model_definitions,
   aic.select <- attr(this_call, "aic_select_max")
   attr(this_call, "aic_select_max") <- NULL
 
-  this_md <- as.character(this_analysis$ModelDefinition)
-  this_df <- as.character(this_analysis$DataFilter)
   # extract whether we have to fit multiple detection functions
   detection_by <- model_definitions[[this_md]]$Estimate$Detection$by
   # extract how the density/abundance estimation is to work

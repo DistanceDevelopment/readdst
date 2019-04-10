@@ -46,7 +46,7 @@ filter_data <- function(data, data_filter){
         data[[sv]] <- data[[paste0(sv, ".", l_type[grepl(sv, d_sel)])]]
       }
     }
-    # apparrently the variable names are case insensitive ¯\_(ツ)_/¯
+    # apparrently the variable names are case insensitive
     # so match them up and fix the filter call
     # get all the variables in the selection
     data_names <- names(data)[match(tolower(select_vars),

@@ -52,35 +52,49 @@ convert_project <- function(project){
   model_definitions <- lapply(model_definitions, parse_definition.model)
   data_filters <- lapply(data_filters, parse_definition.data_filter)
 
-  # get the data
-  # this returns a flatfile-compatible data.frame
-  data <- get_data(data_file)
-
-  # what kind of distances to we have?
+  # what kind of survey do we have?
   data_names <- db_get(data_file, TRUE)
   if(any(grepl("Point.transect", data_names))){
     transect <- "point"
+  }else if(any(grepl("Cue.transect", data_names))){
+    transect <- "cue"
   }else{
     transect <- "line"
   }
 
-  # batch convert analyses and return a list, one element per analysis
-  R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
-                      data_filters, data=data, transect=transect)
-  # give each analysis a name
-  names(R_analyses) <- as.character(analyses$Name)
+  # get the data
+  # this returns a flatfile-compatible data.frame
+  data <- get_data(data_file)
 
-  # save the file names of the project for later
-  R_analyses <- llply(R_analyses, function(x, project, project_file){
-                                    x$project <- project
-                                    x$project_file <- project_file
-                                    return(x)},
-                      project=project, project_file=project_file)
+  # if there are analyses to convert...
+  if(nrow(analyses)>0){
+    # batch convert analyses and return a list, one element per analysis
+    R_analyses <- dlply(analyses, .(ID), make_analysis, model_definitions,
+                        data_filters, data=data, transect=transect)
+    # give each analysis a name
+    names(R_analyses) <- as.character(analyses$Name)
 
-  # return object is just a list of class "converted_distance_analysis"
-  # make that list of class "converted_distance_analyses" so we can
-  # dispatch it later.
-  class(R_analyses) <- "converted_distance_analyses"
+    # save the file names of the project for later
+    R_analyses <- llply(R_analyses, function(x, project, project_file){
+                                      x$project <- project
+                                      x$project_file <- project_file
+                                      return(x)},
+                        project=project, project_file=project_file)
 
-  return(R_analyses)
+    # return object is just a list of class "converted_distance_analysis"
+    # make that list of class "converted_distance_analyses" so we can
+    # dispatch it later.
+    class(R_analyses) <- "converted_distance_analyses"
+
+    return(R_analyses)
+  }else{
+  # if we just have data, return that
+    # apply the data filters
+    filtered <- llply(data_filters, filter_data, data=data)
+    ds_data <- llply(filtered, function(x) unflatfile(x$data))
+
+    class(ds_data) <- "converted_distance_data"
+
+    return(ds_data)
+  }
 }

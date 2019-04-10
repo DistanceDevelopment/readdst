@@ -7,6 +7,7 @@
 #'
 #' @author David L Miller
 #' @export
+#' @importFrom plyr summarise
 get_data <- function(data_file){
 
   # function to rename columns
@@ -101,7 +102,16 @@ get_data <- function(data_file){
                      all=TRUE, suffixes=c(paste0(".", obs_id), ""))
 
 
-  # deal with multiple visits
+  ## deal with multiple visits
+
+  # construct visits if not there
+  if(("visit" %in% names(obs_table)) &
+     !any("visits" %in% names(obs_table))){
+    samp_visits <- obs_table[, c("Label", "visit")]
+    samp_visits <- ddply(obs_table, .(Label), summarise, visits=max(visit))
+    obs_table <- merge(obs_table, samp_visits, by="Label")
+  }
+  # now deal with visits
   if("visits" %in% names(obs_table)){
     visits <- unique(obs_table$visits)
     if(length(visits)>1) stop("Number of transects visits varies - don't know what to do!")

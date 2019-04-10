@@ -17,6 +17,11 @@
 #' @export
 unflatfile <- function(data){
 
+  # TODO: make this more elegant
+  if("Search.time" %in% names(data)){
+    data$Effort <- data$Search.time
+  }
+
   if(all(c("Region.Label", "Area", "Sample.Label", "Effort", "object") %in%
          colnames(data))){
     ## construct region table
