@@ -8,7 +8,7 @@
 #' Model names are as they are in Distance for Windows (so if you have nonsensical names in Distance for Windows they will be the same in R).
 #'
 #' @param project a path to a project (path to the \code{dst} file with "\code{.dst}" removed from the end of the path)
-#' @return an object of class \code{\link{converted_distance_analyses}}
+#' @return an object of class \code{\link{converted_distance_analyses}} (if there are analyses defined), an object of class \code{\link{converted_distance_data}} (if no analyses are present in the project)
 #'
 #' @importFrom plyr dlply "." llply
 #' @export

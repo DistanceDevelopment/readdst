@@ -57,4 +57,21 @@ NULL
 NULL
 
 
+#' Converted distance data
+#'
+#' If \code{\link{convert_project}} has been run on a project, but there are no analyses present in the project, then a list of the data will be returned. The list has one element for each data filter which was present in the project.
+
+#' Each element of the list has the following tables in it:
+#'
+#' \itemize{
+#'   \item{\code{data} containing entire dataset in flatfile form}
+#'   \item{\code{obs.table} containing the observation table}
+#'   \item{\code{sample.table} is the sample table}
+#'   \item{\code{region.table} is the region table{
+#'   \item{\code{units} is a matrix describing conversion factor of distance measures (effort and detection distance) to areal measurements (for density))}
+#' }
+#'
+#' @name converted_distance_data
+#' @aliases converted_distance_data converted_distance_data
+NULL
 

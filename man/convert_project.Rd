@@ -10,7 +10,7 @@ convert_project(project)
 \item{project}{a path to a project (path to the \code{dst} file with "\code{.dst}" removed from the end of the path)}
 }
 \value{
-an object of class \code{\link{converted_distance_analyses}}
+an object of class \code{\link{converted_distance_analyses}} (if there are analyses defined), an object of class \code{\link{converted_distance_data}} (if no analyses are present in the project)
 }
 \description{
 Take each analysis in a Distance for Windows project and convert the model definition to an \code{mrds} model, data and data filters are also extracted and associated with the relevant models.
