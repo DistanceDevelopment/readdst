@@ -13,7 +13,15 @@ db_get <- function(file, table=NULL){
 
   # on unix systems use mdb.get
   if(.Platform$OS.type == "unix"){
-    dat <- mdb.get(file, table)
+    # sometimes numeric labels go wrong (1.6==1.60), so need to ensure that
+    # "Label" is always character ("1.6"!="1.60")
+    # need to muffle a warning generated with this
+    dat <- withCallingHandlers(mdb.get(file, table,
+                                       colClasses=c("Label"="character")),
+                               warning=function(w){
+      if(endsWith(conditionMessage(w), "not all columns named in 'colClasses' exist"))
+        invokeRestart("muffleWarning")
+    })
 
   # on Windows
   }else{

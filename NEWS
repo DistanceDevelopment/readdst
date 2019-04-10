@@ -6,6 +6,7 @@ readdst news
 * data returned if there are no Analyses setup in the project
 * support for no "visits" column, but if there is a "visit" column
 * beginnings of cue count support
+* fix bad processing when Labels looked numeric but should habe been interpreted as character (e.g., "1.6"!="1.60")
 
 # 0.0.5
 
