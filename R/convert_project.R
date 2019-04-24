@@ -8,7 +8,7 @@
 #' Model names are as they are in Distance for Windows (so if you have nonsensical names in Distance for Windows they will be the same in R).
 #'
 #' @param project a path to a project (path to the \code{dst} file with "\code{.dst}" removed from the end of the path)
-#' @return an object of class \code{\link{converted_distance_analyses}} (if there are analyses defined), an object of class \code{\link{converted_distance_data}} (if no analyses are present in the project)
+#' @return an object of class \code{\link{converted_distance_analyses}} (if there are analyses defined), an object of class \code{\link{converted_distance_data}} (if no analyses are present in the project). Either way an attribute called \code{"flatfile"} is also returned with a flat version of the data.
 #'
 #' @importFrom plyr dlply "." llply
 #' @export
@@ -81,6 +81,9 @@ convert_project <- function(project){
                                       return(x)},
                         project=project, project_file=project_file)
 
+    # add flatfile data
+    attr(R_analyses, "flatfile") <- data
+
     # return object is just a list of class "converted_distance_analysis"
     # make that list of class "converted_distance_analyses" so we can
     # dispatch it later.
@@ -102,6 +105,9 @@ convert_project <- function(project){
       x$units <- unit_conversion
       x
     })
+
+    # add flatfile data
+    attr(ds_data, "flatfile") <- data
 
     # keep it classy
     class(ds_data) <- "converted_distance_data"
