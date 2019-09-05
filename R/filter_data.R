@@ -26,6 +26,8 @@ filter_data <- function(data, data_filter){
                                          d_sel[grepl("[^<>]=", d_sel)])
     # DISTANCE also uses "AND" -- replace with &
     d_sel <- gsub(" AND ", " & ", d_sel)
+    # DISTANCE also uses "OR" -- replace with |
+    d_sel <- gsub(" OR ", " | ", d_sel)
     # DISTANCE also uses "IN" -- replace with %in%
     d_sel <- gsub(" IN \\(", " %in% c\\(", d_sel)
 
@@ -37,7 +39,10 @@ filter_data <- function(data, data_filter){
     d_sel <- unlist(d_sel)
 
     # get all the variable names
-    select_vars <- stringr::str_extract(d_sel, "^[:alpha:]+")
+    poss_vars <- stringr::str_extract_all(d_sel, "[:alnum:]+")[[1]]
+    select_vars <- unique(poss_vars[tolower(poss_vars) %in%
+                                    tolower(names(data))])
+
 
     # if there is ambiguity over which covariate we should be
     # selecting on, use the layer data to disambiguate
