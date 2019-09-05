@@ -26,7 +26,7 @@ brew install mdbtools
 
 ### On Windows
 
-Support is via `RODBC` -- simply installing the R package should enable use.  Note RODBC is only supported under 32-bit versions of R.  Many discussions of this on line [this is one such discussion] (http://stackoverflow.com/questions/13070706/how-to-connect-r-with-access-database-in-64-bit-window)
+Support is via `RODBC` -- simply installing the R package should enable use.  Note RODBC is only supported under 32-bit versions of R.  Many discussions of this on line [this is one such discussion](http://stackoverflow.com/questions/13070706/how-to-connect-r-with-access-database-in-64-bit-window)
 
 
 ## Dependencies
