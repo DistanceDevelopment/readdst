@@ -4,6 +4,7 @@ readdst news
 # 0.0.7
 
 * fix data filters when "[Line length]" or "Observer" are used to subset data
+* ensure that the top level ("stratum", 10) area is used in data creation
 
 # 0.0.6
 

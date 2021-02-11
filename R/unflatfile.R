@@ -25,7 +25,14 @@ unflatfile <- function(data){
   if(all(c("Region.Label", "Area", "Sample.Label", "Effort", "object") %in%
          colnames(data))){
     ## construct region table
-    region.table <- unique(data[,c("Region.Label", "Area")])
+    # we might have multiple areas (if there are multiple substrata)
+    # see Distance manual "Enumerations in DistData.mdb" table.
+    # if so we want the top level "10"
+    if(any(colnames(data) == "Area.10")){
+      region.table <- unique(data[,c("Region.Label", "Area.10")])
+    }else{
+      region.table <- unique(data[,c("Region.Label", "Area")])
+    }
     # make sure that the region areas are consistent -- the above can
     # lead to duplicate labels if the areas are not the same for a given
     # region label
