@@ -1,6 +1,10 @@
 readdst news
 =============
 
+# 0.0.7
+
+* fix data filters when "[Line length]" or "Observer" are used to subset data
+
 # 0.0.6
 
 * data returned if there are no Analyses setup in the project

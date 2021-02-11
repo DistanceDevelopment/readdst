@@ -31,6 +31,12 @@ filter_data <- function(data, data_filter){
     # DISTANCE also uses "IN" -- replace with %in%
     d_sel <- gsub(" IN \\(", " %in% c\\(", d_sel)
 
+    # replace "[Line length]" with "Effort", which we re-named in
+    # the data earlier
+    d_sel <- sub("\\[Line Length\\]", "Effort", d_sel)
+    # we also lower-cased Observer
+    d_sel <- sub("Observer", "observer", d_sel)
+
     # since we inserted new "&"s, resplit that
     d_sel <- strsplit(d_sel, " & ")
     # replicate the layer types as needed
