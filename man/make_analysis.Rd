@@ -4,8 +4,7 @@
 \alias{make_analysis}
 \title{Make an analysis}
 \usage{
-make_analysis(this_analysis, model_definitions, data_filters, data,
-  transect)
+make_analysis(this_analysis, model_definitions, data_filters, data, transect)
 }
 \arguments{
 \item{this_analysis}{an analysis from Distance}

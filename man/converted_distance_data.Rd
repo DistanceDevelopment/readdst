@@ -7,3 +7,6 @@
 If \code{\link{convert_project}} has been run on a project, but there are no analyses present in the project, then a list of the data will be returned. The list has one element for each data filter which was present in the project.
 Each element of the list has the following tables in it:
 }
+\details{
+
+}
