@@ -1,5 +1,4 @@
 # this just tests all the projects that we ship with readdst
-library(readdst)
 # we expect everything to work!
 
 # do a pretty printer...
@@ -23,9 +22,3 @@ for(i in seq_along(cc)){
 }
 
 
-
-
-
-
-
-#}
