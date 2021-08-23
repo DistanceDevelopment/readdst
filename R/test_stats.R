@@ -132,7 +132,7 @@ test_stats <- function(analysis, statuses=1, tolerance=0.01){
 
       # test!
       test <- all.equal(test_val, model_val, check.attributes = FALSE,
-                        scale=test_val)
+                        scale=abs(test_val))
                         #tolerance = as.numeric(x[5]), scale=test_val)
       # form result
       return(c(test=test, mrds_val=model_val))
