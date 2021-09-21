@@ -1,30 +1,35 @@
-readdst news
-=============
-
-# 0.0.7
+readdst 0.0.7
+-------------
 
 * fix data filters when "[Line length]" or "Observer" are used to subset data
 * ensure that the top level ("stratum", 10) area is used in data creation
 
-# 0.0.6
+
+readdst 0.0.6
+-------------
 
 * data returned if there are no Analyses setup in the project
 * support for no "visits" column, but if there is a "visit" column
 * beginnings of cue count support
 * fix bad processing when Labels looked numeric but should habe been interpreted as character (e.g., "1.6"!="1.60")
 
-# 0.0.5
+
+readdst 0.0.5
+-------------
 
 * documentation and vignette improvements and updates
 * bug fixes in abundance calculations
 * ODBC issue fixes in Windows
 
-# 0.0.4
+
+readdst 0.0.4
+-------------
 
 * use read.delim rather than read_delim, which seems unstable. No dependency on readr any more!
 * ignore "Assign" commands, thanks to Francois Bolduc for reporting this bug
 
-# 0.0.3
+
+readdst 0.0.3
+-------------
 
 * RODBC support is here! You can now use readdst on Windows!
-

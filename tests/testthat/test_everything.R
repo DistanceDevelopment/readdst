@@ -5,7 +5,6 @@
 this_project <- system.file("Stratify-solutions", package="readdst")
 this_project <- paste0(this_project, "/Stratify\\ solutions")
 
-#for(this_project in projects){
 context(this_project)
 
 cc <- convert_project(this_project)
